@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  role          String    @default("doctor")
+  banned        Boolean   @default(false)
+  banReason     String?
+  banExpiresAt  DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  encounters    Encounter[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id             String   @id @default(uuid())
+  expiresAt      DateTime
+  token          String
+  impersonatedBy String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Encounter {
+  id            String       @id @default(uuid())
+  doctorId      String
+  doctor        User         @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  patientName   String?
+  noteType      String       @default("Problem Visit")
+  status        String       @default("COMPLETED")
+  duration      Int?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  transcript    Transcript?
+  clinicalNote  ClinicalNote?
+  auditLogs     AuditLog[]
+
+  @@index([doctorId])
+  @@map("encounter")
+}
+
+model Transcript {
+  id           String    @id @default(uuid())
+  encounterId  String    @unique
+  encounter    Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+  content      String
+  createdAt    DateTime  @default(now())
+
+  @@map("transcript")
+}
+
+model ClinicalNote {
+  id                  String    @id @default(uuid())
+  encounterId         String    @unique
+  encounter           Encounter @relation(fields: [encounterId], references: [id], onDelete: Cascade)
+  aiGeneratedContent  String
+  finalContent        String?
+  icdCodes            String?
+  cptCodes            String?
+  status              String    @default("DRAFT")
+  approvedAt          DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@map("clinical_note")
+}
+
+model AuditLog {
+  id            String    @id @default(uuid())
+  userId        String
+  encounterId   String?
+  encounter     Encounter? @relation(fields: [encounterId], references: [id])
+  action        String
+  details       String?
+  createdAt     DateTime  @default(now())
+
+  @@index([userId])
+  @@index([encounterId])
+  @@map("audit_log")
+}
