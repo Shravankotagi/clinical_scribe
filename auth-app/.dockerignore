@@ -1,7 +1,8 @@
 node_modules
 .next
-apps/web/.next
 .git
 *.log
+npm-debug.log*
+.env
 .env.local
 .env.*.local

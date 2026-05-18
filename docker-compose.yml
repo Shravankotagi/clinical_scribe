@@ -1,0 +1,34 @@
+services:
+  auth-app:
+    build:
+      context: ./auth-app
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./auth-app/.env
+    restart: unless-stopped
+
+  openscribe:
+    build:
+      context: ./frontend
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./frontend/apps/web/.env.local
+    environment:
+      - WHISPER_LOCAL_URL=http://transcription:8000/v1/audio/transcriptions
+    depends_on:
+      - transcription
+      - auth-app
+    restart: unless-stopped
+
+  transcription:
+    build:
+      context: ./whisper-server
+      dockerfile: Dockerfile.assemblyai
+    ports:
+      - "8002:8000"
+    environment:
+      - ASSEMBLYAI_API_KEY=${ASSEMBLYAI_API_KEY}
+    restart: unless-stopped
