@@ -6,6 +6,9 @@ services:
       - "3000:3000"
     env_file:
       - ./auth-app/.env
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     restart: unless-stopped
 
   openscribe:
@@ -18,6 +21,10 @@ services:
       - ./frontend/apps/web/.env.local
     environment:
       - WHISPER_LOCAL_URL=http://transcription:8000/v1/audio/transcriptions
+      - WHISPER_LOCAL_TRUSTED_HOSTS=transcription
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     depends_on:
       - transcription
       - auth-app
@@ -31,4 +38,14 @@ services:
       - "8002:8000"
     environment:
       - ASSEMBLYAI_API_KEY=${ASSEMBLYAI_API_KEY}
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    restart: unless-stopped
+
+  keepalive:
+    image: alpine
+    command: sh -c "while true; do wget -qO- http://auth-app:3000/api/health > /dev/null 2>&1; sleep 30; done"
+    depends_on:
+      - auth-app
     restart: unless-stopped

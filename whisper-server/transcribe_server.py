@@ -6,7 +6,7 @@ import asyncio
 import httpx
 
 import os
-aai.settings.api_key = os.environ.get("2fe45585274e41509e6182d3ada7c0e3", "")
+aai.settings.api_key = os.environ.get("ASSEMBLYAI_API_KEY", "")
 
 
 

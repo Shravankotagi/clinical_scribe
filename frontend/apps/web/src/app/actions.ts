@@ -80,7 +80,7 @@ export async function generateClinicalNote(
     if (params.doctorId && params.transcript) {
       try {
         console.log("Saving to DB, doctorId:", params.doctorId, "transcript length:", params.transcript?.length)
-        const saveRes = await fetch("http://localhost:3000/api/encounters/save", {
+        const saveRes = await fetch("http://auth-app:3000/api/encounters/save", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
