@@ -9,7 +9,7 @@ export async function signUp(data: {
   password: string;
 }) {
   try {
-    const newUser = await auth.api.createUser({
+    const result = await auth.api.signUpEmail({
       body: {
         email: data.email,
         password: data.password,
@@ -17,7 +17,7 @@ export async function signUp(data: {
       }
     });
 
-    return { success: true, data: newUser };
+    return { success: true, data: result };
   } catch (error) {
     console.error('Failed to create user:', error);
     return {

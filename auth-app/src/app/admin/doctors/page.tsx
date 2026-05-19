@@ -2,6 +2,9 @@ import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 import { isAuthenticated } from "@/server/user";
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+
 import {
   Table, TableBody, TableCell,
   TableHead, TableHeader, TableRow,
@@ -24,7 +27,7 @@ export default async function DoctorsPage() {
     orderBy: { createdAt: "desc" },
   });
 
-   async function createDoctor(formData: FormData) {
+  async function createDoctor(formData: FormData) {
   "use server";
   const session = await isAuthenticated();
   if (!session || session.user.role !== "admin") redirect("/login");
@@ -38,11 +41,15 @@ export default async function DoctorsPage() {
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) throw new Error("User already exists");
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const userId = crypto.randomUUID();
+  
+  // Use Better Auth's internal password hasher
+  const ctx = await auth.$context;
+  const hashedPassword = await ctx.password.hash(password);
 
   await prisma.user.create({
     data: {
-      id: crypto.randomUUID(),
+      id: userId,
       name,
       email,
       role: "doctor",
@@ -52,13 +59,11 @@ export default async function DoctorsPage() {
     },
   });
 
-  // Create account record for Better Auth password login
-  const user = await prisma.user.findUnique({ where: { email } });
   await (prisma as any).account.create({
     data: {
       id: crypto.randomUUID(),
-      userId: user!.id,
-      accountId: user!.id,
+      userId: userId,
+      accountId: email,
       providerId: "credential",
       password: hashedPassword,
       createdAt: new Date(),
