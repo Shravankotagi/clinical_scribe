@@ -24,41 +24,50 @@ export default async function DoctorsPage() {
     orderBy: { createdAt: "desc" },
   });
 
-  async function createDoctor(formData: FormData) {
-    "use server";
-    const session = await isAuthenticated();
-    if (!session || session.user.role !== "admin") redirect("/login");
+   async function createDoctor(formData: FormData) {
+  "use server";
+  const session = await isAuthenticated();
+  if (!session || session.user.role !== "admin") redirect("/login");
 
-    const name = formData.get("name") as string;
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+  const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
 
-    if (!name || !email || !password) throw new Error("All fields required");
+  if (!name || !email || !password) throw new Error("All fields required");
 
-    const existing = await prisma.user.findUnique({ where: { email } });
-    if (existing) throw new Error("User already exists");
+  const existing = await prisma.user.findUnique({ where: { email } });
+  if (existing) throw new Error("User already exists");
 
-    // Use Better Auth's API to create user with properly hashed password
-    const response = await fetch(`${process.env.BETTER_AUTH_URL}/api/auth/sign-up/email`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
-    });
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-    if (!response.ok) throw new Error("Failed to create doctor account");
+  await prisma.user.create({
+    data: {
+      id: crypto.randomUUID(),
+      name,
+      email,
+      role: "doctor",
+      emailVerified: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  });
 
-    const data = await response.json() as { user?: { id: string } };
-    
-    // Update role to doctor
-    if (data.user?.id) {
-      await prisma.user.update({
-        where: { id: data.user.id },
-        data: { role: "doctor", emailVerified: true },
-      });
-    }
+  // Create account record for Better Auth password login
+  const user = await prisma.user.findUnique({ where: { email } });
+  await (prisma as any).account.create({
+    data: {
+      id: crypto.randomUUID(),
+      userId: user!.id,
+      accountId: user!.id,
+      providerId: "credential",
+      password: hashedPassword,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  });
 
-    redirect("/admin/doctors");
-  }
+  redirect("/admin/doctors");
+}
 
   async function toggleDoctorStatus(formData: FormData) {
     "use server";

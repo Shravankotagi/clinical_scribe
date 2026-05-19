@@ -21,8 +21,7 @@ function createPrismaClient() {
 
 const prisma = globalForPrisma.prisma || createPrismaClient();
 
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
-}
+// Store in global for ALL environments to prevent multiple instances
+globalForPrisma.prisma = prisma;
 
 export default prisma;

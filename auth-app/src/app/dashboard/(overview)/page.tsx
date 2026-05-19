@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
 import { AutoRefresh } from '@/components/dashboard/auto-refresh'
-
+import { CodeChip } from '@/components/CodeChip'
 export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage() {
@@ -151,10 +151,7 @@ export default async function DashboardPage() {
                           return (
                             <div className='flex flex-wrap gap-1'>
                               {codes.slice(0, 3).map((code, i) => (
-                                <span key={i} className='inline-flex items-center gap-1 rounded-full bg-blue-100 text-blue-700 px-2 py-0.5 text-xs font-medium'>
-                                  {code.split(':')[0].trim()}
-                                  <span className='text-blue-400 text-[10px]'>{code.split(':')[2]?.trim() ?? '90'}%</span>
-                                </span>
+                                <CodeChip key={i} code={code} defaultConfidence='90' variant='blue' />
                               ))}
                             </div>
                           )
@@ -168,10 +165,7 @@ export default async function DashboardPage() {
                           return (
                             <div className='flex flex-wrap gap-1'>
                               {codes.slice(0, 3).map((code, i) => (
-                                <span key={i} className='inline-flex items-center gap-1 rounded-full bg-purple-100 text-purple-700 px-2 py-0.5 text-xs font-medium'>
-                                  {code.split(':')[0].trim()}
-                                  <span className='text-purple-400 text-[10px]'>{code.split(':')[2]?.trim() ?? '85'}%</span>
-                                </span> 
+                                <CodeChip key={i} code={code} defaultConfidence='85' variant='purple' />
                               ))}
                             </div>
                           )
