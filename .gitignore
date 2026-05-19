@@ -28,6 +28,7 @@ npm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
-CLAUDE.md 
-AGENTS.md 
-.agents/ 
+
+# Local developer notes
+*.md
+.agents/
