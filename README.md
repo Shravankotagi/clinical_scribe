@@ -55,7 +55,7 @@ Physicians currently spend **2–3 hours per day** on documentation, contributin
 
 **The solution:** AI listens and drafts. The physician reviews and approves in one click.
 
-Compared to a human medical scribe (~$3,000/month), this system costs approximately **$145–165/month** — a saving of **~$2,850/month per physician**.
+Compared to a human medical scribe (~$3,000/month), this system costs approximately **$90-100/month** — a saving of **~$2,900/month per physician**.
 
 ---
 
@@ -470,14 +470,14 @@ Estimated monthly cost for a clinic seeing approximately **20 patients per day**
 
 | Service | Monthly Cost |
 |---|---|
-| AssemblyAI (transcription) | ~$130 |
+| AssemblyAI (transcription) | ~$70 |
 | Gemini API (note generation + coding) | ~$0.09 |
 | Neon PostgreSQL | Free tier / $19 |
 | Hosting (Railway or VPS) | ~$15 |
-| **Total** | **~$145–165/month** |
+| **Total** | **~$90-100/month** |
 
 **Compared to a human clinical scribe:** ~$3,000/month
-**Monthly savings per physician: ~$2,850**
+**Monthly savings per physician: ~$2,900**
 
 ---
 
