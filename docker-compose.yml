@@ -45,7 +45,19 @@ services:
 
   keepalive:
     image: alpine
-    command: sh -c "while true; do wget -qO- http://auth-app:3000/api/health > /dev/null 2>&1; sleep 30; done"
+    command: sh -c "apk add --no-cache curl && while true; do curl -s http://auth-app:3000/api/health > /dev/null 2>&1; sleep 20; done"
     depends_on:
-      - auth-app
+      auth-app:
+        condition: service_started
     restart: unless-stopped
+
+  openscribe:
+    environment:
+      - WHISPER_LOCAL_URL=http://transcription:8000/v1/audio/transcriptions
+      - AUTH_APP_URL=http://auth-app:3000
+
+  auth-app:
+    environment:
+      - OPENSCRIBE_URL=http://localhost:3001
+      - BETTER_AUTH_URL=http://localhost:3000
+      - NODE_TLS_REJECT_UNAUTHORIZED=0

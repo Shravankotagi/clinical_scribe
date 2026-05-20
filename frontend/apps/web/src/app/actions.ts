@@ -12,7 +12,7 @@ async function extractIcdCodes(note: string): Promise<string[]> {
 
     console.log("Calling Gemini for ICD extraction, key length:", geminiApiKey.length)
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${geminiApiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -80,7 +80,8 @@ export async function generateClinicalNote(
     if (params.doctorId && params.transcript) {
       try {
         console.log("Saving to DB, doctorId:", params.doctorId, "transcript length:", params.transcript?.length)
-        const saveRes = await fetch("http://auth-app:3000/api/encounters/save", {
+        const AUTH_APP_URL = process.env.AUTH_APP_URL || "http://auth-app:3000"
+        const saveRes = await fetch(`${AUTH_APP_URL}/api/encounters/save`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

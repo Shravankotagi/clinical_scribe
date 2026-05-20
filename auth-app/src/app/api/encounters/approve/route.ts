@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
+const OPENSCRIBE_URL = process.env.OPENSCRIBE_URL || 'http://localhost:3001'
 const corsHeaders = {
-  'Access-Control-Allow-Origin': 'http://localhost:3001',
+  'Access-Control-Allow-Origin': OPENSCRIBE_URL,
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 };

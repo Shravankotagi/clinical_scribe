@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const OPENSCRIBE_URL = process.env.OPENSCRIBE_URL || 'http://localhost:3001'
 const corsHeaders = {
-  'Access-Control-Allow-Origin': 'http://localhost:3001',
+  'Access-Control-Allow-Origin': OPENSCRIBE_URL,
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 };
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
     }
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${geminiApiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

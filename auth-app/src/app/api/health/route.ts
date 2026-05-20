@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
+
+
 export async function GET() {
   try {
     // Verificar conexión a la base de datos

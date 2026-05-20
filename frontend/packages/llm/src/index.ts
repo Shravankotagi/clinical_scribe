@@ -20,7 +20,7 @@ export async function runLLMRequest({ system, prompt, model, apiKey }: LLMReques
 
   const genAI = new GoogleGenerativeAI(geminiApiKey)
 
-  const resolvedModel = "gemini-2.5-flash"
+  const resolvedModel = "gemini-3.1-flash-lite"
 
   const geminiModel = genAI.getGenerativeModel({
     model: resolvedModel,

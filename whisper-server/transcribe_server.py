@@ -1,3 +1,7 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 import assemblyai as aai
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -5,10 +9,12 @@ import uvicorn
 import asyncio
 import httpx
 
-import os
+
 aai.settings.api_key = os.environ.get("ASSEMBLYAI_API_KEY", "")
+print(f">>> API KEY LOADED: '{aai.settings.api_key}'")
 
-
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI()
 
