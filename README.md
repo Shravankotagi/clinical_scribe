@@ -275,7 +275,14 @@ Create the following `.env` files exactly as shown. Replace placeholder values w
 
 ### `auth-app/.env`
 
+Get BETTER_AUTH_SECRET,NEXT_PUBLIC_SECURE_STORAGE_KEY by running the command below comand in your cmd
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+
 ```env
+
+Get BETTER_AUTH_SECRET,NEXT_PUBLIC_SECURE_STORAGE_KEY by running the command below comand in your cmd
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+
 DATABASE_URL="postgresql://your-neon-connection-string"
 BETTER_AUTH_SECRET="your-32-character-secret-key-here"
 BETTER_AUTH_URL="http://localhost:3000"
