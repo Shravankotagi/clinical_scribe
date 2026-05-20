@@ -2,7 +2,7 @@
 
 > **Ambient AI clinical scribe** — records consultations, transcribes with speaker labels, generates SOAP notes, suggests billing codes, and exports to EHR in one click.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 [![Node.js](https://img.shields.io/badge/Node.js-v20+-green.svg)](https://nodejs.org)
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 [![Docker](https://img.shields.io/badge/Docker-Supported-blue.svg)](https://docker.com)
