@@ -15,7 +15,7 @@ export function IdleView({ onStartNew }: IdleViewProps) {
         <Mic className="h-8 w-8 text-background" />
       </button>
 
-      <h2 className="text-xl font-medium text-foreground mb-2">Start a new interview</h2>
+      <h2 className="text-xl font-medium text-foreground mb-2">Start a new Session</h2>
 
       <p className="text-muted-foreground text-center max-w-xs text-sm">
         Record, transcribe, and generate clinical notes automatically.
