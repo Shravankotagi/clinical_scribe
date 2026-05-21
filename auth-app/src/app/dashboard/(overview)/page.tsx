@@ -40,7 +40,7 @@ export default async function DashboardPage() {
           </p>
         </div>
         <Link
-          href={`http://localhost:3001?doctorId=${user.id}`}
+          href={`${process.env.NEXT_PUBLIC_OPENSCRIBE_URL || 'http://localhost:3001'}?doctorId=${user.id}`}
           target='_blank'
           className='inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors'
         >
