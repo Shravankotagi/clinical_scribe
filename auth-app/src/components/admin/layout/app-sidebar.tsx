@@ -35,38 +35,12 @@ const data = {
       icon: IconDashboard
     },
     {
-      title: 'Users',
-      url: '#',
-      icon: IconUsers
-    },
-    {
       title: 'Doctors',
       url: '/admin/doctors',
       icon: IconStethoscope
-    },
-    {
-      title: 'Suscriptions',
-      url: '#',
-      icon: IconCreditCardFilled
-    },
-    {
-      title: 'Documents',
-      url: '#',
-      icon: IconNews
     }
   ],
-  navSecondary: [
-    {
-      title: 'Analytics',
-      url: '#',
-      icon: IconChartBar
-    },
-    {
-      title: 'Settings',
-      url: '#',
-      icon: IconSettings
-    }
-  ]
+  navSecondary: []
 };
 
 export function AppSidebar({

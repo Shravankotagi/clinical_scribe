@@ -31,27 +31,11 @@ const data = {
   navMain: [
     {
       title: 'Dashboard',
-      url: '/admin',
+      url: '/dashboard',
       icon: IconDashboard
-    },
-    {
-      title: 'Users',
-      url: '/admin/users',
-      icon: IconUsers
-    },
-    {
-      title: 'Doctors',
-      url: '/admin/doctors',
-      icon: IconStethoscope
-    },
-  ],
-  navSecondary: [
-    {
-      title: 'Settings',
-      url: '#',
-      icon: IconSettings
     }
-  ]
+  ],
+  navSecondary: []
 };
 
 export function AppSidebar({
