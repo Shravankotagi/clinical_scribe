@@ -2,10 +2,15 @@ services:
   auth-app:
     build:
       context: ./auth-app
+    hostname: auth-app
     ports:
       - "3000:3000"
     env_file:
       - ./auth-app/.env
+    environment:
+      - OPENSCRIBE_URL=http://localhost:3001
+      - BETTER_AUTH_URL=http://localhost:3000
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
     dns:
       - 8.8.8.8
       - 8.8.4.4
@@ -15,6 +20,7 @@ services:
     build:
       context: ./frontend
       dockerfile: apps/web/Dockerfile
+    hostname: openscribe
     ports:
       - "3001:3001"
     env_file:
@@ -22,6 +28,7 @@ services:
     environment:
       - WHISPER_LOCAL_URL=http://transcription:8000/v1/audio/transcriptions
       - WHISPER_LOCAL_TRUSTED_HOSTS=transcription
+      - AUTH_APP_URL=http://auth-app:3000
     dns:
       - 8.8.8.8
       - 8.8.4.4
@@ -34,6 +41,7 @@ services:
     build:
       context: ./whisper-server
       dockerfile: Dockerfile.assemblyai
+    hostname: transcription
     ports:
       - "8002:8000"
     environment:
@@ -50,14 +58,3 @@ services:
       auth-app:
         condition: service_started
     restart: unless-stopped
-
-  openscribe:
-    environment:
-      - WHISPER_LOCAL_URL=http://transcription:8000/v1/audio/transcriptions
-      - AUTH_APP_URL=http://auth-app:3000
-
-  auth-app:
-    environment:
-      - OPENSCRIBE_URL=http://localhost:3001
-      - BETTER_AUTH_URL=http://localhost:3000
-      - NODE_TLS_REJECT_UNAUTHORIZED=0
