@@ -108,12 +108,6 @@ export function NavUser({ user }: { user: userType }) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
