@@ -52,7 +52,9 @@ function messageId() {
     : `${Date.now()}-${Math.random().toString(16).slice(2)}`
 }
 
-export function NoteEditor({ encounter, onSave, authAppUrl = "http://localhost:3000" }: NoteEditorProps) {
+const DEFAULT_AUTH_URL = process.env.NEXT_PUBLIC_AUTH_APP_URL || "http://localhost:3000"
+
+export function NoteEditor({ encounter, onSave, authAppUrl = DEFAULT_AUTH_URL }: NoteEditorProps) {
   const [activeTab, setActiveTab] = useState<TabType>("note")
   const [noteMarkdown, setNoteMarkdown] = useState<string>(encounter.note_text || "")
   const [hasChanges, setHasChanges] = useState(false)
