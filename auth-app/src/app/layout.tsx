@@ -8,11 +8,15 @@ const fontSans = FontSans({
   subsets: ['latin']
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'ClinicalScribe',
-  description:
-    'AI-powered clinical documentation for physicians'
-};
+  description: 'AI-powered clinical documentation for physicians',
+  openGraph: {
+    title: 'ClinicalScribe',
+    description: 'AI-powered clinical documentation for physicians',
+    siteName: 'ClinicalScribe',
+  },
+}
 
 export default function RootLayout({
   children
