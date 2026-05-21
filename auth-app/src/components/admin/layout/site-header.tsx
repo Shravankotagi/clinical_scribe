@@ -1,9 +1,6 @@
 import { ModeToggle } from '@/components/shared/mode-toggle';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { IconBell } from '@tabler/icons-react';
 
 export function SiteHeader() {
   return (
@@ -16,10 +13,6 @@ export function SiteHeader() {
         />
         <h1 className='text-base font-medium'>Documents</h1>
         <div className='ml-auto flex items-center gap-2'>
-          <Input placeholder='Search resources...' className='max-w-sm' />
-          <Button variant='outline' size={'icon'}>
-            <IconBell />
-          </Button>
           <ModeToggle />
         </div>
       </div>

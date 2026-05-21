@@ -1,8 +1,6 @@
 import { ModeToggle } from '@/components/shared/mode-toggle';
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { BellIcon } from 'lucide-react';
 
 export function SiteHeader() {
   return (
@@ -15,9 +13,6 @@ export function SiteHeader() {
         />
         <h1 className='text-base font-medium'>Documents</h1>
         <div className='ml-auto flex items-center gap-2'>
-          <Button variant='outline' size='icon'>
-            <BellIcon />
-          </Button>
           <ModeToggle />
         </div>
       </div>
