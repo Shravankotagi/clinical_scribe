@@ -6,7 +6,12 @@ import { AutoRefresh } from '@/components/dashboard/auto-refresh'
 import { CodeChip } from '@/components/CodeChip'
 export const dynamic = 'force-dynamic'
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams
+}: {
+  searchParams: Promise<{ filter?: string }>
+}) {
+  const { filter } = await searchParams
   const session = await isAuthenticated();
 
   if (!session) {
@@ -25,6 +30,9 @@ export default async function DashboardPage() {
   const totalEncounters = encounters.length;
   const notesGenerated = encounters.filter(e => e.clinicalNote).length;
   const pendingApproval = encounters.filter(e => e.clinicalNote?.status === 'DRAFT').length;
+  const displayEncounters = filter === 'pending'
+    ? encounters.filter(e => e.clinicalNote?.status === 'DRAFT')
+    : encounters
 
   return (
     <div className='mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 p-6 md:p-10'>
@@ -59,31 +67,33 @@ export default async function DashboardPage() {
           <p className='text-sm text-muted-foreground'>Notes Generated</p>
           <p className='mt-1 text-3xl font-bold'>{notesGenerated}</p>
         </div>
-        <div className='rounded-xl border bg-card p-6'>
+        <Link href='/dashboard?filter=pending' className='rounded-xl border bg-card p-6 hover:bg-muted/50 transition-colors cursor-pointer block'>
           <p className='text-sm text-muted-foreground'>Pending Approval</p>
           <p className='mt-1 text-3xl font-bold'>{pendingApproval}</p>
-        </div>
+        </Link>
       </div>
 
       {/* Encounters Table */}
       <div className='rounded-xl border bg-card'>
-        <div className='border-b px-6 py-4'>
-          <h2 className='text-lg font-semibold'>Recent Encounters</h2>
+        <div className='border-b px-6 py-4 flex items-center justify-between'>
+          <h2 className='text-lg font-semibold'>
+            {filter === 'pending' ? 'Pending Approval' : 'Recent Encounters'}
+          </h2>
+          {filter === 'pending' && (
+            <Link href='/dashboard' className='text-sm text-blue-600 hover:underline'>
+              Show all encounters
+            </Link>
+          )}
         </div>
-        {encounters.length === 0 ? (
+        {displayEncounters.length === 0 ? (
           <div className='flex flex-col items-center justify-center gap-3 py-20 text-center'>
             <span className='text-5xl'>🩺</span>
-            <p className='text-lg font-medium'>No encounters yet</p>
-            <p className='text-sm text-muted-foreground'>
-              Start a new encounter to record and transcribe a patient consultation.
+            <p className='text-lg font-medium'>
+              {filter === 'pending' ? 'No pending approvals' : 'No encounters yet'}
             </p>
-            <Link
-              href={`http://localhost:3001?doctorId=${user.id}`}
-              target='_blank'
-              className='mt-2 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors'
-            >
-              🎙️ Start Recording
-            </Link>
+            <p className='text-sm text-muted-foreground'>
+              {filter === 'pending' ? 'All notes have been approved!' : 'Start a new encounter to record and transcribe a patient consultation.'}
+            </p>
           </div>
         ) : (
           <div className='overflow-x-auto'>
@@ -100,7 +110,7 @@ export default async function DashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {encounters.map((encounter) => (
+                {displayEncounters.map((encounter) => (
                   <tr key={encounter.id} className='border-b last:border-0 hover:bg-muted/50'>
                     <td className='px-6 py-4 font-medium'>
                       {encounter.patientName || 'Unknown Patient'}
