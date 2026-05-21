@@ -117,6 +117,19 @@ function templateForVisitReason(visitReason?: string): "default" | "soap" {
 
 function resolveApiBaseUrl(): string {
   if (typeof window === "undefined") return ""
+  const configured = process.env.NEXT_PUBLIC_API_BASE_URL?.trim()
+  if (configured) {
+    return configured.replace(/\/+$/, "")
+  }
+  const origin = window.location?.origin
+  if (origin && origin !== "null") {
+    return origin
+  }
+  return "http://localhost:3001"
+}
+
+function resolveAuthAppUrl(): string {
+  if (typeof window === "undefined") return ""
   const configured = process.env.NEXT_PUBLIC_AUTH_APP_URL?.trim()
   if (configured) {
     return configured.replace(/\/+$/, "")

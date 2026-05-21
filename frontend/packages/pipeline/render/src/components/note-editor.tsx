@@ -10,6 +10,8 @@ import { Save, Copy, Download, Check, AlertTriangle, Send, X, MessageSquare, Loa
 import { format } from "date-fns"
 import { cn } from "@ui/lib/utils"
 
+const AUTH_APP_URL = process.env.NEXT_PUBLIC_AUTH_APP_URL || "http://localhost:3000"
+
 const VISIT_TYPE_LABELS: Record<string, string> = {
   history_physical: "History & Physical",
   problem_visit: "Problem Visit",
@@ -141,7 +143,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
       const storedNeonId = sessionStorage.getItem(storageKey)
       console.log("Approve - encounter.id:", encounter.id, "storageKey:", storageKey, "storedNeonId:", storedNeonId)
       const neonEncounterId = storedNeonId || encounter.id
-      await fetch("http://localhost:3000/api/encounters/approve", {
+      await fetch(`${AUTH_APP_URL}/api/encounters/approve`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
