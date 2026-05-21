@@ -1545,7 +1545,11 @@ function HomePageContent() {
       }
       case "viewing":
         return selectedEncounter ? (
-          <NoteEditor encounter={selectedEncounter} onSave={handleSaveNote} />
+          <NoteEditor 
+            encounter={selectedEncounter} 
+            onSave={handleSaveNote}
+            authAppUrl={process.env.NEXT_PUBLIC_AUTH_APP_URL || "http://localhost:3000"}
+          />
         ) : (
           <IdleView onStartNew={handleStartNew} />
         )

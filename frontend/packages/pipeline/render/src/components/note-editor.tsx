@@ -21,8 +21,8 @@ const VISIT_TYPE_LABELS: Record<string, string> = {
 interface NoteEditorProps {
   encounter: Encounter
   onSave: (noteText: string) => void
+  authAppUrl?: string
 }
-
 type TabType = "note" | "transcript"
 type OpenClawInitState = "idle" | "sending" | "sent" | "failed"
 
@@ -52,7 +52,7 @@ function messageId() {
     : `${Date.now()}-${Math.random().toString(16).slice(2)}`
 }
 
-export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
+export function NoteEditor({ encounter, onSave, authAppUrl = "http://localhost:3000" }: NoteEditorProps) {
   const [activeTab, setActiveTab] = useState<TabType>("note")
   const [noteMarkdown, setNoteMarkdown] = useState<string>(encounter.note_text || "")
   const [hasChanges, setHasChanges] = useState(false)
@@ -118,7 +118,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
     if (highlighting || highlightedNote) return
     setHighlighting(true)
     try {
-      const response = await fetch("http://localhost:3000/api/encounters/highlight-uncertain", {
+      const response = await fetch(`${authAppUrl}/api/encounters/highlight-uncertain`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ note: noteMarkdown }),
@@ -143,7 +143,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
       const storedNeonId = sessionStorage.getItem(storageKey)
       console.log("Approve - encounter.id:", encounter.id, "storageKey:", storageKey, "storedNeonId:", storedNeonId)
       const neonEncounterId = storedNeonId || encounter.id
-      await fetch(`${AUTH_APP_URL}/api/encounters/approve`, {
+      await fetch(`${authAppUrl}/api/encounters/approve`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
