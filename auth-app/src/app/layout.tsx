@@ -9,9 +9,9 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: 'Next.js + Better Auth + Prisma Template',
+  title: 'ClinicalScribe',
   description:
-    'A starter template for Next.js projects using Better Auth and Prisma.'
+    'AI-powered clinical documentation for physicians'
 };
 
 export default function RootLayout({
