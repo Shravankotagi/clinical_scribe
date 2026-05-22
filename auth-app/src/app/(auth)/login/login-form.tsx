@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -47,20 +47,26 @@ export function LoginForm({
     }
   });
 
-  const signInWithGoogle = async () => {
-    try {
-      await authClient.signIn.social({
-        provider: 'google',
-        callbackURL: '/dashboard'
-      });
-    } catch (error) {
-      console.error('Google sign-in failed:', error);
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : 'Google sign-in failed. Please try again.'
-      );
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    const error = url.searchParams.get('error')
+    if (error === 'unable_to_create_user' || error === 'ACCOUNT_NOT_FOUND') {
+      toast.error('Account not found. Please contact your administrator.')
+      window.history.replaceState({}, '', '/login')
     }
+  }, [])
+
+  const signInWithGoogle = async () => {
+    await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: '/dashboard',
+      fetchOptions: {
+        onError: (ctx) => {
+          console.log('onError fired:', ctx)
+          toast.error('Account not found. Please contact your administrator.')
+        }
+      }
+    })
   };
 
   async function onSubmit(data: z.infer<typeof formSchema>) {

@@ -43,6 +43,21 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
     }
   },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          const existingUser = await prisma.user.findUnique({
+            where: { email: user.email }
+          })
+          if (!existingUser) {
+            throw new Error('ACCOUNT_NOT_FOUND')
+          }
+          return { data: user }
+        }
+      }
+    }
+  },
   database: prismaAdapter(prisma, {
     provider: 'postgresql'
   }),
