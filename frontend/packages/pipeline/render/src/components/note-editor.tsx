@@ -369,17 +369,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
               {activeTab === "note" && (
                 <>
                   {/* Send to OpenClaw */}
-                  <button
-                    onClick={handleOpenOpenClawChat}
-                    disabled={!noteMarkdown.trim() || openClawInitState === "sending"}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors disabled:opacity-50"
-                    style={{ color: '#514535', border: '1px solid #d5c4ae' }}
-                    onMouseEnter={e => (e.currentTarget.style.background = '#f0e6e0')}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                  >
-                    {openClawInitState === "sending" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : openClawInitState === "sent" ? <Check className="h-3.5 w-3.5" /> : <MessageSquare className="h-3.5 w-3.5" />}
-                    {openClawInitState === "sending" ? "Opening..." : openClawInitState === "sent" ? "OpenClaw Chat" : "Send to OpenClaw"}
-                  </button>
+                  
 
                   {/* Check Uncertain */}
                   <button
@@ -555,7 +545,6 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <span className="text-sm font-bold" style={{ color: '#805600' }}>OpenClaw Assistant</span>
               </div>
 
               <div className="flex-1 text-sm overflow-y-auto space-y-3 pr-1 mb-4" style={{ color: '#514535' }}>
