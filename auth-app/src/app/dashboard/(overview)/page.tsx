@@ -169,14 +169,7 @@ export default async function DashboardPage({
                   Show all encounters
                 </Link>
               )}
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#514535] text-sm">🔍</span>
-                <input
-                  className="pl-9 pr-4 py-2 bg-[#fcf2eb] border border-[#d5c4ae]/20 rounded-lg text-sm focus:ring-2 focus:ring-[#805600] focus:outline-none w-64 transition-all"
-                  placeholder="Filter encounters..."
-                  type="text"
-                />
-              </div>
+            
             </div>
           </div>
 
