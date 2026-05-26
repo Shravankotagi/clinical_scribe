@@ -19,8 +19,8 @@
 - [Getting Started](#-getting-started)
   - [Prerequisites](#prerequisites)
   - [API Keys Required](#api-keys-required)
-  - [Method 1 — Local Development](#method-1--local-development)
-  - [Method 2 — Docker (Recommended)](#method-2--docker-recommended)
+  - [Method 1 — Docker (Recommended)](#method-1--docker-recommended)
+  - [Method 2 — Local Development](#method-2--local-development)
 - [Environment Variables](#-environment-variables)
 - [First Time Setup](#-first-time-setup)
 - [Build and Test](#-build-and-test)
@@ -152,7 +152,46 @@ You need accounts and API keys from the following services before running the ap
 
 ---
 
-### Method 1 — Local Development
+### Method 1 — Docker (Recommended)
+
+Use this method to run everything in containers with a single command. Best for consistent environments and team deployments.
+
+**Step 1 — Clone the repository**
+
+```bash
+git clone <repo-url>
+cd clinical-scribe
+```
+
+**Step 2 — Configure environment files**
+
+See the [Environment Variables](#-environment-variables) section below and create all required `.env` files before building.
+
+**Step 3 — Build and start all services**
+
+```bash
+docker-compose build
+docker-compose up
+```
+
+> ⏱️ The first build may take 5–10 minutes as Docker downloads dependencies. Subsequent starts are much faster.
+
+**Step 4 — Open the application**
+
+| App | URL |
+|---|---|
+| Auth + Admin App | http://localhost:3000 |
+| OpenScribe Scribe UI | http://localhost:3001 |
+
+To stop all services:
+
+```bash
+docker-compose down
+```
+
+---
+
+### Method 2 — Local Development
 
 Use this method if you want to run the application directly on your machine without Docker.
 
@@ -230,59 +269,19 @@ npm run dev
 
 ---
 
-### Method 2 — Docker (Recommended)
-
-Use this method to run everything in containers with a single command. Best for consistent environments and team deployments.
-
-**Step 1 — Clone the repository**
-
-```bash
-git clone <your-repo-url>
-cd clinical-scribe
-```
-
-**Step 2 — Configure environment files**
-
-See the [Environment Variables](#-environment-variables) section below and create all required `.env` files before building.
-
-**Step 3 — Build and start all services**
-
-```bash
-docker-compose build
-docker-compose up
-```
-
-> ⏱️ The first build may take 5–10 minutes as Docker downloads dependencies. Subsequent starts are much faster.
-
-**Step 4 — Open the application**
-
-| App | URL |
-|---|---|
-| Auth + Admin App | http://localhost:3000 |
-| OpenScribe Scribe UI | http://localhost:3001 |
-
-To stop all services:
-
-```bash
-docker-compose down
-```
-
----
-
 ## 🔧 Environment Variables
 
 Create the following `.env` files exactly as shown. Replace placeholder values with your actual API keys.
 
 ### `auth-app/.env`
 
-Get BETTER_AUTH_SECRET,NEXT_PUBLIC_SECURE_STORAGE_KEY by running the command below comand in your cmd
+Get `BETTER_AUTH_SECRET` and `NEXT_PUBLIC_SECURE_STORAGE_KEY` by running the following command in your terminal:
+
+```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+```
 
 ```env
-
-Get BETTER_AUTH_SECRET,NEXT_PUBLIC_SECURE_STORAGE_KEY by running the command below in your cmd
-node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
-
 DATABASE_URL="postgresql://your-neon-connection-string"
 BETTER_AUTH_SECRET="your-32-character-secret-key-here"
 BETTER_AUTH_URL="http://localhost:3000"
