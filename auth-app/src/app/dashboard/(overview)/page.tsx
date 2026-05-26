@@ -91,9 +91,6 @@ export default async function DashboardPage({
               <div className="p-2 rounded-lg bg-[#ffddb0]/40">
                 <span className="text-[#805600] text-xl">✅</span>
               </div>
-              <span className="text-xs text-green-700 font-bold flex items-center gap-1">
-                ↑ +12%
-              </span>
             </div>
             <div>
               <p className="text-xs text-[#514535] uppercase tracking-wider font-medium mb-1">Total Encounters</p>
@@ -118,9 +115,6 @@ export default async function DashboardPage({
               <div className="p-2 rounded-lg bg-[#ffddb0]/40">
                 <span className="text-[#805600] text-xl">📄</span>
               </div>
-              <span className="text-xs text-green-700 font-bold flex items-center gap-1">
-                ↑ +5%
-              </span>
             </div>
             <div>
               <p className="text-xs text-[#514535] uppercase tracking-wider font-medium mb-1">Notes Generated</p>

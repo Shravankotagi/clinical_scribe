@@ -144,14 +144,7 @@ export default async function DoctorsPage() {
             <h3 className="text-xl font-semibold text-[#805600]" style={{ fontFamily: 'Manrope, sans-serif' }}>
               Practitioner Records
             </h3>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#514535] text-sm">🔍</span>
-              <input
-                className="pl-9 pr-4 py-2 bg-[#fcf2eb] border border-[#d5c4ae]/20 rounded-lg text-sm focus:ring-2 focus:ring-[#805600] focus:outline-none w-64 transition-all"
-                placeholder="Search practitioners..."
-                type="text"
-              />
-            </div>
+
           </div>
 
           <div className="overflow-x-auto">
@@ -260,7 +253,6 @@ export default async function DoctorsPage() {
               <div className="p-2 rounded-lg bg-[#ffddb0]/40">
                 <span className="text-[#805600] text-xl">👥</span>
               </div>
-              <span className="text-xs text-green-700 font-bold flex items-center gap-1">↑ +12%</span>
             </div>
             <div>
               <p className="text-xs text-[#514535] uppercase tracking-wider font-medium mb-1">Total Active Doctors</p>
@@ -270,23 +262,6 @@ export default async function DoctorsPage() {
             </div>
           </div>
 
-          {/* Documentation Hours Saved */}
-          <div
-            className="p-6 rounded-xl flex flex-col gap-4 border-l-4 border-l-[#ffba46] transition-transform duration-200 hover:-translate-y-1"
-            style={{
-              background: 'rgba(255,255,255,0.7)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(128,86,0,0.1)',
-              borderLeft: '4px solid #ffba46',
-              boxShadow: '0px 4px 20px rgba(128,86,0,0.05)',
-            }}
-          >
-            <div className="flex justify-between items-start">
-              <div className="p-2 rounded-lg bg-[#ffddb0]/40">
-                <span className="text-[#805600] text-xl">⏱️</span>
-              </div>
-            </div>
-          </div>
 
           {/* System Status */}
           <div
