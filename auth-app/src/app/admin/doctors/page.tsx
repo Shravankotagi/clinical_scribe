@@ -251,7 +251,7 @@ export default async function DoctorsPage() {
           >
             <div className="flex justify-between items-start">
               <div className="p-2 rounded-lg bg-[#ffddb0]/40">
-                <span className="text-[#805600] text-xl">👥</span>
+                
               </div>
             </div>
             <div>
@@ -276,7 +276,7 @@ export default async function DoctorsPage() {
           >
             <div className="flex justify-between items-start">
               <div className="p-2 rounded-lg bg-green-100">
-                <span className="text-green-600 text-xl">⚡</span>
+                
               </div>
               <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
             </div>

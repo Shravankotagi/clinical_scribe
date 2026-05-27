@@ -89,7 +89,7 @@ export default async function DashboardPage({
           >
             <div className="flex justify-between items-start">
               <div className="p-2 rounded-lg bg-[#ffddb0]/40">
-                <span className="text-[#805600] text-xl">✅</span>
+                
               </div>
             </div>
             <div>
@@ -113,7 +113,7 @@ export default async function DashboardPage({
           >
             <div className="flex justify-between items-start">
               <div className="p-2 rounded-lg bg-[#ffddb0]/40">
-                <span className="text-[#805600] text-xl">📄</span>
+                
               </div>
             </div>
             <div>
@@ -138,7 +138,7 @@ export default async function DashboardPage({
           >
             <div className="flex justify-between items-start">
               <div className="p-2 rounded-lg bg-[#ffdad6]/40">
-                <span className="text-[#ba1a1a] text-xl">⏳</span>
+                
               </div>
               <span className="text-[#ba1a1a] group-hover:translate-x-1 transition-transform duration-200">→</span>
             </div>
