@@ -35,21 +35,21 @@ export default async function DashboardPage({
     : encounters
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen bg-[#fff8f5]">
+    <div className="flex-1 flex flex-col min-h-screen" style={{ background: '#f5f7ff' }}>
       <AutoRefresh intervalMs={15000} />
 
       {/* Top App Bar */}
-      <header className="flex justify-between items-center w-full px-10 h-16 sticky top-0 z-30 bg-[#fff8f5]/80 backdrop-blur-md border-b border-[#d5c4ae]/30">
+      <header className="flex justify-between items-center w-full px-10 h-16 sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200">
         <nav className="flex items-center gap-2 text-sm">
-          <span className="text-[#514535]">Documents</span>
-          <span className="text-[#514535] text-xs">›</span>
-          <span className="text-[#805600] font-bold border-b-2 border-[#805600] pb-1">Dashboard</span>
+          <span className="text-gray-500">Documents</span>
+          <span className="text-gray-500 text-xs">›</span>
+          <span className="text-[#1a33cc] font-bold border-b-2 border-[#1a33cc] pb-1">Dashboard</span>
         </nav>
         <div className="flex items-center gap-4">
           <Link
             href={`${process.env.NEXT_PUBLIC_OPENSCRIBE_URL || 'http://localhost:3001'}?doctorId=${user.id}`}
             target="_blank"
-            className="flex items-center gap-2 bg-[#805600] text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-[#614000] hover:shadow-md active:scale-95 transition-all duration-100"
+            className="flex items-center gap-2 bg-[#1a33cc] text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-[#1428a0] hover:shadow-md active:scale-95 transition-all duration-100"
           >
             <span className="text-base">+</span>
             New Encounter
@@ -62,11 +62,11 @@ export default async function DashboardPage({
 
         {/* Welcome Header */}
         <section className="mb-10">
-          <h1 className="text-4xl font-bold tracking-tight text-[#1f1b17] mb-2"
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900 mb-2"
               style={{ fontFamily: 'Manrope, sans-serif', letterSpacing: '-0.02em' }}>
             Welcome, Dr. {user.name}
           </h1>
-          <p className="text-[#514535]">
+          <p className="text-gray-500">
             {filter === 'pending'
               ? `You have ${pendingApproval} pending documents for review.`
               : 'Manage your patient encounters and clinical notes.'}
@@ -78,22 +78,22 @@ export default async function DashboardPage({
 
           {/* Total Encounters */}
           <div
-            className="p-6 rounded-xl flex flex-col gap-4 border-l-4 border-l-[#805600] transition-transform duration-200 hover:-translate-y-1"
+            className="p-6 rounded-xl flex flex-col gap-4 border-l-4 border-l-[#1a33cc] transition-transform duration-200 hover:-translate-y-1"
             style={{
-              background: 'rgba(255,255,255,0.7)',
+              background: 'rgba(255,255,255,0.9)',
               backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(128,86,0,0.1)',
-              borderLeft: '4px solid #805600',
-              boxShadow: '0px 4px 20px rgba(128,86,0,0.05)',
+              border: '1px solid #e5e7eb',
+              borderLeft: '4px solid #1a33cc',
+              boxShadow: '0px 4px 20px rgba(26,51,204,0.06)',
             }}
           >
             <div className="flex justify-between items-start">
-              <div className="p-2 rounded-lg bg-[#ffddb0]/40">
-                <span className="text-[#805600] text-xl">✅</span>
+              <div className="p-2 rounded-lg bg-[#dbeafe]/40">
+                
               </div>
             </div>
             <div>
-              <p className="text-xs text-[#514535] uppercase tracking-wider font-medium mb-1">Total Encounters</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Total Encounters</p>
               <p className="text-2xl font-bold text-black" style={{ fontFamily: 'Manrope, sans-serif' }}>
                 {totalEncounters}
               </p>
@@ -102,22 +102,22 @@ export default async function DashboardPage({
 
           {/* Notes Generated */}
           <div
-            className="p-6 rounded-xl flex flex-col gap-4 border-l-4 border-l-[#ffba46] transition-transform duration-200 hover:-translate-y-1"
+            className="p-6 rounded-xl flex flex-col gap-4 border-l-4 border-l-[#2563eb] transition-transform duration-200 hover:-translate-y-1"
             style={{
-              background: 'rgba(255,255,255,0.7)',
+              background: 'rgba(255,255,255,0.9)',
               backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(128,86,0,0.1)',
-              borderLeft: '4px solid #ffba46',
-              boxShadow: '0px 4px 20px rgba(128,86,0,0.05)',
+              border: '1px solid #e5e7eb',
+              borderLeft: '4px solid #2563eb',
+              boxShadow: '0px 4px 20px rgba(26,51,204,0.06)',
             }}
           >
             <div className="flex justify-between items-start">
-              <div className="p-2 rounded-lg bg-[#ffddb0]/40">
-                <span className="text-[#805600] text-xl">📄</span>
+              <div className="p-2 rounded-lg bg-[#dbeafe]/40">
+                
               </div>
             </div>
             <div>
-              <p className="text-xs text-[#514535] uppercase tracking-wider font-medium mb-1">Notes Generated</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Notes Generated</p>
               <p className="text-2xl font-bold text-black" style={{ fontFamily: 'Manrope, sans-serif' }}>
                 {notesGenerated}
               </p>
@@ -129,21 +129,21 @@ export default async function DashboardPage({
             href="/dashboard?filter=pending"
             className="p-6 rounded-xl flex flex-col gap-4 border-l-4 border-l-[#ba1a1a] text-left group cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
             style={{
-              background: 'rgba(255,255,255,0.7)',
+              background: 'rgba(255,255,255,0.9)',
               backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(128,86,0,0.1)',
+              border: '1px solid #e5e7eb',
               borderLeft: '4px solid #ba1a1a',
-              boxShadow: '0px 4px 20px rgba(128,86,0,0.05)',
+              boxShadow: '0px 4px 20px rgba(26,51,204,0.06)',
             }}
           >
             <div className="flex justify-between items-start">
               <div className="p-2 rounded-lg bg-[#ffdad6]/40">
-                <span className="text-[#ba1a1a] text-xl">⏳</span>
+                
               </div>
               <span className="text-[#ba1a1a] group-hover:translate-x-1 transition-transform duration-200">→</span>
             </div>
             <div>
-              <p className="text-xs text-[#514535] uppercase tracking-wider font-medium mb-1">Pending Approval</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Pending Approval</p>
               <p className="text-2xl font-bold text-black" style={{ fontFamily: 'Manrope, sans-serif' }}>
                 {pendingApproval}
               </p>
@@ -156,37 +156,30 @@ export default async function DashboardPage({
           className="rounded-xl overflow-hidden shadow-sm"
           style={{
             background: '#ffffff',
-            border: '1px solid rgba(213,196,174,0.3)',
+            border: '1px solid #e5e7eb',
           }}
         >
-          <div className="px-6 py-5 flex justify-between items-center border-b border-[#d5c4ae]/30">
-            <h3 className="text-xl font-semibold text-[#805600]" style={{ fontFamily: 'Manrope, sans-serif' }}>
+          <div className="px-6 py-5 flex justify-between items-center border-b border-gray-200">
+            <h3 className="text-xl font-semibold text-[#1a33cc]" style={{ fontFamily: 'Manrope, sans-serif' }}>
               {filter === 'pending' ? 'Pending Approval' : 'Recent Encounters'}
             </h3>
             <div className="flex items-center gap-3">
               {filter === 'pending' && (
-                <Link href="/dashboard" className="text-sm text-[#805600] hover:underline">
+                <Link href="/dashboard" className="text-sm text-[#1a33cc] hover:underline">
                   Show all encounters
                 </Link>
               )}
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#514535] text-sm">🔍</span>
-                <input
-                  className="pl-9 pr-4 py-2 bg-[#fcf2eb] border border-[#d5c4ae]/20 rounded-lg text-sm focus:ring-2 focus:ring-[#805600] focus:outline-none w-64 transition-all"
-                  placeholder="Filter encounters..."
-                  type="text"
-                />
-              </div>
+            
             </div>
           </div>
 
           {displayEncounters.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 py-20 text-center">
               <span className="text-5xl">🩺</span>
-              <p className="text-lg font-medium text-[#1f1b17]">
+              <p className="text-lg font-medium text-gray-900">
                 {filter === 'pending' ? 'No pending approvals' : 'No encounters yet'}
               </p>
-              <p className="text-sm text-[#514535]">
+              <p className="text-sm text-gray-500">
                 {filter === 'pending'
                   ? 'All notes have been approved!'
                   : 'Start a new encounter to record and transcribe a patient consultation.'}
@@ -196,7 +189,7 @@ export default async function DashboardPage({
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-[#f0e6e0] text-[#514535]">
+                  <tr className="bg-[#f0f4ff] text-gray-600">
                     <th className="px-6 py-4 text-xs uppercase tracking-wider font-bold">Patient</th>
                     <th className="px-6 py-4 text-xs uppercase tracking-wider font-bold">Note Type</th>
                     <th className="px-6 py-4 text-xs uppercase tracking-wider font-bold">Date</th>
@@ -206,16 +199,16 @@ export default async function DashboardPage({
                     <th className="px-6 py-4 text-xs uppercase tracking-wider font-bold">CPT Codes</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#d5c4ae]/20">
+                <tbody className="divide-y divide-gray-100">
                   {displayEncounters.map((encounter) => (
-                    <tr key={encounter.id} className="hover:bg-[#fcf2eb] transition-colors">
-                      <td className="px-6 py-4 text-sm font-bold text-[#1f1b17]">
+                    <tr key={encounter.id} className="hover:bg-[#f0f4ff] transition-colors">
+                      <td className="px-6 py-4 text-sm font-bold text-gray-800">
                         {encounter.patientName || 'Unknown Patient'}
                       </td>
-                      <td className="px-6 py-4 text-sm text-[#514535]">
+                      <td className="px-6 py-4 text-sm text-gray-500">
                         {encounter.noteType}
                       </td>
-                      <td className="px-6 py-4 text-sm text-[#514535]">
+                      <td className="px-6 py-4 text-sm text-gray-500">
                         {new Date(encounter.createdAt).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
@@ -250,7 +243,7 @@ export default async function DashboardPage({
                             )}
                           </div>
                         ) : (
-                          <span className="text-[#514535] font-medium">—</span>
+                          <span className="text-gray-500 font-medium">—</span>
                         )}
                       </td>
                       <td className="px-6 py-4">
@@ -264,8 +257,8 @@ export default async function DashboardPage({
                                 ))}
                               </div>
                             )
-                          } catch { return <span className="text-[#514535]">—</span> }
-                        })() : <span className="text-[#514535]">—</span>}
+                          } catch { return <span className="text-gray-500">—</span> }
+                        })() : <span className="text-gray-500">—</span>}
                       </td>
                       <td className="px-6 py-4">
                         {encounter.clinicalNote?.cptCodes ? (() => {
@@ -278,8 +271,8 @@ export default async function DashboardPage({
                                 ))}
                               </div>
                             )
-                          } catch { return <span className="text-[#514535]">—</span> }
-                        })() : <span className="text-[#514535]">—</span>}
+                          } catch { return <span className="text-gray-500">—</span> }
+                        })() : <span className="text-gray-500">—</span>}
                       </td>
                     </tr>
                   ))}
@@ -289,18 +282,18 @@ export default async function DashboardPage({
           )}
 
           {/* Table Footer */}
-          <div className="px-6 py-4 border-t border-[#d5c4ae]/30 flex items-center justify-between">
-            <span className="text-xs text-[#514535]">
+          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <span className="text-xs text-gray-500">
               Showing {displayEncounters.length} of {totalEncounters} encounters
             </span>
             <div className="flex gap-2">
               <button
-                className="p-2 border border-[#d5c4ae]/30 rounded-lg hover:bg-[#fcf2eb] disabled:opacity-30 transition-colors"
+                className="p-2 border border-gray-200 rounded-lg hover:bg-[#f0f4ff] disabled:opacity-30 transition-colors"
                 disabled
               >
                 ‹
               </button>
-              <button className="p-2 border border-[#d5c4ae]/30 rounded-lg hover:bg-[#fcf2eb] transition-colors">
+              <button className="p-2 border border-gray-200 rounded-lg hover:bg-[#f0f4ff] transition-colors">
                 ›
               </button>
             </div>

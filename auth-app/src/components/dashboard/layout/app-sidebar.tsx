@@ -51,16 +51,9 @@ export function AppSidebar({
               asChild
               className='data-[slot=sidebar-menu-button]:p-1.5!'
             >
-              <Link href='/'>
-                <Image
-                  src='/nextjs.svg'
-                  alt='Logo'
-                  width={32}
-                  height={32}
-                  className='size-8'
-                  priority
-                />
-                <span className='text-base font-semibold'>ClinicalScribe</span>
+              <Link href='/' className='flex items-center gap-2'>
+                <img src='/enlight-logo.png' alt='Enlight Lab' className='w-6 h-6 rounded-full' />
+                <span className='text-base font-semibold'>CareScribe AI</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

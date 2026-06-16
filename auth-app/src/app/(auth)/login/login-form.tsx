@@ -100,70 +100,68 @@ export function LoginForm({
 
       {/* Left Panel */}
       <section
-        className='hidden md:flex md:w-1/2 lg:w-3/5 p-8 md:p-12 lg:p-20 flex-col justify-between text-[#1f1b17] relative overflow-hidden'
-        style={{ background: 'linear-gradient(135deg, #fff8f5 0%, #f6ece6 100%)' }}
+        className='hidden md:flex md:w-1/2 lg:w-3/5 p-8 md:p-12 lg:p-20 flex-col justify-between text-[#0A0F2C] relative overflow-hidden'
+        style={{ background: 'linear-gradient(135deg, #f5f7ff 0%, #eef2ff 100%)' }}
       >
         {/* Dot pattern */}
         <div className='absolute inset-0 pointer-events-none opacity-50'
           style={{
-            backgroundImage: 'radial-gradient(rgba(128, 86, 0, 0.05) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(rgba(26, 51, 204, 0.05) 1px, transparent 1px)',
             backgroundSize: '40px 40px'
           }}
         />
         {/* Blobs */}
         <div className='absolute w-96 h-96 -top-20 -left-20 rounded-full pointer-events-none'
-          style={{ background: 'radial-gradient(circle, rgba(202,138,4,0.08) 0%, transparent 70%)', filter: 'blur(60px)' }}
+          style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.08) 0%, transparent 70%)', filter: 'blur(60px)' }}
         />
         <div className='absolute w-80 h-80 bottom-40 -right-20 rounded-full pointer-events-none'
-          style={{ background: 'radial-gradient(circle, rgba(202,138,4,0.08) 0%, transparent 70%)', filter: 'blur(60px)' }}
+          style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.08) 0%, transparent 70%)', filter: 'blur(60px)' }}
         />
 
         <div className='relative z-10'>
           {/* Logo + Badge */}
           <div className='flex items-center justify-between mb-12'>
             <div className='flex items-center gap-4'>
-              <div className='w-12 h-12 bg-[#805600] flex items-center justify-center rounded-xl shadow-lg'>
-                <svg className='w-6 h-6 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' />
-                </svg>
+              <div className='w-12 h-12 bg-[#1a33cc] flex items-center justify-center rounded-xl shadow-lg'>
+                <img src='/enlight-logo.png' alt='Enlight Lab' className='w-7 h-7 rounded-full' />
               </div>
-              <span className='text-xl font-bold tracking-tight text-[#805600]'>ClinicalScribe Pro</span>
+              <span className='text-xl font-bold tracking-tight text-[#1a33cc]'>CareScribe AI</span>
             </div>
             <div className='px-3 py-1 rounded-full flex items-center gap-2 border'
-              style={{ background: 'rgba(128,86,0,0.05)', borderColor: 'rgba(128,86,0,0.2)' }}>
-              <span className='w-2 h-2 bg-[#805600] rounded-full animate-pulse' />
-              <span className='text-[10px] font-bold text-[#805600] uppercase tracking-widest'>HIPAA Ready</span>
+              style={{ background: 'rgba(26,51,204,0.05)', borderColor: 'rgba(26,51,204,0.2)' }}>
+              <span className='w-2 h-2 bg-[#1a33cc] rounded-full animate-pulse' />
+              <span className='text-[10px] font-bold text-[#1a33cc] uppercase tracking-widest'>HIPAA Ready</span>
             </div>
           </div>
 
           {/* Headline */}
           <div className='max-w-2xl'>
-            <h1 className='text-4xl lg:text-5xl font-bold mb-6 leading-tight text-[#1f1b17]'>
+            <h1 className='text-4xl lg:text-5xl font-bold mb-6 leading-tight text-[#0A0F2C]'>
               Focus on the patient,<br />not the charting.
             </h1>
-            <p className='text-lg text-[#514535] mb-10 max-w-lg leading-relaxed'>
+            <p className='text-lg text-gray-500 mb-10 max-w-lg leading-relaxed'>
               Our medical grade Ambient AI captures consultations and turns them into high quality clinical documentation in seconds.
             </p>
 
             {/* Stats */}
             <div className='grid grid-cols-2 gap-4 mb-10'>
-              <div className='p-6 rounded-2xl' style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(16px)', border: '1px solid rgba(128,86,0,0.1)' }}>
+              <div className='p-6 rounded-2xl' style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(16px)', border: '1px solid rgba(26,51,204,0.1)' }}>
                 <div className='flex items-center gap-3 mb-2'>
-                  <svg className='w-5 h-5 text-[#805600]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <svg className='w-5 h-5 text-[#1a33cc]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' />
                   </svg>
-                  <span className='text-2xl font-bold text-[#805600]'>~3 min</span>
+                  <span className='text-2xl font-bold text-[#1a33cc]'>~3 min</span>
                 </div>
-                <p className='text-xs font-medium text-[#514535] uppercase tracking-wider'>Avg. Note Generation</p>
+                <p className='text-xs font-medium text-gray-500 uppercase tracking-wider'>Avg. Note Generation</p>
               </div>
-              <div className='p-6 rounded-2xl' style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(16px)', border: '1px solid rgba(128,86,0,0.1)' }}>
+              <div className='p-6 rounded-2xl' style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(16px)', border: '1px solid rgba(26,51,204,0.1)' }}>
                 <div className='flex items-center gap-3 mb-2'>
-                  <svg className='w-5 h-5 text-[#805600]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <svg className='w-5 h-5 text-[#1a33cc]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z' />
                   </svg>
-                  <span className='text-2xl font-bold text-[#805600]'>95.8%</span>
+                  <span className='text-2xl font-bold text-[#1a33cc]'>95.8%</span>
                 </div>
-                <p className='text-xs font-medium text-[#514535] uppercase tracking-wider'>Coding Accuracy</p>
+                <p className='text-xs font-medium text-gray-500 uppercase tracking-wider'>Coding Accuracy</p>
               </div>
             </div>
 
@@ -187,21 +185,21 @@ export function LoginForm({
                 }
               ].map((f, i) => (
                 <div key={i} className='flex gap-4'>
-                  <div className='w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center' style={{ background: '#ffddb0' }}>
-                    <svg className='w-5 h-5 text-[#281800]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>{f.icon}</svg>
+                  <div className='w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center' style={{ background: '#dbeafe' }}>
+                    <svg className='w-5 h-5 text-[#1e40af]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>{f.icon}</svg>
                   </div>
                   <div>
-                    <h4 className='text-sm font-semibold text-[#1f1b17] mb-0.5'>{f.title}</h4>
-                    <p className='text-sm text-[#514535]'>{f.desc}</p>
+                    <h4 className='text-sm font-semibold text-[#0A0F2C] mb-0.5'>{f.title}</h4>
+                    <p className='text-sm text-gray-500'>{f.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
 
             {/* Testimonial */}
-            <div className='border-l-2 pl-6 mb-12' style={{ borderColor: 'rgba(128,86,0,0.3)' }}>
-              <p className='italic text-base text-[#1f1b17] mb-2'>"ClinicalScribe saved me 2 hours of charting every day. I actually get home in time for dinner now."</p>
-              <p className='text-xs font-semibold text-[#514535] uppercase tracking-wider'>— Dr. Aris R., Cardiologist</p>
+            <div className='border-l-2 pl-6 mb-12' style={{ borderColor: 'rgba(26,51,204,0.3)' }}>
+              <p className='italic text-base text-[#0A0F2C] mb-2'>"CareScribe AI saved me 2 hours of charting every day. I actually get home in time for dinner now."</p>
+              <p className='text-xs font-semibold text-gray-500 uppercase tracking-wider'>— Dr. Aris R., Cardiologist</p>
             </div>
           </div>
         </div>
@@ -209,25 +207,23 @@ export function LoginForm({
       </section>
 
       {/* Right Panel — Login Form */}
-      <section className='md:w-1/2 lg:w-2/5 bg-[#fff8f5] flex flex-col items-center justify-center p-8 md:p-12 lg:p-24 relative overflow-hidden'>
-        <div className='absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full blur-3xl' style={{ background: 'rgba(128,86,0,0.05)' }} />
-        <div className='absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full blur-3xl' style={{ background: 'rgba(229,227,208,0.1)' }} />
+      <section className='md:w-1/2 lg:w-2/5 bg-white flex flex-col items-center justify-center p-8 md:p-12 lg:p-24 relative overflow-hidden'>
+        <div className='absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full blur-3xl' style={{ background: 'rgba(26,51,204,0.05)' }} />
+        <div className='absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full blur-3xl' style={{ background: 'rgba(219,234,254,0.4)' }} />
 
         <div className={cn('w-full max-w-md relative z-10', className)} {...props}>
 
           {/* Mobile logo */}
           <div className='flex items-center gap-3 mb-8 md:hidden'>
-            <div className='w-10 h-10 bg-[#805600] flex items-center justify-center rounded-xl'>
-              <svg className='w-5 h-5 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' />
-              </svg>
+            <div className='w-10 h-10 bg-[#1a33cc] flex items-center justify-center rounded-xl'>
+              <img src='/enlight-logo.png' alt='Enlight Lab' className='w-6 h-6 rounded-full' />
             </div>
-            <span className='text-lg font-bold text-[#805600]'>ClinicalScribe Pro</span>
+            <span className='text-lg font-bold text-[#1a33cc]'>CareScribe AI</span>
           </div>
 
           <div className='mb-10'>
-            <h2 className='text-3xl font-bold text-[#1f1b17] mb-2'>Sign in to Practitioner Portal</h2>
-            <p className='text-base text-[#514535]'>Welcome back. Enter your credentials to continue.</p>
+            <h2 className='text-3xl font-bold text-[#0A0F2C] mb-2'>Sign in to Practitioner Portal</h2>
+            <p className='text-base text-gray-500'>Welcome back. Enter your credentials to continue.</p>
           </div>
 
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
@@ -238,11 +234,11 @@ export function LoginForm({
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor='email' className='block text-sm font-semibold text-[#1f1b17] mb-2'>
+                    <FieldLabel htmlFor='email' className='block text-sm font-semibold text-[#0A0F2C] mb-2'>
                       Institutional Email
                     </FieldLabel>
                     <div className='relative'>
-                      <svg className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#837562]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <svg className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' />
                       </svg>
                       <Input
@@ -254,7 +250,7 @@ export function LoginForm({
                         autoCapitalize='none'
                         autoCorrect='off'
                         aria-invalid={fieldState.invalid}
-                        className='w-full pl-12 pr-4 py-3.5 bg-white border border-[#d5c4ae] rounded-xl focus:ring-2 focus:ring-[#805600] focus:border-[#805600] outline-none transition-all shadow-sm h-auto'
+                        className='w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a33cc] focus:border-[#1a33cc] outline-none transition-all shadow-sm h-auto'
                       />
                     </div>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -269,15 +265,15 @@ export function LoginForm({
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <div className='flex items-center justify-between mb-2'>
-                      <FieldLabel htmlFor='password' className='block text-sm font-semibold text-[#1f1b17]'>
+                      <FieldLabel htmlFor='password' className='block text-sm font-semibold text-[#0A0F2C]'>
                         Password
                       </FieldLabel>
-                      <Link href='/forgot-password' className='text-xs font-semibold text-[#805600] hover:underline'>
+                      <Link href='/forgot-password' className='text-xs font-semibold text-[#1a33cc] hover:underline'>
                         Forgot password?
                       </Link>
                     </div>
                     <div className='relative'>
-                      <svg className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#837562]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <svg className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' />
                       </svg>
                       <PasswordInput
@@ -286,7 +282,7 @@ export function LoginForm({
                         placeholder='••••••••'
                         autoComplete='current-password'
                         aria-invalid={fieldState.invalid}
-                        className='w-full pl-12 pr-12 py-3.5 bg-white border border-[#d5c4ae] rounded-xl focus:ring-2 focus:ring-[#805600] focus:border-[#805600] outline-none transition-all shadow-sm h-auto'
+                        className='w-full pl-12 pr-12 py-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a33cc] focus:border-[#1a33cc] outline-none transition-all shadow-sm h-auto'
                       />
                     </div>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -299,7 +295,7 @@ export function LoginForm({
                 type='submit'
                 disabled={isSubmitting}
                 className='w-full py-4 h-auto font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.98]'
-                style={{ background: '#805600', color: 'white' }}
+                style={{ background: '#1a33cc', color: 'white' }}
               >
                 {isSubmitting ? (
                   <Spinner />
@@ -317,16 +313,16 @@ export function LoginForm({
 
           {/* Divider */}
           <div className='relative py-6 flex items-center gap-4'>
-            <div className='flex-grow border-t border-[#d5c4ae]' />
-            <span className='text-[10px] font-bold text-[#837562] uppercase tracking-[0.15em]'>SSO Login</span>
-            <div className='flex-grow border-t border-[#d5c4ae]' />
+            <div className='flex-grow border-t border-gray-200' />
+            <span className='text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em]'>SSO Login</span>
+            <div className='flex-grow border-t border-gray-200' />
           </div>
 
           {/* Google Sign In */}
           <button
             type='button'
             onClick={signInWithGoogle}
-            className='w-full py-3.5 bg-white border border-[#d5c4ae] rounded-xl flex items-center justify-center gap-3 hover:bg-[#f6ece6] transition-colors text-sm font-semibold text-[#1f1b17] shadow-sm'
+            className='w-full py-3.5 bg-white border border-gray-200 rounded-xl flex items-center justify-center gap-3 hover:bg-[#f0f4ff] transition-colors text-sm font-semibold text-[#0A0F2C] shadow-sm'
           >
             <img
               src='https://www.google.com/favicon.ico'
@@ -340,4 +336,4 @@ export function LoginForm({
       </section>
     </main>
   );
-} 
+}
