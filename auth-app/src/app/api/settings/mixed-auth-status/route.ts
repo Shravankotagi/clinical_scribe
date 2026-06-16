@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server'
 
 export async function GET() {
-  const key = (process.env.ANTHROPIC_API_KEY || '').trim()
-  const hasKey = key.length > 0 && key.startsWith('sk-ant-')
+  const anthropicKey = (process.env.ANTHROPIC_API_KEY || '').trim()
+  const geminiKey = (process.env.GEMINI_API_KEY || '').trim()
+
+  const hasKey = anthropicKey.length > 0 || geminiKey.length > 0
 
   return NextResponse.json({
     hasAnthropicKeyConfigured: hasKey,
