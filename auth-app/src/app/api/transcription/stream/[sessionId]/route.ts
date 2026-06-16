@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server"
-import { transcriptionSessionStore } from "@transcript-assembly"
+import { transcriptionSessionStore } from "@/lib/assemble"
 
 export const runtime = "nodejs"
 

@@ -1,8 +1,8 @@
 import type { NextRequest } from "next/server"
-import { toPipelineError } from "@pipeline-errors"
-import { parseWavHeader, resolveTranscriptionProvider, transcribeWithResolvedProvider } from "@transcription"
-import { transcriptionSessionStore } from "@transcript-assembly"
-import { writeAuditEntry } from "@storage/audit-log"
+import { toPipelineError } from "@/lib/pipeline-shared/error"
+import { parseWavHeader, resolveTranscriptionProvider, transcribeWithResolvedProvider } from "@/lib/transcribe"
+import { transcriptionSessionStore } from "@/lib/assemble"
+import { writeAuditEntry } from "@/lib/scribe-storage/audit-log"
 
 export const runtime = "nodejs"
 

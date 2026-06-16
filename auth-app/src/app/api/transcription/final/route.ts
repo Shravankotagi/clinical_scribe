@@ -1,8 +1,8 @@
 import type { NextRequest } from "next/server"
-import { toPipelineError } from "@pipeline-errors"
-import { parseWavHeader, resolveTranscriptionProvider, transcribeWithResolvedProvider } from "@transcription"
-import { transcriptionSessionStore } from "@transcript-assembly"
-import { writeAuditEntry } from "@storage/audit-log"
+import { toPipelineError } from "@/lib/pipeline-shared/error"
+import { parseWavHeader, resolveTranscriptionProvider, transcribeWithResolvedProvider } from "@/lib/transcribe"
+import { transcriptionSessionStore } from "@/lib/assemble"
+import { writeAuditEntry } from "@/lib/scribe-storage/audit-log"
 
 export const runtime = "nodejs"
 
@@ -105,15 +105,16 @@ export async function POST(req: NextRequest) {
       )
       const latencyMs = Date.now() - startedAtMs
       if (isBlankTranscript(transcript)) {
-        transcriptionSessionStore.emitError(
-          sessionId,
-          "blank_audio",
-          "No detectable speech signal in the recording. Check microphone input/device and retry.",
-        )
+        transcriptionSessionStore.emitError(sessionId, {
+          code: "blank_audio",
+          message: "No detectable speech signal in the recording. Check microphone input/device and retry.",
+          recoverable: false,
+        })
         return jsonError(
-          422,
+          422,  
           "blank_audio",
           "No detectable speech signal in the recording. Check microphone input/device and retry.",
+          false,
         )
       }
       if (likelySilentAudio) {
