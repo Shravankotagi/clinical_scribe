@@ -146,7 +146,7 @@ export default async function DoctorsPage() {
             </h3>
           </div>
 
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto overflow-y-visible">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-[#f0f4ff] text-gray-600">

@@ -22,7 +22,7 @@ export function CodeChip({ code, defaultConfidence = '90', variant }: CodeChipPr
         {codeNum}
         <span className={`text-[10px] ${colors.pct}`}>{confidence}%</span>
       </span>
-      <div className='absolute bottom-full left-0 mb-1 z-50 w-52 rounded-lg bg-gray-900 text-white text-xs p-3 shadow-xl border border-gray-700 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-150'>
+      <div className='absolute top-full left-0 mt-1 z-[999] w-52 rounded-lg bg-gray-900 text-white text-xs p-3 shadow-xl border border-gray-700 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-150'>
         <p className='font-semibold'>{codeNum}</p>
         <p className='text-gray-300 mt-1 leading-relaxed'>{description}</p>
         <p className='text-gray-400 mt-1'>Confidence: {confidence}%</p>

@@ -47,8 +47,7 @@ export default async function DashboardPage({
         </nav>
         <div className="flex items-center gap-4">
           <Link
-            href={`${process.env.NEXT_PUBLIC_OPENSCRIBE_URL || 'http://localhost:3001'}?doctorId=${user.id}`}
-            target="_blank"
+            href={`/scribe?doctorId=${user.id}`}
             className="flex items-center gap-2 bg-[#1a33cc] text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-[#1428a0] hover:shadow-md active:scale-95 transition-all duration-100"
           >
             <span className="text-base">+</span>
@@ -181,12 +180,12 @@ export default async function DashboardPage({
               </p>
               <p className="text-sm text-gray-500">
                 {filter === 'pending'
-                  ? 'All notes have been approved!'
+                  ? 'All notes have been approved!' 
                   : 'Start a new encounter to record and transcribe a patient consultation.'}
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto overflow-y-visible">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-[#f0f4ff] text-gray-600">
