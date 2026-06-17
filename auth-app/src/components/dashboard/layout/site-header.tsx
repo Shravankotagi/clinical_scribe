@@ -13,7 +13,7 @@ export function SiteHeader() {
         />
         <h1 className='text-base font-medium'>Documents</h1>
         <div className='ml-auto flex items-center gap-2'>
-          <ModeToggle />
+          {/* <ModeToggle /> */}
         </div>
       </div>
     </header>

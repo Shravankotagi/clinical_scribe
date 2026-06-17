@@ -8,33 +8,16 @@ services:
     env_file:
       - ./auth-app/.env
     environment:
-      - OPENSCRIBE_URL=http://localhost:3001
       - BETTER_AUTH_URL=http://localhost:3000
       - NODE_TLS_REJECT_UNAUTHORIZED=0
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
-    restart: unless-stopped
-
-  openscribe:
-    build:
-      context: ./frontend
-      dockerfile: apps/web/Dockerfile
-    hostname: openscribe
-    ports:
-      - "3001:3001"
-    env_file:
-      - ./frontend/apps/web/.env.local
-    environment:
       - WHISPER_LOCAL_URL=http://transcription:8000/v1/audio/transcriptions
       - WHISPER_LOCAL_TRUSTED_HOSTS=transcription
-      - AUTH_APP_URL=http://auth-app:3000
+      - NODE_OPTIONS=--dns-result-order=ipv4first
     dns:
       - 8.8.8.8
       - 8.8.4.4
     depends_on:
       - transcription
-      - auth-app
     restart: unless-stopped
 
   transcription:
@@ -43,7 +26,7 @@ services:
       dockerfile: Dockerfile.assemblyai
     hostname: transcription
     ports:
-      - "8002:8000"
+      - "8003:8000"
     environment:
       - ASSEMBLYAI_API_KEY=${ASSEMBLYAI_API_KEY}
     dns:
@@ -55,6 +38,5 @@ services:
     image: alpine
     command: sh -c "apk add --no-cache curl && while true; do curl -s http://auth-app:3000/api/health > /dev/null 2>&1; sleep 20; done"
     depends_on:
-      auth-app:
-        condition: service_started
+      - auth-app
     restart: unless-stopped

@@ -62,7 +62,9 @@ export default async function DoctorsPage() {
         updatedAt: new Date(),
       },
     });
-
+    
+    const { revalidatePath } = await import('next/cache')
+    revalidatePath('/admin/doctors')
     redirect("/admin/doctors");
   }
 
@@ -71,9 +73,11 @@ export default async function DoctorsPage() {
     const session = await isAuthenticated();
     if (!session || session.user.role !== "admin") redirect("/login");
 
+    const { revalidatePath } = await import('next/cache')
     const doctorId = formData.get("doctorId") as string;
     const banned = formData.get("banned") === "true";
     await prisma.user.update({ where: { id: doctorId }, data: { banned: !banned } });
+    revalidatePath('/admin/doctors')
   }
 
   const totalActive = doctors.filter(d => !d.banned).length;

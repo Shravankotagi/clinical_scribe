@@ -4,6 +4,7 @@ import Link from 'next/link';
 import prisma from '@/lib/prisma';
 import { AutoRefresh } from '@/components/dashboard/auto-refresh'
 import { CodeChip } from '@/components/CodeChip'
+import { EncounterRow } from '@/components/dashboard/encounter-row'
 export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage({
@@ -36,7 +37,7 @@ export default async function DashboardPage({
 
   return (
     <div className="flex-1 flex flex-col min-h-screen" style={{ background: '#f5f7ff' }}>
-      <AutoRefresh intervalMs={15000} />
+      <AutoRefresh intervalMs={5000} />
 
       {/* Top App Bar */}
       <header className="flex justify-between items-center w-full px-10 h-16 sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200">
@@ -200,7 +201,12 @@ export default async function DashboardPage({
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {displayEncounters.map((encounter) => (
-                    <tr key={encounter.id} className="hover:bg-[#f0f4ff] transition-colors">
+                    <EncounterRow
+                      key={encounter.id}
+                      encounterId={encounter.id}
+                      doctorId={user.id}
+                      isDraft={encounter.clinicalNote?.status === 'DRAFT'}
+                    >
                       <td className="px-6 py-4 text-sm font-bold text-gray-800">
                         {encounter.patientName || 'Unknown Patient'}
                       </td>
@@ -273,7 +279,7 @@ export default async function DashboardPage({
                           } catch { return <span className="text-gray-500">—</span> }
                         })() : <span className="text-gray-500">—</span>}
                       </td>
-                    </tr>
+                    </EncounterRow>
                   ))}
                 </tbody>
               </table>

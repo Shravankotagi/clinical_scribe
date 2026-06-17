@@ -57,7 +57,10 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
   const [hasChanges, setHasChanges] = useState(false)
   const [copied, setCopied] = useState(false)
   const [saved, setSaved] = useState(false)
-  const [approved, setApproved] = useState(false)
+  const [approved, setApproved] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return sessionStorage.getItem(`approved_${encounter.id}`) === 'true'
+  })
   const [approving, setApproving] = useState(false)
   const [highlightedNote, setHighlightedNote] = useState<string | null>(null)
   const [highlighting, setHighlighting] = useState(false)
@@ -114,24 +117,6 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
     setTimeout(() => setSaved(false), 2000)
   }
 
-  const handleHighlightUncertain = async () => {
-    if (highlighting || highlightedNote) return
-    setHighlighting(true)
-    try {
-      const response = await fetch(`/api/proxy/highlight`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ note: noteMarkdown }),
-      })
-      const data = await response.json() as { markedNote?: string }
-      if (data.markedNote) setHighlightedNote(data.markedNote)
-    } catch (err) {
-      console.error("Highlight failed:", err)
-    } finally {
-      setHighlighting(false)
-    }
-  }
-
   const handleApprove = async () => {
     if (approving || approved) return
     setApproving(true)
@@ -148,7 +133,12 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
         body: JSON.stringify({ encounterId: neonEncounterId, doctorId, finalNote: noteMarkdown }),
       })
       setApproved(true)
+      sessionStorage.setItem(`approved_${encounter.id}`, 'true')
       setHasChanges(false)
+      // Broadcast to dashboard immediately
+      const channel = new BroadcastChannel('dashboard_refresh')
+      channel.postMessage('refresh')
+      channel.close()
       if (window.opener) window.opener.location.reload()
     } catch (err) {
       console.error("Approve failed:", err)
@@ -176,6 +166,27 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
     a.download = `${encounter.patient_name || "encounter"}_${suffix}_${format(new Date(encounter.created_at), "yyyy-MM-dd")}.${extension}`
     a.click()
     URL.revokeObjectURL(url)
+  }
+  const handleHighlightUncertain = async () => {
+    if (highlightedNote) {
+      setHighlightedNote(null)
+      return
+    }
+    if (highlighting) return
+    setHighlighting(true)
+    try {
+      const response = await fetch(`/api/proxy/highlight`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ note: noteMarkdown }),
+      })
+      const data = await response.json() as { markedNote?: string }
+      if (data.markedNote) setHighlightedNote(data.markedNote)
+    } catch (err) {
+      console.error("Highlight failed:", err)
+    } finally {
+      setHighlighting(false)
+    }
   }
 
   const appendMessage = (message: OpenClawMessage) => {
@@ -370,12 +381,16 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                     onClick={handleHighlightUncertain}
                     disabled={highlighting || !noteMarkdown.trim()}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors disabled:opacity-50"
-                    style={{ color: '#1a33cc', border: '1px solid rgba(26,51,204,0.3)' }}
-                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(26,51,204,0.05)')}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                    style={{ 
+                      color: highlightedNote ? '#854d0e' : '#1a33cc', 
+                      border: highlightedNote ? '1px solid rgba(133,77,14,0.3)' : '1px solid rgba(26,51,204,0.3)',
+                      background: highlightedNote ? 'rgba(254,240,138,0.3)' : 'transparent'
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = highlightedNote ? 'rgba(254,240,138,0.5)' : 'rgba(26,51,204,0.05)')}
+                    onMouseLeave={e => (e.currentTarget.style.background = highlightedNote ? 'rgba(254,240,138,0.3)' : 'transparent')}
                   >
                     {highlighting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <AlertTriangle className="h-3.5 w-3.5" />}
-                    {highlightedNote ? 'Highlighted' : 'Check Uncertain'}
+                    {highlighting ? 'Checking...' : highlightedNote ? 'Clear Highlight' : 'Check Uncertain'}
                   </button>
 
                   <button
@@ -406,7 +421,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
         </div>
 
         {/* Content Area */}
-        <div className="flex flex-1 overflow-hidden gap-6 p-6">
+        <div className="flex flex-1 overflow-y-auto gap-6 p-6">
 
           {/* Main Note Area */}
           <div className="flex-1 flex flex-col overflow-hidden rounded-xl border" style={{ background: '#ffffff', borderColor: '#e5e7eb', boxShadow: '0px 4px 20px rgba(26,51,204,0.06)' }}>
@@ -421,8 +436,8 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
               </div>
             </div>
 
-            <ScrollArea className="flex-1">
-              <div className="p-8">
+            <div className="flex-1 overflow-y-auto">
+               <div className="p-8">
                 {activeTab === "note" ? (
                   <>
                     {highlightedNote ? (
@@ -430,17 +445,18 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                         className="min-h-[500px] rounded-xl font-mono text-sm leading-relaxed p-4 whitespace-pre-wrap"
                         style={{ background: 'white', border: '1px solid #e5e7eb' }}
                       >
-                        {highlightedNote.split(/(\{\{uncertain\}\}.*?\{\{\/uncertain\}\})/g).map((part, i) => {
+                        {highlightedNote.split(/(\{\{uncertain\}\}[\s\S]*?\{\{\/uncertain\}\})/g).map((part, i) => {
                           if (part.startsWith('{{uncertain}}')) {
                             const text = part.replace('{{uncertain}}', '').replace('{{/uncertain}}', '')
                             return (
-                              <mark key={i} style={{ background: 'rgba(26,51,204,0.1)', borderBottom: '2px dashed #1a33cc', cursor: 'help' }}>
+                              <mark key={i} style={{ background: '#fef08a', borderRadius: '3px', padding: '1px 3px' }}>
                                 {text}
                               </mark>
                             )
                           }
                           return <span key={i}>{part}</span>
                         })}
+                      
                         <button
                           onClick={() => setHighlightedNote(null)}
                           className="mt-3 text-xs underline block"
@@ -483,7 +499,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                   </div>
                 )}
               </div>
-            </ScrollArea>
+            </div>
           </div>
 
           {/* Right Sidebar */}

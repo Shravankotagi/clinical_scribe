@@ -147,11 +147,14 @@ function HomePageContent() {
   const { encounters, addEncounter, updateEncounter, deleteEncounter: removeEncounter, refresh } = useEncounters()
   const searchParams = useSearchParams()
   const doctorId = searchParams.get("doctorId") || ""
+  const preloadEncounterId = searchParams.get("encounterId") || ""
   
   // HIPAA Compliance: Warn if production build is served over HTTP
   const httpsWarning = useHttpsWarning()
 
-  const [view, setView] = useState<ViewState>({ type: "idle" })
+  const [view, setView] = useState<ViewState>(
+    preloadEncounterId ? { type: "viewing", encounterId: preloadEncounterId } : { type: "idle" }
+  )
   const [transcriptionStatus, setTranscriptionStatus] = useState<StepStatus>("pending")
   const [noteGenerationStatus, setNoteGenerationStatus] = useState<StepStatus>("pending")
   const [transcriptionErrorMessage, setTranscriptionErrorMessage] = useState("")
@@ -1478,6 +1481,44 @@ function HomePageContent() {
     return () => window.clearInterval(interval)
   }, [useLocalBackend, localPaused, view.type])
 
+  useEffect(() => {
+  if (!preloadEncounterId) return
+  
+  const loadEncounterFromDb = async () => {
+    try {
+      const response = await fetch(`/api/encounters/${preloadEncounterId}`)
+      if (!response.ok) return
+      const data = await response.json() as {
+        id: string
+        patientName: string
+        noteType: string
+        createdAt: string
+        clinicalNote?: { aiGeneratedContent?: string; finalContent?: string }
+        transcript?: { content: string }
+      }
+      
+      await addEncounter({
+        id: preloadEncounterId,
+        patient_name: data.patientName,
+        patient_id: '',
+        visit_reason: data.noteType,
+        created_at: data.createdAt,
+        updated_at: data.createdAt,
+        transcript_text: data.transcript?.content || '',
+        note_text: data.clinicalNote?.finalContent || data.clinicalNote?.aiGeneratedContent || '',
+        status: 'completed',
+        language: 'en',
+      })
+      
+      setView({ type: "viewing", encounterId: preloadEncounterId })
+    } catch (err) {
+      console.error('Failed to load encounter from DB:', err)
+    }
+  }
+  
+  void loadEncounterFromDb()
+}, [preloadEncounterId])
+
   const currentEncounter = encounters.find((e: Encounter) => "encounterId" in view && e.id === view.encounterId)
   const selectedEncounter = view.type === "viewing" ? encounters.find((e: Encounter) => e.id === view.encounterId) : null
 
@@ -1492,6 +1533,14 @@ function HomePageContent() {
   }
 
   const handleDeleteEncounter = async (encounterId: string) => {
+    // Delete from DB using neon ID if available
+    try {
+      const neonId = sessionStorage.getItem(`neon_${encounterId}`) || encounterId
+      await fetch(`/api/encounters/${neonId}`, { method: 'DELETE' })
+    } catch (err) {
+      console.error('Failed to delete from DB:', err)
+    }
+
     await removeEncounter(encounterId)
     if (currentEncounterIdRef.current === encounterId) {
       currentEncounterIdRef.current = null
@@ -1736,7 +1785,7 @@ function HomePageContent() {
           <ModelIndicator processingMode={processingMode} />
           <SettingsBar onOpenSettings={handleOpenSettings} />
         </div>
-        <main className="flex flex-1 flex-col overflow-hidden bg-background">
+        <main className="flex flex-1 flex-col overflow-y-auto bg-background">
           {renderMainContent()}
         </main>
       </div>

@@ -31,12 +31,13 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           contents: [{
             parts: [{
-              text: `You are a medical documentation reviewer. Review the clinical note below and wrap any uncertain, assumed, or inferred content in {{uncertain}}...{{/uncertain}} tags.
-Uncertain content includes: assumed findings not explicitly stated, inferred diagnoses, medications not clearly mentioned, or any information not directly supported by the conversation.
-Return the COMPLETE note with only the uncertain parts wrapped. Do not change any other text. Do not add markdown or explanation.
+              text: `You are a medical documentation reviewer. Review the clinical note and wrap ONLY the uncertain parts in {{uncertain}}text here{{/uncertain}} tags.
+              Uncertain means: assumed diagnoses, inferred medications, findings not explicitly stated by patient.
+              IMPORTANT: Use exactly {{uncertain}} to open and {{/uncertain}} to close. No other format.
+              Return the complete note. Do not explain anything.
 
-Clinical Note:
-${note}`
+              Clinical Note:
+              ${note}`
             }]
           }],
           generationConfig: { temperature: 0.1, maxOutputTokens: 2048 }

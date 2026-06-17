@@ -16,4 +16,15 @@ const prisma = globalForPrisma.prisma ?? createClient();
 
 globalForPrisma.prisma = prisma;
 
+// Keep database connection alive — ping every 4 minutes
+if (typeof setInterval !== 'undefined') {
+  setInterval(async () => {
+    try {
+      await prisma.$queryRaw`SELECT 1`
+    } catch {
+      // silently ignore keepalive failures
+    }
+  }, 4 * 60 * 1000)
+}
+
 export default prisma;
