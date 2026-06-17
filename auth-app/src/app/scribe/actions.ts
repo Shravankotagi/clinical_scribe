@@ -5,6 +5,7 @@ import { createClinicalNoteText } from "@/lib/note-core"
 import { writeAuditEntry } from "@/lib/scribe-storage/audit-log"
 import { getAnthropicApiKey } from "@/lib/scribe-storage/server-api-keys"
 import prisma from "@/lib/prisma"
+import { isAuthenticated } from '@/server/user'
 
 async function extractIcdCodes(note: string): Promise<string[]> {
   try {
@@ -95,6 +96,12 @@ ${note}`
 export async function generateClinicalNote(
   params: ClinicalNoteRequest & { doctorId?: string; transcript?: string; duration?: number }
 ): Promise<{ note: string; neonEncounterId?: string; icdCodes?: string[]; cptCodes?: string[] }> {
+  if (params.doctorId) {
+    const session = await isAuthenticated()
+    if (!session || session.user.id !== params.doctorId) {
+      throw new Error('Unauthorized')
+    }
+  }
   const apiKey = getAnthropicApiKey()
 
   try {

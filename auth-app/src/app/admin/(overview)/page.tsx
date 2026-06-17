@@ -174,14 +174,12 @@ export default async function AdminDashboardPage({
                     </td>
                     <td className='px-6 py-4'>
                       {encounter.clinicalNote?.status === 'APPROVED' ? (
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-wider ${
-                          encounter.clinicalNote?.status === 'APPROVED'
-                            ? 'bg-green-100 text-green-700'
-                            : encounter.clinicalNote?.status === 'PENDING'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-gray-100 text-gray-600'
-                        }`}>
-                          {encounter.clinicalNote?.status || 'NO NOTE'}
+                        <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold' style={{ background: '#dcfce7', color: '#15803d' }}>
+                          <span className='w-1.5 h-1.5 rounded-full bg-green-500' />Approved
+                        </span>
+                      ) : encounter.clinicalNote?.status === 'DRAFT' ? (
+                        <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold' style={{ background: '#fef9c3', color: '#854d0e' }}>
+                          <span className='w-1.5 h-1.5 rounded-full bg-yellow-500' />Pending
                         </span>
                       ) : (
                         <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold' style={{ background: '#e2e2e2', color: '#514535' }}>No Note</span>

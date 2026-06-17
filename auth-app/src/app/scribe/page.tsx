@@ -217,6 +217,30 @@ function HomePageContent() {
   }, [])
 
   useEffect(() => {
+    if (!doctorId) return
+    
+    const loadPreviousEncounters = async () => {
+      try {
+        const response = await fetch('/api/encounters/mine')
+        if (!response.ok) return
+        const dbEncounters = await response.json() as Encounter[]
+        
+        for (const enc of dbEncounters) {
+          const existing = encounters.find((e: Encounter) => e.id === enc.id)
+          if (!existing) {
+            await addEncounter(enc)
+          }
+        }
+        await refresh()
+      } catch (err) {
+        console.error('Failed to load previous encounters:', err)
+      }
+    }
+    
+    void loadPreviousEncounters()
+  }, [doctorId])
+
+  useEffect(() => {
     const loadApiKeys = async () => {
       try {
         const [keys, mixedAuthStatus] = await Promise.all([getApiKeys(), getMixedModeAuthStatus()])
