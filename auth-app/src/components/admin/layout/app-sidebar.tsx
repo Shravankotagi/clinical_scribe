@@ -52,15 +52,16 @@ export function AppSidebar({
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className='data-[slot=sidebar-menu-button]:p-1.5!'
-            >
-              <Link href='/' className='flex items-center gap-2'>
-                <img src='/enlight-logo.png' alt='Enlight Lab' className='w-6 h-6 rounded-full' />
-                <span className='text-base font-semibold'>CareScribe AI</span>
-              </Link>
-            </SidebarMenuButton>
+            <Link href="/admin" className="flex flex-col items-center gap-1 px-2 py-3 w-full">
+              <img 
+                src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" 
+                alt="Enlight Lab" 
+                className="h-8 w-auto"
+              />
+              <span className="text-[11px] font-bold tracking-widest text-[#0A1F6B]">
+                CARESCRIBE AI
+              </span>
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

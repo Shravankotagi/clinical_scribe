@@ -1,15 +1,9 @@
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { isAuthenticated } from "@/server/user";
-import { auth } from '@/lib/auth';
-
-import {
-  Dialog, DialogContent, DialogDescription,
-  DialogHeader, DialogTitle, DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { AddDoctorDialog } from "./add-doctor-dialog";
+import { toggleDoctorStatus, deleteDoctor } from "./actions";
+import { DeleteDoctorButton } from '@/components/admin/delete-doctor-button'
 
 export default async function DoctorsPage() {
   const session = await isAuthenticated();
@@ -19,66 +13,6 @@ export default async function DoctorsPage() {
     where: { role: "doctor" },
     orderBy: { createdAt: "desc" },
   });
-
-  async function createDoctor(formData: FormData) {
-    "use server";
-    const session = await isAuthenticated();
-    if (!session || session.user.role !== "admin") redirect("/login");
-
-    const name = formData.get("name") as string;
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    if (!name || !email || !password) throw new Error("All fields required");
-
-    const existing = await prisma.user.findUnique({ where: { email } });
-    if (existing) throw new Error("User already exists");
-
-    const userId = crypto.randomUUID();
-
-    const ctx = await auth.$context;
-    const hashedPassword = await ctx.password.hash(password);
-
-    await prisma.user.create({
-      data: {
-        id: userId,
-        name,
-        email,
-        role: "doctor",
-        emailVerified: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    });
-
-    await (prisma as any).account.create({
-      data: {
-        id: crypto.randomUUID(),
-        userId: userId,
-        accountId: email,
-        providerId: "credential",
-        password: hashedPassword,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    });
-    
-    const { revalidatePath } = await import('next/cache')
-    revalidatePath('/admin/doctors')
-    redirect("/admin/doctors");
-  }
-
-  async function toggleDoctorStatus(formData: FormData) {
-    "use server";
-    const session = await isAuthenticated();
-    if (!session || session.user.role !== "admin") redirect("/login");
-
-    const { revalidatePath } = await import('next/cache')
-    const doctorId = formData.get("doctorId") as string;
-    const banned = formData.get("banned") === "true";
-    await prisma.user.update({ where: { id: doctorId }, data: { banned: !banned } });
-    revalidatePath('/admin/doctors')
-  }
 
   const totalActive = doctors.filter(d => !d.banned).length;
 
@@ -93,35 +27,7 @@ export default async function DoctorsPage() {
           <span className="text-[#1a33cc] font-bold border-b-2 border-[#1a33cc] pb-1">Manage Doctors</span>
         </nav>
         <div className="flex items-center gap-4">
-          <Dialog>
-            <DialogTrigger asChild>
-              <button className="flex items-center gap-2 bg-[#1a33cc] text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-[#1428a0] hover:shadow-md active:scale-95 transition-all duration-100">
-                <span className="text-base">+</span>
-                Add Doctor
-              </button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Add Doctor</DialogTitle>
-                <DialogDescription>Create a new doctor account</DialogDescription>
-              </DialogHeader>
-              <form action={createDoctor} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input id="name" name="name" placeholder="Dr. John Smith" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" name="email" type="email" placeholder="doctor@clinic.com" required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">Temporary Password</Label>
-                  <Input id="password" name="password" type="password" placeholder="••••••••" required />
-                </div>
-                <Button type="submit" className="w-full">Create Doctor Account</Button>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <AddDoctorDialog />
         </div>
       </header>
 
@@ -199,20 +105,23 @@ export default async function DoctorsPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <form action={toggleDoctorStatus}>
-                          <input type="hidden" name="doctorId" value={doctor.id} />
-                          <input type="hidden" name="banned" value={String(doctor.banned)} />
-                          <button
-                            type="submit"
-                            className={`text-sm font-medium px-4 py-1.5 rounded-lg border transition-all hover:shadow-sm active:scale-95 ${
-                              doctor.banned
-                                ? 'text-[#1a33cc] bg-[#f0f4ff] border-[#c7d2fe] hover:bg-[#e0e7ff]'
-                                : 'text-[#ba1a1a] bg-white border-gray-200 hover:bg-red-50'
-                            }`}
-                          >
-                            {doctor.banned ? 'Activate' : 'Deactivate'}
-                          </button>
-                        </form>
+                        <div className="flex items-center justify-end gap-2">
+                          <form action={toggleDoctorStatus}>
+                            <input type="hidden" name="doctorId" value={doctor.id} />
+                            <input type="hidden" name="banned" value={String(doctor.banned)} />
+                            <button
+                              type="submit"
+                              className={`text-sm font-medium px-4 py-1.5 rounded-lg border transition-all hover:shadow-sm active:scale-95 ${
+                                doctor.banned
+                                  ? 'text-[#1a33cc] bg-[#f0f4ff] border-[#c7d2fe] hover:bg-[#e0e7ff]'
+                                  : 'text-[#ba1a1a] bg-white border-gray-200 hover:bg-red-50'
+                              }`}
+                            >
+                              {doctor.banned ? 'Activate' : 'Deactivate'}
+                            </button>
+                          </form>
+                          <DeleteDoctorButton doctorId={doctor.id} deleteAction={deleteDoctor} />
+                        </div>
                       </td>
                     </tr>
                   ))

@@ -9,12 +9,12 @@ const fontSans = FontSans({
 });
 
 export const metadata = {
-  title: 'ClinicalScribe',
+  title: 'CareScribe AI',
   description: 'AI-powered clinical documentation for physicians',
   openGraph: {
-    title: 'ClinicalScribe',
+    title: 'CareScribe AI',
     description: 'AI-powered clinical documentation for physicians',
-    siteName: 'ClinicalScribe',
+    siteName: 'CareScribe AI',
   },
 }
 

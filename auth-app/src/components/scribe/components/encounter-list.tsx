@@ -49,12 +49,16 @@ export function EncounterList({
 
       {/* Branding */}
       <div className="px-6 py-6 flex flex-col gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: '#1a33cc' }}>
-            <img src="/enlight-logo.png" alt="Enlight Lab" className="w-6 h-6 rounded-full" />
-          </div>
-          <span className="text-lg font-bold text-white">CareScribe AI</span>
-        </div>
+        <a href="/dashboard" className="flex flex-col items-center gap-1 py-2">
+          <img 
+            src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" 
+            alt="Enlight Lab" 
+            className="h-8 w-auto brightness-0 invert"
+          />
+          <span className="text-[11px] font-bold tracking-widest" style={{ color: '#60a5fa' }}>
+            CARESCRIBE AI
+          </span>
+        </a>
 
         {/* New Encounter Button */}
         <button

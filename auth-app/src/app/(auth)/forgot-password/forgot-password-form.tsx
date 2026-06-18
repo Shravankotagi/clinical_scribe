@@ -71,13 +71,13 @@ export function ForgotPasswordForm({
     >
       {/* Header */}
       <div className='flex flex-col items-center gap-2 text-center'>
-        <div className='bg-primary/10 text-primary mb-2 flex h-12 w-12 items-center justify-center rounded-xl'>
+        <div className='mb-2 flex h-12 w-12 items-center justify-center'>
           <Image
-            src='/nextjs.svg'
-            alt='Logo'
-            width={50}
-            height={50}
-            className='size-12'
+            src='/enlight-icon.png'
+            alt='Enlight Lab'
+            width={48}
+            height={48}
+            className='size-12 rounded-xl'
             priority
           />
         </div>

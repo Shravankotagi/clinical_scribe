@@ -24,7 +24,7 @@ export async function GET() {
     updated_at: e.updatedAt.toISOString(),
     transcript_text: '',
     note_text: e.clinicalNote?.finalContent || e.clinicalNote?.aiGeneratedContent || '',
-    status: 'completed',
+    status: 'completed' as const,
     language: 'en',
     recording_duration: e.duration,
   })))
