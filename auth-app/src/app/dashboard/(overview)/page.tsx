@@ -6,6 +6,7 @@ import { AutoRefresh } from '@/components/dashboard/auto-refresh'
 import { CodeChip } from '@/components/CodeChip'
 import { EncounterRow } from '@/components/dashboard/encounter-row'
 export const dynamic = 'force-dynamic'
+import { FhirDownloadButton } from '@/components/dashboard/fhir-download-button'
 
 export default async function DashboardPage({
   searchParams
@@ -225,14 +226,7 @@ export default async function DashboardPage({
                                 </span>
                               )}
                               {status === 'APPROVED' && (
-                                <a
-                                  href={`/api/encounters/fhir-export?encounterId=${encounter.id}`}
-                                  download={`fhir-${encounter.id}.json`}
-                                  onClick={e => e.stopPropagation()}
-                                  className="flex items-center gap-0.5 px-2 py-0.5 bg-[#e6fcf5] text-emerald-700 rounded-md text-[10px] font-bold border border-emerald-200"
-                                >
-                                  <span>↓</span> FHIR
-                                </a>
+                                <FhirDownloadButton encounterId={encounter.id} />
                               )}
                             </div>
                           </div>
