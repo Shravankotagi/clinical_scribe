@@ -135,7 +135,6 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
       setApproved(true)
       sessionStorage.setItem(`approved_${encounter.id}`, 'true')
       setHasChanges(false)
-      // Broadcast to dashboard immediately
       const channel = new BroadcastChannel('dashboard_refresh')
       channel.postMessage('refresh')
       channel.close()
@@ -167,6 +166,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
     a.click()
     URL.revokeObjectURL(url)
   }
+
   const handleHighlightUncertain = async () => {
     if (highlightedNote) {
       setHighlightedNote(null)
@@ -289,23 +289,28 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
 
   return (
     <>
+      {/* Main wrapper — full height, no overflow on outer */}
       <div className="flex h-full flex-col" style={{ background: '#f5f7ff' }}>
 
-        {/* Header */}
-        <div className="shrink-0 border-b px-8 py-5" style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderColor: '#e5e7eb' }}>
-          <div className="flex items-start justify-between gap-4 mb-4">
-            <div>
-              <div className="flex items-center gap-3">
-                <h2 className="text-lg font-bold" style={{ color: '#0A0F2C' }}>
+        {/* ── Header ── */}
+        <div
+          className="shrink-0 border-b px-4 sm:px-8 py-4 sm:py-5"
+          style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderColor: '#e5e7eb' }}
+        >
+          {/* Patient info row */}
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-base sm:text-lg font-bold truncate" style={{ color: '#0A0F2C' }}>
                   {encounter.patient_name || "Unknown Patient"}
                 </h2>
                 {encounter.patient_id && (
-                  <span className="rounded-full px-2 py-0.5 text-xs font-mono font-semibold" style={{ background: '#e0e7ff', color: '#1a33cc' }}>
+                  <span className="rounded-full px-2 py-0.5 text-xs font-mono font-semibold shrink-0" style={{ background: '#e0e7ff', color: '#1a33cc' }}>
                     {encounter.patient_id}
                   </span>
                 )}
               </div>
-              <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm" style={{ color: '#6b7280' }}>
+              <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs sm:text-sm" style={{ color: '#6b7280' }}>
                 <span>{format(new Date(encounter.created_at), "MMM d, yyyy 'at' h:mm a")}</span>
                 {encounter.visit_reason && (
                   <>
@@ -318,42 +323,42 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
           </div>
 
           {/* Tabs + Action Buttons */}
-          <div className="flex items-center justify-between border-b pb-0" style={{ borderColor: '#e5e7eb' }}>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b pb-0" style={{ borderColor: '#e5e7eb' }}>
             {/* Tabs */}
             <div className="flex gap-1">
               <button
                 onClick={() => setActiveTab("note")}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold border-b-2 -mb-px transition-colors"
                 style={{
                   borderColor: activeTab === "note" ? '#1a33cc' : 'transparent',
                   color: activeTab === "note" ? '#1a33cc' : '#6b7280',
                 }}
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Clinical Note
+                <span className="hidden xs:inline">Clinical </span>Note
               </button>
               <button
                 onClick={() => setActiveTab("transcript")}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold border-b-2 -mb-px transition-colors"
                 style={{
                   borderColor: activeTab === "transcript" ? '#1a33cc' : 'transparent',
                   color: activeTab === "transcript" ? '#1a33cc' : '#6b7280',
                 }}
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                 </svg>
                 Transcript
               </button>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex items-center gap-1 pb-2">
+            {/* Action Buttons — scrollable row on mobile */}
+            <div className="flex items-center gap-1 pb-2 overflow-x-auto">
               <button
                 onClick={handleCopy}
-                className="p-2 rounded-lg transition-colors"
+                className="p-2 rounded-lg transition-colors shrink-0"
                 style={{ color: '#6b7280' }}
                 title="Copy"
                 onMouseEnter={e => (e.currentTarget.style.background = '#f0f4ff')}
@@ -366,7 +371,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
 
               <button
                 onClick={handleExport}
-                className="p-2 rounded-lg transition-colors"
+                className="p-2 rounded-lg transition-colors shrink-0"
                 style={{ color: '#6b7280' }}
                 title="Export"
                 onMouseEnter={e => (e.currentTarget.style.background = '#f0f4ff')}
@@ -380,9 +385,9 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                   <button
                     onClick={handleHighlightUncertain}
                     disabled={highlighting || !noteMarkdown.trim()}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors disabled:opacity-50"
-                    style={{ 
-                      color: highlightedNote ? '#854d0e' : '#1a33cc', 
+                    className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors disabled:opacity-50 shrink-0"
+                    style={{
+                      color: highlightedNote ? '#854d0e' : '#1a33cc',
                       border: highlightedNote ? '1px solid rgba(133,77,14,0.3)' : '1px solid rgba(26,51,204,0.3)',
                       background: highlightedNote ? 'rgba(254,240,138,0.3)' : 'transparent'
                     }}
@@ -390,13 +395,14 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                     onMouseLeave={e => (e.currentTarget.style.background = highlightedNote ? 'rgba(254,240,138,0.3)' : 'transparent')}
                   >
                     {highlighting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <AlertTriangle className="h-3.5 w-3.5" />}
-                    {highlighting ? 'Checking...' : highlightedNote ? 'Clear Highlight' : 'Check Uncertain'}
+                    <span className="hidden sm:inline">{highlighting ? 'Checking...' : highlightedNote ? 'Clear Highlight' : 'Check Uncertain'}</span>
+                    <span className="sm:hidden">{highlighting ? '...' : highlightedNote ? 'Clear' : 'Uncertain'}</span>
                   </button>
 
                   <button
                     onClick={handleSave}
                     disabled={!hasChanges}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors disabled:opacity-40"
+                    className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors disabled:opacity-40 shrink-0"
                     style={{ background: 'white', color: '#1a33cc', border: '2px solid #1a33cc' }}
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(26,51,204,0.05)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'white')}
@@ -408,7 +414,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                   <button
                     onClick={handleApprove}
                     disabled={approving || approved}
-                    className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-md hover:brightness-110 active:scale-95 disabled:opacity-50"
+                    className="flex items-center gap-1 sm:gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-md hover:brightness-110 active:scale-95 disabled:opacity-50 shrink-0"
                     style={{ background: '#1a33cc', color: 'white' }}
                   >
                     {approving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CheckCircle className="h-3.5 w-3.5" />}
@@ -420,29 +426,39 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
           </div>
         </div>
 
-        {/* Content Area */}
-        <div className="flex flex-1 overflow-y-auto gap-6 p-6">
+        {/* ── Content Area: stacks on mobile, side-by-side on lg ── */}
+        <div className="flex flex-1 overflow-hidden flex-col lg:flex-row gap-0 lg:gap-6 p-3 sm:p-6 lg:p-6">
 
-          {/* Main Note Area */}
-          <div className="flex-1 flex flex-col overflow-hidden rounded-xl border" style={{ background: '#ffffff', borderColor: '#e5e7eb', boxShadow: '0px 4px 20px rgba(26,51,204,0.06)' }}>
+          {/* ── Main Note Area ── */}
+          <div
+            className="flex flex-col overflow-hidden rounded-xl border"
+            style={{
+              flex: '1 1 0%',
+              minHeight: 0,
+              background: '#ffffff',
+              borderColor: '#e5e7eb',
+              boxShadow: '0px 4px 20px rgba(26,51,204,0.06)'
+            }}
+          >
             {/* Note toolbar */}
-            <div className="flex justify-between items-center px-4 py-3 border-b" style={{ background: '#f0f4ff', borderColor: '#e5e7eb' }}>
-              <div className="flex items-center gap-4">
+            <div className="flex justify-between items-center px-3 sm:px-4 py-2 sm:py-3 border-b shrink-0" style={{ background: '#f0f4ff', borderColor: '#e5e7eb' }}>
+              <div className="flex items-center gap-3">
                 <span className="text-xs font-bold uppercase tracking-widest" style={{ color: '#1a33cc' }}>SOAP Format</span>
-                <div className="h-4 w-px" style={{ background: '#e5e7eb' }} />
-                <span className="text-xs italic" style={{ color: '#6b7280' }}>
+                <div className="hidden sm:block h-4 w-px" style={{ background: '#e5e7eb' }} />
+                <span className="hidden sm:inline text-xs italic" style={{ color: '#6b7280' }}>
                   {format(new Date(encounter.created_at), "MMM d, yyyy 'at' h:mm a")}
                 </span>
               </div>
             </div>
 
+            {/* Scrollable note content */}
             <div className="flex-1 overflow-y-auto">
-               <div className="p-8">
+              <div className="p-4 sm:p-8">
                 {activeTab === "note" ? (
                   <>
                     {highlightedNote ? (
                       <div
-                        className="min-h-[500px] rounded-xl font-mono text-sm leading-relaxed p-4 whitespace-pre-wrap"
+                        className="min-h-[300px] sm:min-h-[500px] rounded-xl font-mono text-sm leading-relaxed p-4 whitespace-pre-wrap"
                         style={{ background: 'white', border: '1px solid #e5e7eb' }}
                       >
                         {highlightedNote.split(/(\{\{uncertain\}\}[\s\S]*?\{\{\/uncertain\}\})/g).map((part, i) => {
@@ -456,7 +472,6 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                           }
                           return <span key={i}>{part}</span>
                         })}
-                      
                         <button
                           onClick={() => setHighlightedNote(null)}
                           className="mt-3 text-xs underline block"
@@ -470,7 +485,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                         value={noteMarkdown}
                         onChange={(e) => handleNoteChange(e.target.value)}
                         placeholder="Clinical note markdown..."
-                        className="min-h-[500px] resize-none rounded-xl font-mono text-sm leading-relaxed focus-visible:ring-1"
+                        className="min-h-[300px] sm:min-h-[500px] resize-none rounded-xl font-mono text-sm leading-relaxed focus-visible:ring-1"
                         style={{
                           background: 'white',
                           border: '1px solid #e5e7eb',
@@ -486,7 +501,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                     )}
                   </>
                 ) : (
-                  <div className="min-h-[500px] rounded-xl p-6" style={{ background: 'white', border: '1px solid #e5e7eb' }}>
+                  <div className="min-h-[300px] sm:min-h-[500px] rounded-xl p-4 sm:p-6" style={{ background: 'white', border: '1px solid #e5e7eb' }}>
                     {encounter.transcript_text ? (
                       <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed" style={{ color: '#0A0F2C' }}>
                         {encounter.transcript_text}
@@ -502,22 +517,26 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
             </div>
           </div>
 
-          {/* Right Sidebar */}
-          <div className="w-72 flex flex-col gap-4 overflow-y-auto">
+          {/* ── Right Sidebar ── full width on mobile, fixed on lg ── */}
+          <div className="flex flex-col gap-4 lg:w-72 lg:overflow-y-auto lg:shrink-0">
 
             {/* Confidence Card */}
-            <div className="p-5 rounded-xl" style={{ background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0px 4px 20px rgba(26,51,204,0.06)' }}>
+            <div className="p-4 sm:p-5 rounded-xl" style={{ background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0px 4px 20px rgba(26,51,204,0.06)' }}>
               <div className="flex items-center gap-2 mb-3" style={{ color: '#1a33cc' }}>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 <span className="text-sm font-bold">Scribe Confidence</span>
               </div>
-              <div className="text-3xl font-bold mb-2" style={{ color: '#1a33cc' }}>98.4%</div>
-              <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: '#e0e7ff' }}>
-                <div className="h-full rounded-full" style={{ width: '98%', background: '#1a33cc' }} />
+              <div className="flex items-end gap-4">
+                <div className="text-3xl font-bold" style={{ color: '#1a33cc' }}>98.4%</div>
+                <div className="flex-1 mb-1.5">
+                  <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: '#e0e7ff' }}>
+                    <div className="h-full rounded-full" style={{ width: '98%', background: '#1a33cc' }} />
+                  </div>
+                </div>
               </div>
-              <p className="text-xs mt-2" style={{ color: '#6b7280' }}>High fidelity transcription achieved.</p>
+              <p className="text-xs mt-1" style={{ color: '#6b7280' }}>High fidelity transcription achieved.</p>
             </div>
 
             {/* Approve & Save Buttons */}
@@ -525,7 +544,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
               <button
                 onClick={handleApprove}
                 disabled={approving || approved}
-                className="w-full py-4 rounded-xl font-bold flex items-center justify-center gap-3 transition-all shadow-lg hover:brightness-110 active:scale-95 disabled:opacity-50"
+                className="w-full py-3 sm:py-4 rounded-xl font-bold flex items-center justify-center gap-3 transition-all shadow-lg hover:brightness-110 active:scale-95 disabled:opacity-50"
                 style={{ background: '#1a33cc', color: 'white' }}
               >
                 {approving ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle className="w-5 h-5" />}
@@ -534,7 +553,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
               <button
                 onClick={handleSave}
                 disabled={!hasChanges}
-                className="w-full py-4 bg-white rounded-xl font-bold flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-40"
+                className="w-full py-3 sm:py-4 bg-white rounded-xl font-bold flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-40"
                 style={{ border: '2px solid #1a33cc', color: '#1a33cc' }}
                 onMouseEnter={e => (e.currentTarget.style.background = 'rgba(26,51,204,0.05)')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'white')}
@@ -545,9 +564,12 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
             </div>
 
             {/* OpenClaw Chat Panel */}
-            <div className="flex-1 flex flex-col rounded-xl p-4 min-h-[280px]" style={{ background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0px 4px 20px rgba(26,51,204,0.06)' }}>
+            <div
+              className="flex flex-col rounded-xl p-4 min-h-[220px] lg:min-h-[280px]"
+              style={{ background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: '0px 4px 20px rgba(26,51,204,0.06)', flex: '1 1 auto' }}
+            >
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: '#1a33cc' }}>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: '#1a33cc' }}>
                   <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
@@ -555,7 +577,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                 <span className="text-sm font-bold" style={{ color: '#0A0F2C' }}>OpenClaw</span>
               </div>
 
-              <div className="flex-1 text-sm overflow-y-auto space-y-3 pr-1 mb-4" style={{ color: '#6b7280' }}>
+              <div className="flex-1 text-sm overflow-y-auto space-y-3 pr-1 mb-4" style={{ color: '#6b7280', maxHeight: '200px' }}>
                 {openClawMessages.length === 0 ? (
                   <p className="text-xs italic" style={{ color: '#9ca3af' }}>
                     Send to OpenClaw to start a clinical handoff session.
@@ -622,11 +644,14 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
         </div>
       </div>
 
-      {/* OpenClaw Panel Overlay */}
+      {/* ── OpenClaw Panel Overlay — full screen on mobile ── */}
       {openClawPanelOpen && (
         <>
           <div className="fixed inset-0 z-40 bg-black/20" onClick={() => setOpenClawPanelOpen(false)} />
-          <aside className="fixed right-0 top-0 z-50 h-screen w-[440px] shadow-2xl" style={{ background: '#ffffff', borderLeft: '1px solid #e5e7eb' }}>
+          <aside
+            className="fixed inset-0 sm:inset-auto sm:right-0 sm:top-0 z-50 sm:h-screen sm:w-[440px] shadow-2xl"
+            style={{ background: '#ffffff', borderLeft: '1px solid #e5e7eb' }}
+          >
             <div className="flex h-full flex-col">
               <div className="px-4 py-3 border-b" style={{ borderColor: '#e5e7eb' }}>
                 <div className="flex items-center justify-between gap-3">
