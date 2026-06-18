@@ -1,3 +1,4 @@
+
 import Link from 'next/link'
 import {
   Stethoscope,
@@ -8,12 +9,11 @@ import {
   UploadCloud,
   ShieldCheck,
   Building2,
+  Menu,
+  X,
 } from 'lucide-react'
 import { DemoLoginButton } from '@/components/DemoLoginButtons'
 
-// lucide-react intentionally ships no brand/logo icons, so these two are
-// small hand-rolled SVGs (fill uses currentColor, so they inherit the
-// parent link's color automatically).
 function FacebookIcon({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -34,43 +34,175 @@ export default function HomePage() {
   return (
     <div style={{ minHeight: '100vh', background: '#ffffff', fontFamily: 'Inter, system-ui, sans-serif' }}>
 
+      <style>{`
+        /* ── Reset margins that bleed into sections ── */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ── Mobile menu toggle (checkbox hack — no JS needed) ── */
+        #nav-toggle { display: none; }
+
+        .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+        .nav-actions { display: flex; gap: 0.875rem; align-items: center; }
+        .hamburger { display: none; cursor: pointer; padding: 0.5rem; }
+        .mobile-menu {
+          display: none;
+          flex-direction: column;
+          gap: 0;
+          background: #fff;
+          border-top: 1px solid #e5e7eb;
+          padding: 1rem 1.5rem 1.5rem;
+        }
+
+        /* ── Grid helpers ── */
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2rem; text-align: center; }
+        .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+        .workflow-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; position: relative; }
+        .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 800px; margin: 0 auto; }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+        .footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+        .stat-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+        .workflow-arrow { display: block; }
+
+        @media (max-width: 768px) {
+          /* Navbar */
+          .nav-links { display: none; }
+          .nav-actions { display: none; }
+          .hamburger { display: flex; align-items: center; justify-content: center; }
+
+          #nav-toggle:checked ~ .mobile-menu { display: flex; }
+          #nav-toggle:checked ~ label .hamburger-open { display: none; }
+          #nav-toggle:checked ~ label .hamburger-close { display: flex; }
+          .hamburger-close { display: none; }
+
+          .mobile-menu a {
+            display: block;
+            padding: 0.875rem 0;
+            border-bottom: 1px solid #f3f4f6;
+            color: #374151;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+          }
+          .mobile-menu a:last-child { border-bottom: none; }
+          .mobile-cta {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+          }
+          .mobile-cta a {
+            text-align: center;
+            padding: 0.75rem 1rem !important;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            text-decoration: none;
+            border-bottom: none !important;
+          }
+
+          /* Hero */
+          .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+          .stat-cards-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+          .hero-section { padding: 2.5rem 1.25rem 2rem !important; }
+          .hero-buttons { flex-direction: column; gap: 0.75rem !important; }
+          .hero-buttons a { text-align: center; }
+
+          /* Stats bar */
+          .stats-grid { grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+          .stats-section { padding: 2rem 1.25rem !important; }
+
+          /* Features */
+          .features-grid { grid-template-columns: 1fr; }
+          .features-section { padding: 3rem 1.25rem !important; }
+
+          /* Workflow */
+          .workflow-grid { grid-template-columns: 1fr; gap: 1rem; }
+          .workflow-arrow { display: none; }
+          .workflow-section { padding: 3rem 1.25rem !important; }
+
+          /* Demo */
+          .demo-grid { grid-template-columns: 1fr; max-width: 100%; }
+          .demo-section { padding: 3rem 1.25rem !important; }
+
+          /* Testimonials */
+          .testimonials-grid { grid-template-columns: 1fr; }
+          .testimonials-section { padding: 3rem 1.25rem !important; }
+
+          /* FAQ */
+          .faq-section { padding: 3rem 1.25rem !important; }
+
+          /* Footer */
+          .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+          .footer-section { padding: 3rem 1.25rem 1.5rem !important; }
+          .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+
+          /* Rolling belt */
+          .belt-section { padding: 1.5rem 0 2rem !important; }
+        }
+
+        @media (max-width: 480px) {
+          .footer-grid { grid-template-columns: 1fr; }
+          .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+      `}</style>
+
       {/* Navbar */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #e5e7eb', padding: '0 2.5rem', height: '96px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Link href="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none' }}>
-          <img src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" alt="Enlight Lab" width={200} height={42} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#0A1F6B', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '-2px' }}>CARESCRIBE AI</span>
-        </Link>
-        <div style={{ display: 'flex', gap: '2.5rem', alignItems: 'center' }}>
-          <a href="#features" style={{ color: '#374151', fontSize: '1rem', textDecoration: 'none', fontWeight: 500 }}>Features</a>
-          <a href="#how-it-works" style={{ color: '#374151', fontSize: '1rem', textDecoration: 'none', fontWeight: 500 }}>How It Works</a>
-          <a href="#demo" style={{ color: '#374151', fontSize: '1rem', textDecoration: 'none', fontWeight: 500 }}>Demo</a>
-          <a href="#faq" style={{ color: '#374151', fontSize: '1rem', textDecoration: 'none', fontWeight: 500 }}>FAQ</a>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #e5e7eb' }}>
+        <div style={{ padding: '0 1.5rem', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1280px', margin: '0 auto' }}>
+          <Link href="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textDecoration: 'none', flexShrink: 0 }}>
+            <img src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" alt="Enlight Lab" width={140} height={30} style={{ objectFit: 'contain' }} />
+            <span style={{ fontSize: '0.6rem', fontWeight: 700, color: '#0A1F6B', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '1px' }}>CARESCRIBE AI</span>
+          </Link>
+
+          <div className="nav-links">
+            <a href="#features" style={{ color: '#374151', fontSize: '0.9375rem', textDecoration: 'none', fontWeight: 500 }}>Features</a>
+            <a href="#how-it-works" style={{ color: '#374151', fontSize: '0.9375rem', textDecoration: 'none', fontWeight: 500 }}>How It Works</a>
+            <a href="#demo" style={{ color: '#374151', fontSize: '0.9375rem', textDecoration: 'none', fontWeight: 500 }}>Demo</a>
+            <a href="#faq" style={{ color: '#374151', fontSize: '0.9375rem', textDecoration: 'none', fontWeight: 500 }}>FAQ</a>
+          </div>
+
+          <div className="nav-actions">
+            <Link href="/login" style={{ color: '#1a33cc', fontSize: '0.9375rem', fontWeight: 600, textDecoration: 'none', padding: '0.55rem 1.1rem', border: '1.5px solid #1a33cc', borderRadius: '10px' }}>Sign In</Link>
+            <Link href="/login" style={{ background: '#1a33cc', color: '#fff', fontSize: '0.9375rem', fontWeight: 600, textDecoration: 'none', padding: '0.55rem 1.25rem', borderRadius: '10px', boxShadow: '0 4px 12px rgba(26,51,204,0.25)' }}>Try Demo →</Link>
+          </div>
+
+          {/* Hamburger — checkbox hack, no client JS */}
+          <label htmlFor="nav-toggle" className="hamburger" style={{ color: '#374151' }}>
+            <span className="hamburger-open"><Menu size={24} /></span>
+            <span className="hamburger-close"><X size={24} /></span>
+          </label>
         </div>
-        <div style={{ display: 'flex', gap: '0.875rem', alignItems: 'center' }}>
-          <Link href="/login" style={{ color: '#1a33cc', fontSize: '0.9375rem', fontWeight: 600, textDecoration: 'none', padding: '0.6rem 1.25rem', border: '1.5px solid #1a33cc', borderRadius: '10px' }}>
-            Sign In
-          </Link>
-          <Link href="/login" style={{ background: '#1a33cc', color: '#fff', fontSize: '0.9375rem', fontWeight: 600, textDecoration: 'none', padding: '0.6rem 1.5rem', borderRadius: '10px', boxShadow: '0 4px 12px rgba(26,51,204,0.25)' }}>
-            Try Demo →
-          </Link>
+
+        <input type="checkbox" id="nav-toggle" style={{ display: 'none' }} />
+        <div className="mobile-menu">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#demo">Demo</a>
+          <a href="#faq">FAQ</a>
+          <div className="mobile-cta">
+            <Link href="/login" style={{ color: '#1a33cc', border: '1.5px solid #1a33cc' }}>Sign In</Link>
+            <Link href="/login" style={{ background: '#1a33cc', color: '#fff', boxShadow: '0 4px 12px rgba(26,51,204,0.25)' }}>Try Demo →</Link>
+          </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section style={{ padding: '5rem 2.5rem 4rem', background: '#fff', maxWidth: '1280px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
+      <section className="hero-section" style={{ padding: '5rem 2.5rem 4rem', background: '#fff', maxWidth: '1280px', margin: '0 auto' }}>
+        <div className="hero-grid">
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#f0f4ff', padding: '0.4rem 1rem', borderRadius: '9999px', fontSize: '0.8125rem', fontWeight: 600, color: '#1a33cc', marginBottom: '1.5rem' }}>
               <Stethoscope size={16} strokeWidth={2} /> Built for Clinical Documentation
             </div>
-            <h1 style={{ fontSize: 'clamp(2.25rem, 4vw, 3.25rem)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '1.5rem', color: '#0a0f2c' }}>
+            <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.25rem)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '1.25rem', color: '#0a0f2c' }}>
               AI that listens,<br />
               <span style={{ color: '#1a33cc' }}>so doctors don't have to type.</span>
             </h1>
-            <p style={{ fontSize: '1.125rem', color: '#6b7280', lineHeight: 1.7, marginBottom: '2rem' }}>
+            <p style={{ fontSize: '1rem', color: '#6b7280', lineHeight: 1.7, marginBottom: '1.75rem' }}>
               CareScribe AI ambiently records clinical consultations and instantly generates structured SOAP notes, ICD-10 codes, and CPT codes — letting physicians focus entirely on the patient.
             </p>
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+            <div className="hero-buttons" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
               <Link href="/login" style={{ background: '#1a33cc', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: '10px', textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                 Start Free Demo →
               </Link>
@@ -78,22 +210,19 @@ export default function HomePage() {
                 See How It Works
               </a>
             </div>
-            <p style={{ fontSize: '0.8125rem', color: '#9ca3af' }}>
-              ✓ No credit card required &nbsp; ✓ Setup in minutes &nbsp; ✓ HIPAA-ready
-            </p>
+            <p style={{ fontSize: '0.8125rem', color: '#9ca3af' }}>✓ No credit card required &nbsp; ✓ Setup in minutes &nbsp; ✓ HIPAA-ready</p>
           </div>
 
-          {/* Stats Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+          <div className="stat-cards-grid">
             {[
               { stat: '~3 min', label: 'Average note generation time', color: '#1a33cc', bg: '#f0f4ff' },
               { stat: '98.4%', label: 'Transcription accuracy', color: '#059669', bg: '#f0fdf4' },
               { stat: 'ICD-10', label: 'Auto medical coding', color: '#7c3aed', bg: '#faf5ff' },
               { stat: '0 typing', label: 'Required from physician', color: '#dc2626', bg: '#fef2f2' },
             ].map((item) => (
-              <div key={item.stat} style={{ background: item.bg, borderRadius: '16px', padding: '1.5rem', border: `1.5px solid ${item.color}20` }}>
-                <p style={{ fontSize: '1.75rem', fontWeight: 800, color: item.color, letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>{item.stat}</p>
-                <p style={{ fontSize: '0.8125rem', color: '#6b7280', lineHeight: 1.4 }}>{item.label}</p>
+              <div key={item.stat} style={{ background: item.bg, borderRadius: '16px', padding: '1.25rem', border: `1.5px solid ${item.color}20` }}>
+                <p style={{ fontSize: '1.5rem', fontWeight: 800, color: item.color, letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>{item.stat}</p>
+                <p style={{ fontSize: '0.75rem', color: '#6b7280', lineHeight: 1.4 }}>{item.label}</p>
               </div>
             ))}
           </div>
@@ -101,8 +230,8 @@ export default function HomePage() {
       </section>
 
       {/* Stats Bar */}
-      <section style={{ padding: '2.5rem 2.5rem', background: '#f9fafb', borderTop: '1px solid #e5e7eb', borderBottom: '1px solid #e5e7eb' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', textAlign: 'center' }}>
+      <section className="stats-section" style={{ padding: '2.5rem', background: '#f9fafb', borderTop: '1px solid #e5e7eb', borderBottom: '1px solid #e5e7eb' }}>
+        <div className="stats-grid" style={{ maxWidth: '1280px', margin: '0 auto' }}>
           {[
             { v: '500+', l: 'Physicians using CareScribe' },
             { v: '10k+', l: 'Notes generated monthly' },
@@ -110,7 +239,7 @@ export default function HomePage() {
             { v: '99.9%', l: 'Platform uptime' },
           ].map((s) => (
             <div key={s.l}>
-              <p style={{ fontSize: '2rem', fontWeight: 800, color: '#1a33cc', letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>{s.v}</p>
+              <p style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1a33cc', letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>{s.v}</p>
               <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>{s.l}</p>
             </div>
           ))}
@@ -118,18 +247,18 @@ export default function HomePage() {
       </section>
 
       {/* Features */}
-      <section id="features" style={{ padding: '5rem 2.5rem', maxWidth: '1280px', margin: '0 auto' }}>
+      <section id="features" className="features-section" style={{ padding: '5rem 2.5rem', maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#1a33cc', marginBottom: '0.5rem' }}>Features</p>
-          <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 800, color: '#0a0f2c', letterSpacing: '-0.025em', marginBottom: '1rem' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', fontWeight: 800, color: '#0a0f2c', letterSpacing: '-0.025em', marginBottom: '1rem', lineHeight: 1.2 }}>
             Everything a clinic needs.{' '}
-            <span style={{ background: '#1a33cc', color: '#fff', padding: '0.1em 0.4em', borderRadius: '6px' }}>Nothing extra.</span>
+            <span style={{ background: '#1a33cc', color: '#fff', padding: '0.1em 0.4em', borderRadius: '6px', display: 'inline-block' }}>Nothing extra.</span>
           </h2>
           <p style={{ color: '#6b7280', fontSize: '1rem', maxWidth: '600px', margin: '0 auto' }}>
             From the moment the consultation starts to FHIR export — CareScribe handles the full documentation workflow.
           </p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+        <div className="features-grid">
           {[
             { icon: Mic, title: 'Ambient Recording', desc: 'Records consultations in the background — no interruptions, no button pressing. The doctor speaks naturally.' },
             { icon: FileText, title: 'Structured SOAP Notes', desc: 'Automatically generates Subjective, Objective, Assessment, and Plan sections from the conversation transcript.' },
@@ -138,10 +267,8 @@ export default function HomePage() {
             { icon: UploadCloud, title: 'FHIR Export', desc: 'Export approved encounters as FHIR-compliant JSON for EHR integration with Epic, Cerner, and more.' },
             { icon: ShieldCheck, title: 'HIPAA-ready Infrastructure', desc: 'End-to-end encryption, audit logs, and access controls built in from day one.' },
           ].map((f) => (
-            <div key={f.title} style={{ background: '#ffffff', border: '1.5px solid #e5e7eb', borderRadius: '16px', padding: '1.75rem', transition: 'all 0.2s' }}>
-              <div style={{ marginBottom: '1rem' }}>
-                <f.icon size={32} strokeWidth={1.75} color="#1a33cc" />
-              </div>
+            <div key={f.title} style={{ background: '#ffffff', border: '1.5px solid #e5e7eb', borderRadius: '16px', padding: '1.75rem' }}>
+              <div style={{ marginBottom: '1rem' }}><f.icon size={32} strokeWidth={1.75} color="#1a33cc" /></div>
               <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#0a0f2c', marginBottom: '0.75rem' }}>{f.title}</h3>
               <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: 1.65 }}>{f.desc}</p>
             </div>
@@ -150,15 +277,15 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" style={{ padding: '5rem 2.5rem', background: '#f9fafb', borderTop: '1px solid #e5e7eb' }}>
+      <section id="how-it-works" className="workflow-section" style={{ padding: '5rem 2.5rem', background: '#f9fafb', borderTop: '1px solid #e5e7eb' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <p style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#1a33cc', marginBottom: '0.5rem' }}>Workflow</p>
-            <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 800, color: '#0a0f2c', letterSpacing: '-0.025em' }}>
+            <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', fontWeight: 800, color: '#0a0f2c', letterSpacing: '-0.025em' }}>
               From consultation to signed note in minutes
             </h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', position: 'relative' }}>
+          <div className="workflow-grid">
             {[
               { n: '01', title: 'Record', desc: 'Doctor starts a new encounter. CareScribe ambiently records the consultation.' },
               { n: '02', title: 'Transcribe', desc: 'AssemblyAI transcribes the conversation with speaker diarization at 98%+ accuracy.' },
@@ -172,7 +299,7 @@ export default function HomePage() {
                 <h3 style={{ fontSize: '1.125rem', fontWeight: 800, color: '#0a0f2c', marginBottom: '0.75rem', marginTop: '0.5rem' }}>{step.title}</h3>
                 <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: 1.6 }}>{step.desc}</p>
                 {i < 3 && (
-                  <div style={{ position: 'absolute', right: '-19px', top: '50%', transform: 'translateY(-50%)', color: '#1a33cc', fontSize: '1.5rem', zIndex: 10 }}>→</div>
+                  <div className="workflow-arrow" style={{ position: 'absolute', right: '-19px', top: '50%', transform: 'translateY(-50%)', color: '#1a33cc', fontSize: '1.5rem', zIndex: 10 }}>→</div>
                 )}
               </div>
             ))}
@@ -181,17 +308,17 @@ export default function HomePage() {
       </section>
 
       {/* Demo Section */}
-      <section id="demo" style={{ padding: '5rem 2.5rem', maxWidth: '1280px', margin: '0 auto' }}>
+      <section id="demo" className="demo-section" style={{ padding: '5rem 2.5rem', maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#1a33cc', marginBottom: '0.5rem' }}>Try It Now</p>
-          <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 800, color: '#0a0f2c', letterSpacing: '-0.025em', marginBottom: '1rem' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', fontWeight: 800, color: '#0a0f2c', letterSpacing: '-0.025em', marginBottom: '1rem' }}>
             See CareScribe in action
           </h2>
-          <p style={{ color: '#6b7280', fontSize: '1rem', maxWidth: '500px', margin: '0 auto 2.5rem' }}>
+          <p style={{ color: '#6b7280', fontSize: '1rem', maxWidth: '500px', margin: '0 auto' }}>
             Log in with demo credentials to explore the full platform — no setup required.
           </p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+        <div className="demo-grid">
           {[
             {
               role: 'Admin Demo' as const,
@@ -205,7 +332,7 @@ export default function HomePage() {
             {
               role: 'Doctor Demo' as const,
               icon: Stethoscope,
-              desc: 'Experience the doctor workflow record a consultation, generate notes, and approve.',
+              desc: 'Experience the doctor workflow — record a consultation, generate notes, and approve.',
               email: 'doctor@clinic.com',
               password: 'Doctor@123',
               color: '#059669',
@@ -231,12 +358,12 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section style={{ padding: '5rem 2.5rem', background: '#f9fafb', borderTop: '1px solid #e5e7eb' }}>
+      <section className="testimonials-section" style={{ padding: '5rem 2.5rem', background: '#f9fafb', borderTop: '1px solid #e5e7eb' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: '#0a0f2c', marginBottom: '3rem' }}>
             What physicians say
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+          <div className="testimonials-grid">
             {[
               { name: 'Dr. Sarah M.', specialty: 'Internal Medicine', quote: 'CareScribe cut my documentation time from 2 hours to 20 minutes daily. I actually leave on time now.' },
               { name: 'Dr. Rajesh K.', specialty: 'Family Practice', quote: 'The ICD coding accuracy is remarkable. Our billing rejections dropped by 60% in the first month.' },
@@ -256,10 +383,10 @@ export default function HomePage() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" style={{ padding: '5rem 2.5rem', maxWidth: '800px', margin: '0 auto' }}>
+      <section id="faq" className="faq-section" style={{ padding: '5rem 2.5rem', maxWidth: '800px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <p style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#1a33cc', marginBottom: '0.5rem' }}>FAQ</p>
-          <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.25rem)', fontWeight: 800, color: '#0a0f2c', letterSpacing: '-0.025em' }}>Common questions</h2>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', fontWeight: 800, color: '#0a0f2c', letterSpacing: '-0.025em' }}>Common questions</h2>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {[
@@ -271,88 +398,51 @@ export default function HomePage() {
           ].map((f, i) => (
             <div key={i} style={{ background: '#f9fafb', borderRadius: '12px', padding: '1.5rem', border: '1px solid #e5e7eb' }}>
               <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#0a0f2c', marginBottom: '0.5rem' }}>{f.q}</h3>
-              <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: 1.65, margin: 0 }}>{f.a}</p>
+              <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: 1.65 }}>{f.a}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* CTA */}
-
-
-      {/* Trusted By — Rolling Belt */}
-      
-      {/* Trusted By — Rolling Belt */}
-      <section style={{ background: '#1535C9', padding: '2rem 0 2.5rem', overflow: 'hidden', position: 'relative' }}>
+      {/* Rolling Belt */}
+      <section className="belt-section" style={{ background: '#1535C9', padding: '2rem 0 2.5rem', overflow: 'hidden', position: 'relative' }}>
         <p style={{ textAlign: 'center', fontSize: '0.7rem', fontWeight: 600, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '1.25rem' }}>
           Trusted by Fortune-Grade Global Leaders
         </p>
-        
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          
-          {/* Static Enlight Lab logo — fixed on left, overlaps the scroll */}
-          <div style={{ 
-            position: 'absolute', 
-            left: 0, 
-            top: 0, 
-            bottom: 0,
-            zIndex: 10, 
-            background: '#1535C9',
-            padding: '0 2rem 0 2.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            boxShadow: '8px 0 16px 8px #1535C9'
-          }}>
-            <img 
-              src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" 
-              alt="Enlight Lab" 
-              style={{ height: '28px', filter: 'brightness(0) invert(1)', opacity: 0.9 }} 
-            />
+          <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, zIndex: 10, background: '#1535C9', padding: '0 2rem 0 1.5rem', display: 'flex', alignItems: 'center', boxShadow: '8px 0 16px 8px #1535C9' }}>
+            <img src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" alt="Enlight Lab" style={{ height: '24px', filter: 'brightness(0) invert(1)', opacity: 0.9 }} />
           </div>
-
-          {/* Scrolling brands */}
           <div style={{ display: 'flex', overflow: 'hidden', width: '100%' }}>
             <style>{`
-              @keyframes scroll {
-                0% { transform: translateX(0); }
-                100% { transform: translateX(-50%); }
-              }
-              .rolling-belt {
-                display: flex;
-                align-items: center;
-                animation: scroll 25s linear infinite;
-                width: max-content;
-              }
-              
+              @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+              .rolling-belt { display: flex; align-items: center; animation: scroll 25s linear infinite; width: max-content; }
             `}</style>
             <div className="rolling-belt">
               {[
                 { name: 'CNN', style: { fontFamily: 'Georgia, serif', fontSize: '1.75rem', fontWeight: 900, letterSpacing: '-0.02em' } },
-                { name: 'Mozilla Foundation', style: { fontFamily: 'Inter, sans-serif', fontSize: '1rem', fontWeight: 700 }},
+                { name: 'Mozilla Foundation', style: { fontFamily: 'Inter, sans-serif', fontSize: '1rem', fontWeight: 700 } },
                 { name: 'qPress', style: { fontFamily: 'Georgia, serif', fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.03em' } },
                 { name: 'Emblazer', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.1rem', fontWeight: 800 } },
-                { name: 'Go2ANDAMAN', style: { fontFamily: 'Inter, sans-serif', fontSize: '1rem', fontWeight: 700 }},
+                { name: 'Go2ANDAMAN', style: { fontFamily: 'Inter, sans-serif', fontSize: '1rem', fontWeight: 700 } },
                 { name: 'homeloft', style: { fontFamily: 'Georgia, serif', fontSize: '1.4rem', fontWeight: 400 } },
-                { name: 'HUMA', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.2rem', fontWeight: 700, letterSpacing: '0.1em' }},
-                { name: 'Pasqal', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.1rem', fontWeight: 600 }},
-                { name: 'MAERSK', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.2rem', fontWeight: 900, letterSpacing: '0.08em' }},
-                { name: 'United Healthcare', style: { fontFamily: 'Inter, sans-serif', fontSize: '0.95rem', fontWeight: 700 }},
-                // duplicate for seamless loop
+                { name: 'HUMA', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.2rem', fontWeight: 700, letterSpacing: '0.1em' } },
+                { name: 'Pasqal', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.1rem', fontWeight: 600 } },
+                { name: 'MAERSK', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.2rem', fontWeight: 900, letterSpacing: '0.08em' } },
+                { name: 'United Healthcare', style: { fontFamily: 'Inter, sans-serif', fontSize: '0.95rem', fontWeight: 700 } },
                 { name: 'CNN', style: { fontFamily: 'Georgia, serif', fontSize: '1.75rem', fontWeight: 900, letterSpacing: '-0.02em' } },
-                { name: 'Mozilla Foundation', style: { fontFamily: 'Inter, sans-serif', fontSize: '1rem', fontWeight: 700 }},
+                { name: 'Mozilla Foundation', style: { fontFamily: 'Inter, sans-serif', fontSize: '1rem', fontWeight: 700 } },
                 { name: 'qPress', style: { fontFamily: 'Georgia, serif', fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.03em' } },
                 { name: 'Emblazer', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.1rem', fontWeight: 800 } },
-                { name: 'Go2ANDAMAN', style: { fontFamily: 'Inter, sans-serif', fontSize: '1rem', fontWeight: 700 }},
+                { name: 'Go2ANDAMAN', style: { fontFamily: 'Inter, sans-serif', fontSize: '1rem', fontWeight: 700 } },
                 { name: 'homeloft', style: { fontFamily: 'Georgia, serif', fontSize: '1.4rem', fontWeight: 400 } },
-                { name: 'HUMA', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.2rem', fontWeight: 700, letterSpacing: '0.1em' }},
-                { name: 'Pasqal', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.1rem', fontWeight: 600 }},
-                { name: 'MAERSK', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.2rem', fontWeight: 900, letterSpacing: '0.08em' }},
-                { name: 'United Healthcare', style: { fontFamily: 'Inter, sans-serif', fontSize: '0.95rem', fontWeight: 700 }},
+                { name: 'HUMA', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.2rem', fontWeight: 700, letterSpacing: '0.1em' } },
+                { name: 'Pasqal', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.1rem', fontWeight: 600 } },
+                { name: 'MAERSK', style: { fontFamily: 'Inter, sans-serif', fontSize: '1.2rem', fontWeight: 900, letterSpacing: '0.08em' } },
+                { name: 'United Healthcare', style: { fontFamily: 'Inter, sans-serif', fontSize: '0.95rem', fontWeight: 700 } },
               ].map((brand, i) => (
                 <div key={i} style={{ padding: '0 2.5rem', display: 'flex', alignItems: 'center', color: 'rgba(255,255,255,0.85)', whiteSpace: 'nowrap', borderRight: '1px solid rgba(255,255,255,0.15)' }}>
-                  <span style={brand.style as React.CSSProperties}>
-                    {(brand as any).prefix}{brand.name}
-                  </span>
+                  <span style={brand.style as React.CSSProperties}>{brand.name}</span>
                 </div>
               ))}
             </div>
@@ -361,11 +451,9 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer style={{ background: '#f8f9ff', borderTop: '1px solid #e5e7eb', padding: '4rem 2.5rem 2rem' }}>
+      <footer className="footer-section" style={{ background: '#f8f9ff', borderTop: '1px solid #e5e7eb', padding: '4rem 2.5rem 2rem' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '3rem', marginBottom: '3rem' }}>
-            
-            {/* Brand column */}
+          <div className="footer-grid">
             <div>
               <img src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" alt="Enlight Lab" style={{ height: '28px', marginBottom: '1rem' }} />
               <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: 1.7, marginBottom: '1.5rem' }}>
@@ -382,7 +470,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Product column */}
             <div>
               <h4 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1a33cc', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1.25rem' }}>Product</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -392,7 +479,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Company column */}
             <div>
               <h4 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1a33cc', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1.25rem' }}>Company</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -407,7 +493,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Legal column */}
             <div>
               <h4 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1a33cc', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1.25rem' }}>Legal</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -418,8 +503,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Bottom bar */}
-          <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="footer-bottom" style={{ borderTop: '1px solid #e5e7eb', paddingTop: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <p style={{ fontSize: '0.8125rem', color: '#9ca3af' }}>© 2026 Enlight Lab. All rights reserved.</p>
             <p style={{ fontSize: '0.8125rem', color: '#9ca3af' }}>CareScribe AI — a product by Enlight Lab</p>
           </div>
