@@ -20,43 +20,44 @@ export default async function DoctorsPage() {
     <div className="flex-1 flex flex-col min-h-screen" style={{ background: '#f5f7ff' }}>
 
       {/* Top App Bar */}
-      <header className="flex justify-between items-center w-full px-10 h-16 sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200">
-        <nav className="flex items-center gap-2 text-sm">
+      <header className="flex flex-wrap items-center justify-between gap-3 w-full px-4 sm:px-6 lg:px-10 py-3 sm:h-16 sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200">
+        <nav className="flex items-center gap-2 text-sm shrink-0">
           <span className="text-gray-500">Administration</span>
           <span className="text-gray-400 text-xs">›</span>
           <span className="text-[#1a33cc] font-bold border-b-2 border-[#1a33cc] pb-1">Manage Doctors</span>
         </nav>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 shrink-0">
           <AddDoctorDialog />
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="p-10 max-w-[1440px] w-full mx-auto">
+      <main className="px-4 py-6 sm:px-6 sm:py-8 lg:p-10 max-w-[1440px] w-full mx-auto">
 
         {/* Page Header */}
-        <section className="mb-10">
+        <section className="mb-6 sm:mb-10">
           <h1
-            className="text-4xl font-bold tracking-tight text-gray-900 mb-2"
+            className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-gray-900 mb-2"
             style={{ fontFamily: 'Manrope, sans-serif', letterSpacing: '-0.02em' }}
           >
             Manage doctor accounts
           </h1>
-          <p className="text-gray-500">View, edit, and deactivate clinical practitioner access.</p>
+          <p className="text-sm sm:text-base text-gray-500">View, edit, and deactivate clinical practitioner access.</p>
         </section>
 
         {/* Practitioners Table */}
         <section
-          className="rounded-xl overflow-hidden shadow-sm mb-12"
+          className="rounded-xl overflow-hidden shadow-sm mb-8 sm:mb-12"
           style={{ background: '#ffffff', border: '1px solid #e5e7eb' }}
         >
-          <div className="px-6 py-5 flex justify-between items-center border-b border-gray-200 bg-white">
-            <h3 className="text-xl font-semibold text-[#1a33cc]" style={{ fontFamily: 'Manrope, sans-serif' }}>
+          <div className="px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center border-b border-gray-200 bg-white">
+            <h3 className="text-lg sm:text-xl font-semibold text-[#1a33cc]" style={{ fontFamily: 'Manrope, sans-serif' }}>
               Practitioner Records
             </h3>
           </div>
 
-          <div className="overflow-x-auto overflow-y-visible">
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto overflow-y-visible">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-[#f0f4ff] text-gray-600">
@@ -86,17 +87,17 @@ export default async function DoctorsPage() {
                           <div className="w-8 h-8 rounded-full bg-[#dbeafe] flex items-center justify-center text-[#1e40af] font-bold text-xs flex-shrink-0">
                             {(doctor.name ?? 'U')[0].toUpperCase()}
                           </div>
-                          <span className="text-sm font-bold text-gray-800">{doctor.name}</span>
+                          <span className="text-sm font-bold text-gray-800 whitespace-nowrap">{doctor.name}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">{doctor.email}</td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
+                      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{doctor.email}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
                         {new Date(doctor.createdAt).toLocaleDateString('en-US', {
                           month: 'short', day: 'numeric', year: 'numeric'
                         })}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-wider ${
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-wider whitespace-nowrap ${
                           doctor.banned
                             ? 'bg-red-100 text-red-700'
                             : 'bg-green-100 text-green-700'
@@ -111,7 +112,7 @@ export default async function DoctorsPage() {
                             <input type="hidden" name="banned" value={String(doctor.banned)} />
                             <button
                               type="submit"
-                              className={`text-sm font-medium px-4 py-1.5 rounded-lg border transition-all hover:shadow-sm active:scale-95 ${
+                              className={`text-sm font-medium px-4 py-1.5 rounded-lg border transition-all hover:shadow-sm active:scale-95 whitespace-nowrap ${
                                 doctor.banned
                                   ? 'text-[#1a33cc] bg-[#f0f4ff] border-[#c7d2fe] hover:bg-[#e0e7ff]'
                                   : 'text-[#ba1a1a] bg-white border-gray-200 hover:bg-red-50'
@@ -130,8 +131,70 @@ export default async function DoctorsPage() {
             </table>
           </div>
 
+          {/* Mobile Card List */}
+          <div className="md:hidden">
+            {doctors.length === 0 ? (
+              <div className="text-center py-16 text-gray-500 px-4">
+                <div className="flex flex-col items-center gap-3">
+                  <span className="text-4xl">👨‍⚕️</span>
+                  <p className="font-medium text-gray-800">No doctors yet</p>
+                  <p className="text-sm">Add your first doctor account to get started.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-100">
+                {doctors.map((doctor) => (
+                  <div key={doctor.id} className="p-4 flex flex-col gap-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-9 h-9 rounded-full bg-[#dbeafe] flex items-center justify-center text-[#1e40af] font-bold text-xs flex-shrink-0">
+                          {(doctor.name ?? 'U')[0].toUpperCase()}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-bold text-gray-800 truncate">{doctor.name}</p>
+                          <p className="text-xs text-gray-500 truncate">{doctor.email}</p>
+                        </div>
+                      </div>
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-wider shrink-0 ${
+                        doctor.banned
+                          ? 'bg-red-100 text-red-700'
+                          : 'bg-green-100 text-green-700'
+                      }`}>
+                        {doctor.banned ? 'INACTIVE' : 'ACTIVE'}
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-gray-500">
+                      Created {new Date(doctor.createdAt).toLocaleDateString('en-US', {
+                        month: 'short', day: 'numeric', year: 'numeric'
+                      })}
+                    </p>
+
+                    <div className="flex items-center gap-2">
+                      <form action={toggleDoctorStatus} className="flex-1">
+                        <input type="hidden" name="doctorId" value={doctor.id} />
+                        <input type="hidden" name="banned" value={String(doctor.banned)} />
+                        <button
+                          type="submit"
+                          className={`w-full text-sm font-medium px-4 py-2 rounded-lg border transition-all active:scale-95 ${
+                            doctor.banned
+                              ? 'text-[#1a33cc] bg-[#f0f4ff] border-[#c7d2fe] hover:bg-[#e0e7ff]'
+                              : 'text-[#ba1a1a] bg-white border-gray-200 hover:bg-red-50'
+                          }`}
+                        >
+                          {doctor.banned ? 'Activate' : 'Deactivate'}
+                        </button>
+                      </form>
+                      <DeleteDoctorButton doctorId={doctor.id} deleteAction={deleteDoctor} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Table Footer */}
-          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between bg-white">
+          <div className="px-4 sm:px-6 py-4 border-t border-gray-200 flex items-center justify-between bg-white">
             <span className="text-xs text-gray-500 font-medium">
               Showing {doctors.length} doctor{doctors.length !== 1 ? 's' : ''}
             </span>
@@ -148,11 +211,11 @@ export default async function DoctorsPage() {
         </section>
 
         {/* Overview Stats */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
 
           {/* Total Active Doctors */}
           <div
-            className="p-6 rounded-xl flex flex-col gap-4 transition-transform duration-200 hover:-translate-y-1"
+            className="p-5 sm:p-6 rounded-xl flex flex-col gap-3 sm:gap-4 transition-transform duration-200 hover:-translate-y-1"
             style={{
               background: '#ffffff',
               border: '1px solid #e5e7eb',
@@ -165,7 +228,7 @@ export default async function DoctorsPage() {
             </div>
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Total Active Doctors</p>
-              <p className="text-2xl font-bold text-gray-800" style={{ fontFamily: 'Manrope, sans-serif' }}>
+              <p className="text-xl sm:text-2xl font-bold text-gray-800" style={{ fontFamily: 'Manrope, sans-serif' }}>
                 {totalActive}
               </p>
             </div>
@@ -173,7 +236,7 @@ export default async function DoctorsPage() {
 
           {/* System Status */}
           <div
-            className="p-6 rounded-xl flex flex-col gap-4 transition-transform duration-200 hover:-translate-y-1"
+            className="p-5 sm:p-6 rounded-xl flex flex-col gap-3 sm:gap-4 transition-transform duration-200 hover:-translate-y-1"
             style={{
               background: '#ffffff',
               border: '1px solid #e5e7eb',
@@ -187,7 +250,7 @@ export default async function DoctorsPage() {
             </div>
             <div>
               <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">System Status</p>
-              <p className="text-2xl font-bold text-gray-800" style={{ fontFamily: 'Manrope, sans-serif' }}>Optimized</p>
+              <p className="text-xl sm:text-2xl font-bold text-gray-800" style={{ fontFamily: 'Manrope, sans-serif' }}>Optimized</p>
             </div>
           </div>
 
