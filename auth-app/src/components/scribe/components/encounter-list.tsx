@@ -45,17 +45,19 @@ export function EncounterList({
   }, [encounters, search])
 
   return (
-    <div className="flex h-full min-h-0 flex-col" style={{ background: '#0A0F2C', color: '#f5f7ff' }}>
+    <div className="flex h-full min-h-0 flex-col" style={{ background: 'white', color: '#1f2937' }}>
 
       {/* Branding */}
       <div className="px-6 py-6 flex flex-col gap-4">
-        <a href="/dashboard" className="flex flex-col items-center gap-1 py-2">
+        {/* Changed items-center to items-start for left alignment */}
+        <a href="/dashboard" className="flex flex-col items-start gap-1 py-2">
           <img 
             src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" 
             alt="Enlight Lab" 
-            className="h-8 w-auto brightness-0 invert"
+            className="h-8 w-auto brightness-100"
           />
-          <span className="text-[11px] font-bold tracking-widest" style={{ color: '#60a5fa' }}>
+          {/* Added marginLeft: '34px' to match navigation headers and sidebars */}
+          <span className="text-[11px] font-bold tracking-widest text-[#0A1F6B]" style={{ marginLeft: '34px' }}>
             CARESCRIBE AI
           </span>
         </a>
@@ -76,7 +78,7 @@ export function EncounterList({
 
       {/* Encounters Section */}
       <div className="px-4 pb-3">
-        <p className="px-2 mb-3 text-[10px] uppercase tracking-widest font-bold" style={{ color: '#a0aae0' }}>
+        <p className="px-2 mb-3 text-[10px] uppercase tracking-widest font-bold" style={{ color: '#9ca3af' }}>
           Encounters
         </p>
       </div>
@@ -85,8 +87,8 @@ export function EncounterList({
       <ScrollArea className="flex-1 min-h-0">
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-8 text-center">
-            <FileText className="mb-3 h-8 w-8" style={{ color: 'rgba(245,247,255,0.3)' }} />
-            <p className="text-sm" style={{ color: '#8891c5' }}>
+            <FileText className="mb-3 h-8 w-8 text-gray-300" />
+            <p className="text-sm text-gray-400">
               {encounters.length === 0 ? "No encounters yet" : "No matching encounters"}
             </p>
           </div>
@@ -98,8 +100,8 @@ export function EncounterList({
                 className={cn(
                   "relative mb-1 w-full rounded-lg p-3 text-left transition-colors cursor-pointer",
                   selectedId === encounter.id
-                    ? "bg-white/10"
-                    : "hover:bg-white/5"
+                    ? "bg-[#f0f4ff]"
+                    : "hover:bg-gray-50"
                 )}
               >
                 <button
@@ -108,14 +110,17 @@ export function EncounterList({
                   className="w-full text-left focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
                 >
                   <div className="pr-8">
-                    <p className="truncate text-sm font-semibold text-white">
+                    <p className={cn(
+                      "truncate text-sm font-semibold",
+                      selectedId === encounter.id ? "text-[#1a33cc]" : "text-gray-900"
+                    )}>
                       {encounter.patient_name || "Unknown patient"}
                     </p>
-                    <p className="mt-0.5 truncate text-xs" style={{ color: '#a0aae0' }}>
+                    <p className="mt-0.5 truncate text-xs" style={{ color: selectedId === encounter.id ? '#1a33ccb0' : '#6b7280' }}>
                       {VISIT_TYPE_LABELS[encounter.visit_reason] || encounter.visit_reason || "No reason specified"}
                     </p>
                   </div>
-                  <div className="mt-2 flex items-center gap-1.5 text-xs" style={{ color: '#8891c5' }}>
+                  <div className="mt-2 flex items-center gap-1.5 text-xs" style={{ color: selectedId === encounter.id ? '#1a33cca0' : '#9ca3af' }}>
                     <Clock className="h-3 w-3" />
                     <span>
                       {formatDistanceToNow(new Date(encounter.created_at), { addSuffix: true })}
@@ -132,8 +137,8 @@ export function EncounterList({
                     }}
                     disabled={disabled}
                     aria-label="Delete encounter"
-                    className="absolute right-3 top-3 rounded-md p-1 transition-colors hover:bg-white/10 disabled:pointer-events-none disabled:opacity-50"
-                    style={{ color: 'rgba(245,247,255,0.5)' }}
+                    className="absolute right-3 top-3 rounded-md p-1 transition-colors hover:bg-gray-100 disabled:pointer-events-none disabled:opacity-50"
+                    style={{ color: selectedId === encounter.id ? '#1a33cca0' : '#9ca3af' }}
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>

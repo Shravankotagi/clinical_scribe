@@ -1,8 +1,12 @@
 "use client"
 
 import { useState, useCallback, useRef, useEffect, Suspense } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
+import Link from "next/link"
 import { Menu, X } from "lucide-react"
+import { authClient } from "@/lib/auth-client"
+import { type userType } from "@/types/user"
+import { UserDropdown } from "@/components/dashboard/layout/user-dropdown"
 import {
   createPipelineError,
   toPipelineError,
@@ -143,9 +147,32 @@ function resolveAuthAppUrl(): string {
 }
 
 function HomePageContent() {
+  const router = useRouter()
+  const [user, setUser] = useState<userType | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const { data } = await authClient.getSession()
+        if (data?.user) {
+          setUser(data.user as userType)
+        } else {
+          router.push("/login")
+        }
+      } catch (err) {
+        console.error("Failed to fetch session:", err)
+        router.push("/login")
+      } finally {
+        setLoading(false)
+      }
+    }
+    void fetchSession()
+  }, [router])
+
   const { encounters, addEncounter, updateEncounter, deleteEncounter: removeEncounter, refresh } = useEncounters()
   const searchParams = useSearchParams()
-  const doctorId = searchParams.get("doctorId") || ""
+  const doctorId = searchParams.get("doctorId") || user?.id || ""
   const preloadEncounterId = searchParams.get("encounterId") || ""
   
   const httpsWarning = useHttpsWarning()
@@ -212,6 +239,26 @@ function HomePageContent() {
     setPreferredInputDeviceId(prefs.preferredInputDeviceId || "")
     void initializeAuditLog()
   }, [])
+
+  useEffect(() => {
+    if (!doctorId) return
+
+    const loadFromDb = async () => {
+      try {
+        const response = await fetch('/api/encounters/mine')
+        if (!response.ok) return
+        const dbEncounters = await response.json() as Encounter[]
+        
+        const { bulkMergeEncounters } = await import('@/lib/scribe-storage/encounters')
+        await bulkMergeEncounters(dbEncounters)
+        await refreshRef.current()
+      } catch (err) {
+        console.error('Failed to load encounters from DB:', err)
+      }
+    }
+
+    void loadFromDb()
+  }, [doctorId])
 
   useEffect(() => {
     const loadApiKeys = async () => {
@@ -1153,6 +1200,14 @@ function HomePageContent() {
     }
   }
 
+  if (loading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-[#f5f7ff]">
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-t-transparent border-[#1a33cc]" />
+      </div>
+    )
+  }
+
   return (
     <>
       <LocalSetupWizard isOpen={showLocalSetupWizard} checks={setupChecks} selectedModel={selectedSetupModel} supportedModels={supportedModels} isBusy={setupBusy} statusMessage={setupStatusMessage} onSelectedModelChange={setSelectedSetupModel} onRunCheck={handleRunSetupCheck} onDownloadWhisper={handleDownloadWhisper} onDownloadModel={handleDownloadSetupModel} onComplete={handleCompleteSetup} onSkip={() => setShowLocalSetupWizard(false)} />
@@ -1202,12 +1257,12 @@ function HomePageContent() {
         <div className="fixed top-0 left-0 right-0 z-50 bg-destructive px-4 py-2 text-center text-sm font-semibold text-destructive-foreground">{httpsWarning}</div>
       )}
 
-      <div className="flex h-screen w-screen overflow-hidden bg-background">
+      <div className="flex h-screen w-screen overflow-hidden bg-[#f5f7ff]">
 
         {/* Mobile overlay backdrop */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 z-30 bg-black/50 sm:hidden"
+            className="fixed inset-0 z-30 bg-black/40 sm:hidden"
             onClick={() => setSidebarOpen(false)}
           />
         )}
@@ -1215,14 +1270,13 @@ function HomePageContent() {
         {/* Sidebar — drawer on mobile, fixed on desktop */}
         <div className={`
           fixed sm:relative inset-y-0 left-0 z-40
-          flex h-full w-72 shrink-0 flex-col overflow-hidden border-r border-sidebar-border bg-sidebar
+          flex h-full w-72 shrink-0 flex-col overflow-hidden border-r border-gray-200 bg-white
           transition-transform duration-300 ease-in-out
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}
         `}>
           {/* Mobile close button inside sidebar */}
           <button
-            className="absolute right-3 top-3 z-50 sm:hidden p-1.5 rounded-lg"
-            style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
+            className="absolute right-3 top-3 z-50 sm:hidden p-1.5 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-500"
             onClick={() => setSidebarOpen(false)}
           >
             <X className="w-4 h-4" />
@@ -1241,23 +1295,37 @@ function HomePageContent() {
         </div>
 
         {/* Main content */}
-        <main className="flex flex-1 flex-col overflow-y-auto bg-background min-w-0">
-          {/* Mobile top bar with hamburger */}
-          <div className="flex items-center gap-3 px-4 py-3 sm:hidden border-b border-gray-200" style={{ background: '#0A0F2C' }}>
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="p-2 rounded-lg"
-              style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-            <div className="flex flex-col">
-              <span className="text-white text-sm font-bold leading-tight">CareScribe AI</span>
-              <span className="text-[10px] font-semibold" style={{ color: '#60a5fa' }}>by Enlight Lab</span>
+        <main className="flex flex-1 flex-col overflow-y-auto bg-[#f5f7ff] min-w-0">
+          {/* Top Header */}
+          <header className="flex h-16 w-full shrink-0 items-center justify-between px-6 border-b border-gray-150 bg-white sticky top-0 z-10">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="sm:hidden p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-600"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+              <span className="font-bold text-gray-800 text-lg select-none">CARESCRIBE AI</span>
             </div>
-          </div>
 
-          {renderMainContent()}
+            <div className="flex items-center gap-3">
+              {user && (
+                <>
+                  <Link
+                    href={user.role === 'admin' ? '/admin' : '/dashboard'}
+                    className="flex items-center gap-1.5 border border-[#1a33cc] text-[#1a33cc] px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-[#f0f4ff] hover:shadow-sm active:scale-95 transition-all duration-100"
+                  >
+                    <span>Dashboard</span>
+                  </Link>
+                  <UserDropdown user={user as userType} />
+                </>
+              )}
+            </div>
+          </header>
+
+          <div className="flex-1 overflow-y-auto">
+            {renderMainContent()}
+          </div>
         </main>
       </div>
     </>

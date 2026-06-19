@@ -6,7 +6,7 @@ interface IdleViewProps {
 
 export function IdleView({ onStartNew }: IdleViewProps) {
   return (
-    <div className="flex h-full flex-col items-center justify-center p-8 gap-8" style={{ background: '#f5f7ff' }}>
+    <div className="flex h-full flex-col items-center justify-center p-8 gap-8" style={{ background: 'transparent' }}>
       
       {/* Microphone Button with pulse rings */}
       <div className="relative group">

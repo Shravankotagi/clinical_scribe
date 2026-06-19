@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { Fragment } from 'react';
 import { AutoRefresh } from '@/components/dashboard/auto-refresh'
 import { CodeChip } from '@/components/CodeChip'
+import { Separator } from '@/components/ui/separator'
+import { UserDropdown } from '@/components/dashboard/layout/user-dropdown'
+import { userType } from '@/types/user'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -49,12 +52,19 @@ export default async function AdminDashboardPage({
 
       {/* Top Header */}
       <header className="flex flex-wrap items-center justify-between gap-3 w-full px-4 sm:px-6 lg:px-10 py-3 sm:h-16 sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200">
-        <nav className="flex items-center gap-2 text-sm shrink-0">
-          <span className="text-gray-500">Platform</span>
-          <span className="text-gray-500 text-xs">›</span>
-          <span className="text-[#1a33cc] font-bold border-b-2 border-[#1a33cc] pb-1">Dashboard</span>
-        </nav>
-        <div className='flex items-center gap-4 shrink-0'>
+        <div className="flex items-center">
+          <Link href="/admin" className="flex flex-col items-start gap-0.5 hover:opacity-90 transition-opacity">
+            <img 
+              src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" 
+              alt="Enlight Lab" 
+              className="h-6 sm:h-7 w-auto"
+            />
+            <span className="text-[9px] sm:text-[10px] font-bold tracking-widest text-[#0A1F6B] leading-none" style={{ marginLeft: '42px' }}>
+              CARESCRIBE AI
+            </span>
+          </Link>
+        </div>
+        <div className='flex items-center gap-3 shrink-0'>
           <Link
             href='/admin/doctors'
             className='flex items-center gap-1.5 px-3 sm:px-6 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all hover:opacity-90 active:scale-95 whitespace-nowrap'
@@ -66,6 +76,7 @@ export default async function AdminDashboardPage({
             <span className="hidden sm:inline">Add Doctor</span>
             <span className="sm:hidden">Add</span>
           </Link>
+          <UserDropdown user={session.user as userType} />
         </div>
       </header>
 
@@ -139,12 +150,12 @@ export default async function AdminDashboardPage({
           </div>
 
           {/* Desktop Table */}
-          <div className="hidden md:block overflow-x-auto">
-            <table className='w-full text-left border-collapse'>
+          <div className="hidden md:block overflow-hidden">
+            <table className='w-full text-left border-collapse table-auto'>
               <thead style={{ background: '#f0f4ff' }}>
                 <tr>
                   {['Patient', 'Doctor', 'Note Type', 'Date', 'Status', 'ICD Codes', 'CPT Codes'].map((h) => (
-                    <th key={h} className='px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-600 whitespace-nowrap'>{h}</th>
+                    <th key={h} className='px-2.5 sm:px-3.5 py-3 text-xs font-bold uppercase tracking-wider text-gray-600 whitespace-nowrap'>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -155,52 +166,52 @@ export default async function AdminDashboardPage({
                     className='transition-colors hover:bg-[#f0f4ff]'
                     style={{ background: idx % 2 === 1 ? 'rgba(240,244,255,0.3)' : 'transparent' }}
                   >
-                    <td className='px-6 py-4'>
+                    <td className='px-2.5 sm:px-3.5 py-3'>
                       <div className='flex items-center gap-2'>
                         <div className='w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0' style={{ background: '#dbeafe', color: '#1e40af' }}>
                           {(encounter.patientName || 'U')[0].toUpperCase()}
                         </div>
-                        <span className='text-sm font-semibold text-gray-800 whitespace-nowrap'>{encounter.patientName || 'Unknown Patient'}</span>
+                        <span className='text-xs sm:text-sm font-semibold text-gray-800 whitespace-nowrap'>{encounter.patientName || 'Unknown Patient'}</span>
                       </div>
                     </td>
-                    <td className='px-6 py-4'>
+                    <td className='px-2.5 sm:px-3.5 py-3'>
                       <div className='flex items-center gap-2'>
                         <div className='w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0' style={{ background: '#e2e2e2', color: '#1a1c1c' }}>
                           {encounter.doctor.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
                         </div>
-                        <span className='text-sm font-semibold text-gray-800 whitespace-nowrap'>Dr. {encounter.doctor.name}</span>
+                        <span className='text-xs sm:text-sm font-semibold text-gray-800 whitespace-nowrap'>Dr. {encounter.doctor.name}</span>
                       </div>
                     </td>
-                    <td className='px-6 py-4 text-sm text-gray-500 whitespace-nowrap'>{encounter.noteType}</td>
-                    <td className='px-6 py-4 text-sm text-gray-500 whitespace-nowrap'>
+                    <td className='px-2.5 sm:px-3.5 py-3 text-xs sm:text-sm text-gray-500 whitespace-nowrap'>{encounter.noteType}</td>
+                    <td className='px-2.5 sm:px-3.5 py-3 text-xs sm:text-sm text-gray-500 whitespace-nowrap'>
                       {new Date(encounter.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </td>
-                    <td className='px-6 py-4'>
+                    <td className='px-2.5 sm:px-3.5 py-3'>
                       {encounter.clinicalNote?.status === 'APPROVED' ? (
-                        <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold whitespace-nowrap' style={{ background: '#dcfce7', color: '#15803d' }}>
+                        <span className='inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold whitespace-nowrap' style={{ background: '#dcfce7', color: '#15803d' }}>
                           <span className='w-1.5 h-1.5 rounded-full bg-green-500' />Approved
                         </span>
                       ) : encounter.clinicalNote?.status === 'DRAFT' ? (
-                        <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold whitespace-nowrap' style={{ background: '#fef9c3', color: '#854d0e' }}>
+                        <span className='inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold whitespace-nowrap' style={{ background: '#fef9c3', color: '#854d0e' }}>
                           <span className='w-1.5 h-1.5 rounded-full bg-yellow-500' />Pending
                         </span>
                       ) : (
-                        <span className='inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold whitespace-nowrap' style={{ background: '#e2e2e2', color: '#514535' }}>No Note</span>
+                        <span className='inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold whitespace-nowrap' style={{ background: '#e2e2e2', color: '#514535' }}>No Note</span>
                       )}
                     </td>
-                    <td className='px-6 py-4'>
+                    <td className='px-2.5 sm:px-3.5 py-3'>
                       {encounter.clinicalNote?.icdCodes ? (() => {
                         try {
                           const codes = JSON.parse(encounter.clinicalNote!.icdCodes!) as string[]
-                          return <div className='flex flex-wrap gap-1'>{codes.slice(0, 3).map((code, i) => <CodeChip key={i} code={code} defaultConfidence='90' variant='blue' />)}</div>
+                          return <div className='flex flex-wrap gap-1'>{codes.slice(0, 2).map((code, i) => <CodeChip key={i} code={code} defaultConfidence='90' variant='blue' />)}</div>
                         } catch { return <span className='text-gray-400'>—</span> }
                       })() : <span className='text-gray-400'>—</span>}
                     </td>
-                    <td className='px-6 py-4'>
+                    <td className='px-2.5 sm:px-3.5 py-3'>
                       {encounter.clinicalNote?.cptCodes ? (() => {
                         try {
                           const codes = JSON.parse(encounter.clinicalNote!.cptCodes!) as string[]
-                          return <div className='flex flex-wrap gap-1'>{codes.slice(0, 3).map((code, i) => <CodeChip key={i} code={code} defaultConfidence='85' variant='purple' />)}</div>
+                          return <div className='flex flex-wrap gap-1'>{codes.slice(0, 2).map((code, i) => <CodeChip key={i} code={code} defaultConfidence='85' variant='purple' />)}</div>
                         } catch { return <span className='text-gray-400'>—</span> }
                       })() : <span className='text-gray-400'>—</span>}
                     </td>

@@ -21,6 +21,18 @@ export async function saveEncounters(encounters: Encounter[]): Promise<void> {
   await saveSecureItem(STORAGE_KEY, sanitized)
 }
 
+export async function bulkMergeEncounters(newEncounters: Encounter[]): Promise<Encounter[]> {
+  const existing = await getEncounters()
+  const existingIds = new Set(existing.map(e => e.id))
+  const toAdd = newEncounters.filter(e => !existingIds.has(e.id))
+  
+  if (toAdd.length === 0) return existing
+  
+  const merged = [...existing, ...toAdd]
+  await saveEncounters(merged)
+  return merged
+}
+
 export function createEncounter(data: Partial<Encounter>): Encounter {
   const now = new Date().toISOString()
   return {

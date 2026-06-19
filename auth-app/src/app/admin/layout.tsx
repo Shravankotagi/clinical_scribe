@@ -1,8 +1,4 @@
-import { AppSidebar } from '@/components/admin/layout/app-sidebar';
-import { SiteHeader } from '@/components/admin/layout/site-header';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { isAuthenticated } from '@/server/user';
-import { userType } from '@/types/user';
 import { unauthorized } from 'next/navigation';
 
 export default async function AdminLayout({
@@ -16,15 +12,9 @@ export default async function AdminLayout({
     unauthorized();
   }
 
-  const user = session.user;
-
   return (
-    <SidebarProvider>
-      <AppSidebar variant='inset' user={user as userType} />
-      <SidebarInset>
-        <SiteHeader />
-        {children}
-      </SidebarInset>
-    </SidebarProvider>
+    <div className="flex-1 flex flex-col min-h-screen bg-[#f5f7ff]">
+      {children}
+    </div>
   );
 }

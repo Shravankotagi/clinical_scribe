@@ -82,15 +82,16 @@ export function LoginForm({
   }
 
   return (
-    <main className='relative flex min-h-screen items-center justify-center bg-gradient-to-tr from-[#f8f9ff] via-white to-[#f5f7ff] p-6 md:p-12 overflow-hidden'>
+    <main className='relative flex min-h-screen items-center justify-center bg-white p-6 md:p-12 overflow-hidden'>
       
-      {/* Modern Background Dot Grid & Soft Color Orbs */}
-      <div className='absolute inset-0 bg-[radial-gradient(#e5e7eb_1.5px,transparent_1.5px)] [background-size:32px_32px] opacity-70 pointer-events-none' />
-      <div className='absolute top-0 right-0 -mr-24 -mt-24 w-96 h-96 rounded-full blur-3xl pointer-events-none' style={{ background: 'rgba(26,51,204,0.06)' }} />
-      <div className='absolute bottom-0 left-0 -ml-24 -mb-24 w-96 h-96 rounded-full blur-3xl pointer-events-none' style={{ background: 'rgba(219,234,254,0.45)' }} />
+      {/* Modern Background Dot Grid */}
+      <div className='absolute inset-0 bg-[radial-gradient(#e5e7eb_1.5px,transparent_1.5px)] [background-size:32px_32px] opacity-70 pointer-events-none' style={{ zIndex: 1 }} />
+      
+      {/* Centered Large Blue Glow Shade (matching the screenshot style) */}
+      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] md:w-[950px] h-[700px] md:h-[950px] rounded-full pointer-events-none blur-3xl' style={{ background: 'radial-gradient(circle, rgba(26,51,204,0.1) 0%, rgba(219,234,254,0.04) 50%, rgba(255,255,255,0) 70%)', zIndex: 1 }} />
 
       {/* FLOATING CARD 1: Ambient SOAP Notes (Left Side) */}
-      <div className='absolute left-8 lg:left-12 xl:left-20 top-1/4 max-w-[260px] p-5 bg-white/90 backdrop-blur-md border border-blue-100/50 rounded-2xl shadow-xl shadow-indigo-900/5 rotate-[-3deg] hidden lg:block pointer-events-none select-none transition-all duration-300 hover:rotate-0 hover:scale-102'>
+      <div className='absolute left-8 lg:left-12 xl:left-20 top-1/4 max-w-[260px] p-5 bg-white/90 backdrop-blur-md border border-blue-100/50 rounded-2xl shadow-xl shadow-indigo-900/5 rotate-[-3deg] hidden lg:block pointer-events-none select-none transition-all duration-300 hover:rotate-0 hover:scale-102' style={{ zIndex: 2 }}>
         <div className='flex items-center gap-2 mb-3'>
           <svg className='w-4 h-4 text-[#1a33cc]' fill='none' stroke='currentColor' strokeWidth={2.5} viewBox='0 0 24 24'>
             <path strokeLinecap='round' strokeLinejoin='round' d='M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z' />
@@ -109,7 +110,7 @@ export function LoginForm({
       </div>
 
       {/* FLOATING CARD 2: AI Medical Coding (Right Side) */}
-      <div className='absolute right-8 lg:right-12 xl:right-20 bottom-1/4 max-w-[260px] p-5 bg-white/90 backdrop-blur-md border border-emerald-100/50 rounded-2xl shadow-xl shadow-emerald-900/5 rotate-[3deg] hidden lg:block pointer-events-none select-none transition-all duration-300 hover:rotate-0 hover:scale-102'>
+      <div className='absolute right-8 lg:right-12 xl:right-20 bottom-1/4 max-w-[260px] p-5 bg-white/90 backdrop-blur-md border border-emerald-100/50 rounded-2xl shadow-xl shadow-emerald-900/5 rotate-[3deg] hidden lg:block pointer-events-none select-none transition-all duration-300 hover:rotate-0 hover:scale-102' style={{ zIndex: 2 }}>
         <div className='flex items-center gap-2 mb-3'>
           <svg className='w-4 h-4 text-emerald-600' fill='none' stroke='currentColor' strokeWidth={2.5} viewBox='0 0 24 24'>
             <path strokeLinecap='round' strokeLinejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581a1.42 1.42 0 002.008 0l4.318-4.318a1.42 1.42 0 000-2.008L10.985 4.66A2.25 2.25 0 009.568 3z' />

@@ -189,15 +189,14 @@ export async function loadSecureItem<T>(key: string): Promise<T | null> {
     }
   }
   
-  // Decrypt with current key (works for both v1 and v2 if using same key)
-  const cryptoKey = await getKey()
-  const decrypted = await getCrypto().subtle.decrypt(
-    { name: "AES-GCM", iv: payload.iv.buffer as ArrayBuffer },
-    cryptoKey,
-    payload.data.buffer as ArrayBuffer
-  )
-  
   try {
+    // Decrypt with current key (works for both v1 and v2 if using same key)
+    const cryptoKey = await getKey()
+    const decrypted = await getCrypto().subtle.decrypt(
+      { name: "AES-GCM", iv: payload.iv.buffer as ArrayBuffer },
+      cryptoKey,
+      payload.data.buffer as ArrayBuffer
+    )
     const parsed = JSON.parse(DECODER.decode(decrypted)) as T
     
     // Auto-migrate v1 to v2 format
@@ -210,9 +209,11 @@ export async function loadSecureItem<T>(key: string): Promise<T | null> {
     }
     
     return parsed
-  } catch {
-    // Decryption succeeded but JSON parsing failed
-    window.localStorage.removeItem(key)
+  } catch (error) {
+    console.warn(`Failed to decrypt secure storage item for key "${key}". It might be corrupted or using a different key.`, error)
+    try {
+      window.localStorage.removeItem(key)
+    } catch {}
     return null
   }
 }

@@ -12,6 +12,7 @@ import {
   X,
 } from 'lucide-react'
 import { DemoLoginButton } from '@/components/DemoLoginButtons'
+
 function FacebookIcon({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -19,6 +20,7 @@ function FacebookIcon({ size = 16 }: { size?: number }) {
     </svg>
   )
 }
+
 function LinkedinIcon({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -26,21 +28,28 @@ function LinkedinIcon({ size = 16 }: { size?: number }) {
     </svg>
   )
 }
+
 export default function HomePage() {
   return (
     <div style={{ minHeight: '100vh', background: '#ffffff' }}>
+
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
         /* ── Reset margins that bleed into sections ── */
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
           font-family: 'Inter', system-ui, sans-serif;
         }
+
         h1, h2, h3, h4 {
           font-family: 'Plus Jakarta Sans', sans-serif;
         }
+
         /* ── Mobile menu toggle (checkbox hack) ── */
         #nav-toggle { display: none; }
+
         .nav-links { display: flex; gap: 2.5rem; align-items: center; }
         .nav-actions { display: flex; gap: 0.875rem; align-items: center; }
         .hamburger { display: none; cursor: pointer; padding: 0.5rem; }
@@ -52,6 +61,7 @@ export default function HomePage() {
           border-top: 1px solid #e5e7eb;
           padding: 1rem 1.5rem 1.5rem;
         }
+
         /* ── Hover Micro-Animations ── */
         .hover-float {
           transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
@@ -63,6 +73,7 @@ export default function HomePage() {
           box-shadow: 0 20px 25px -5px rgba(26, 51, 204, 0.1), 0 8px 10px -6px rgba(26, 51, 204, 0.1);
           border-color: rgba(26, 51, 204, 0.25) !important;
         }
+
         /* Hover animation that reveals a premium blue shade overlay */
         .hover-float-blue-shade {
           transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
@@ -76,6 +87,7 @@ export default function HomePage() {
           border-color: rgba(26, 51, 204, 0.3) !important;
           background-color: rgba(26, 51, 204, 0.015) !important;
         }
+
         .hover-glow-blue {
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -84,6 +96,7 @@ export default function HomePage() {
           box-shadow: 0 20px 25px -5px rgba(26, 51, 204, 0.1);
           border-color: rgba(26, 51, 204, 0.35) !important;
         }
+
         .hover-glow-green {
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -92,6 +105,7 @@ export default function HomePage() {
           box-shadow: 0 20px 25px -5px rgba(5, 150, 105, 0.1);
           border-color: rgba(5, 150, 105, 0.35) !important;
         }
+
         /* ── Pulse animation for Live Recording indicator ── */
         @keyframes pulse-recording {
           0% { transform: scale(0.95); opacity: 0.6; }
@@ -101,6 +115,7 @@ export default function HomePage() {
         .pulse-indicator {
           animation: pulse-recording 2s infinite ease-in-out;
         }
+
         /* ── Grid helpers ── */
         .hero-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 4rem; align-items: center; }
         .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2rem; text-align: center; }
@@ -110,12 +125,15 @@ export default function HomePage() {
         .testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.75rem; }
         .footer-grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
         .stat-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
         .workflow-arrow { display: block; }
+
         @media (max-width: 991px) {
           .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
           .features-grid { grid-template-columns: repeat(2,1fr); }
           .testimonials-grid { grid-template-columns: repeat(2,1fr); }
         }
+
         @media (max-width: 768px) {
           /* Navbar */
           .nav-links { display: none; }
@@ -180,38 +198,53 @@ export default function HomePage() {
           /* Rolling belt */
           .belt-section { padding: 2rem 0 !important; }
         }
+
         @media (max-width: 480px) {
           .footer-grid { grid-template-columns: 1fr; }
           .stats-grid { grid-template-columns: 1fr; }
           .stat-cards-grid { grid-template-columns: 1fr; }
         }
       `}</style>
+
       {/* Navbar */}
       <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #e5e7eb' }}>
-        <div style={{ padding: '0 1.5rem', height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1280px', margin: '0 auto' }}>
+        {/* Outer Container: Increased height to '84px' and horizontal padding to '2rem' */}
+        <div style={{ padding: '0 2rem', height: '96px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1280px', margin: '0 auto' }}>
+          
           <Link href="/" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textDecoration: 'none', flexShrink: 0 }}>
-            <img src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" alt="Enlight Lab" width={140} height={30} style={{ objectFit: 'contain' }} />
-            <span style={{ fontSize: '0.6rem', fontWeight: 700, color: '#0A1F6B', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '1px', marginLeft: '34px' }}>
+            {/* Logo Image: Increased dimensions to 160x34 */}
+            <img src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" alt="Enlight Lab" width={170} height={36} style={{ objectFit: 'contain' }} />
+            {/* Subtext: Scaled font to '0.65rem' and aligned margin-left to '39px' */}
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#0A1F6B', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '2px', marginLeft: '39px' }}>
               CARESCRIBE AI
             </span>
           </Link>
           
-          <div className="nav-links">
-            <a href="#features" style={{ color: '#374151', fontSize: '0.9375rem', textDecoration: 'none', fontWeight: 500 }}>Features</a>
-            <a href="#how-it-works" style={{ color: '#374151', fontSize: '0.9375rem', textDecoration: 'none', fontWeight: 500 }}>How It Works</a>
-            <a href="#demo" style={{ color: '#374151', fontSize: '0.9375rem', textDecoration: 'none', fontWeight: 500 }}>Demo</a>
-            <a href="#faq" style={{ color: '#374151', fontSize: '0.9375rem', textDecoration: 'none', fontWeight: 500 }}>FAQ</a>
+          {/* Nav Links: Increased font size to '1rem' and spacing gap to '3rem' */}
+          <div className="nav-links" style={{ gap: '3rem' }}>
+            <a href="#features" style={{ color: '#374151', fontSize: '1rem', textDecoration: 'none', fontWeight: 500 }}>Features</a>
+            <a href="#how-it-works" style={{ color: '#374151', fontSize: '1rem', textDecoration: 'none', fontWeight: 500 }}>How It Works</a>
+            <a href="#demo" style={{ color: '#374151', fontSize: '1rem', textDecoration: 'none', fontWeight: 500 }}>Demo</a>
+            <a href="#faq" style={{ color: '#374151', fontSize: '1rem', textDecoration: 'none', fontWeight: 500 }}>FAQ</a>
           </div>
-          <div className="nav-actions">
-            <Link href="/login" style={{ color: '#1a33cc', fontSize: '0.9375rem', fontWeight: 600, textDecoration: 'none', padding: '0.55rem 1.1rem', border: '1.5px solid #1a33cc', borderRadius: '10px' }}>Sign In</Link>
-            <Link href="/login" style={{ background: '#1a33cc', color: '#fff', fontSize: '0.9375rem', fontWeight: 600, textDecoration: 'none', padding: '0.55rem 1.25rem', borderRadius: '10px', boxShadow: '0 4px 12px rgba(26,51,204,0.25)' }}>Try Demo →</Link>
+
+          {/* Nav Action Buttons: Scaled fonts to '1rem' and increased padding for larger buttons */}
+          <div className="nav-actions" style={{ gap: '1rem' }}>
+            <Link href="/login" style={{ color: '#1a33cc', fontSize: '1rem', fontWeight: 600, textDecoration: 'none', padding: '0.65rem 1.35rem', border: '1.5px solid #1a33cc', borderRadius: '11px' }}>
+              Sign In
+            </Link>
+            <Link href="/login" style={{ background: '#1a33cc', color: '#fff', fontSize: '1rem', fontWeight: 600, textDecoration: 'none', padding: '0.65rem 1.6rem', borderRadius: '11px', boxShadow: '0 4px 12px rgba(26,51,204,0.25)' }}>
+              Try Demo →
+            </Link>
           </div>
-          {/* Hamburger — checkbox hack */}
+          
+          {/* Hamburger */}
           <label htmlFor="nav-toggle" className="hamburger" style={{ color: '#374151' }}>
             <span className="hamburger-open"><Menu size={24} /></span>
             <span className="hamburger-close"><X size={24} /></span>
           </label>
         </div>
+        
         <input type="checkbox" id="nav-toggle" style={{ display: 'none' }} />
         <div className="mobile-menu">
           <a href="#features">Features</a>
@@ -224,14 +257,16 @@ export default function HomePage() {
           </div>
         </div>
       </nav>
+
       {/* Hero Section */}
       <section className="hero-section" style={{ padding: '6rem 2.5rem 5rem', background: '#fff', maxWidth: '1280px', margin: '0 auto', position: 'relative', overflow: 'hidden' }}>
         
         {/* Subtle mesh background dot grid details */}
         <div className='absolute inset-0 bg-[radial-gradient(#e5e7eb_1.5px,transparent_1.5px)] [background-size:32px_32px] opacity-40 pointer-events-none' style={{ zIndex: 1 }} />
         
-        {/* Centered Large Blue Glow Shade */}
-        <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] md:w-[1000px] h-[700px] md:h-[1000px] rounded-full pointer-events-none blur-3xl' style={{ background: 'radial-gradient(circle, rgba(26,51,204,0.09) 0%, rgba(59,130,246,0.03) 50%, rgba(255,255,255,0) 70%)', zIndex: 1 }} />
+        {/* Centered Large Blue Glow Shade (Matching your screenshot style) */}
+        <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] md:w-[1000px] h-[700px] md:h-[1000px] rounded-full pointer-events-none blur-3xl' style={{ background: 'radial-gradient(circle, rgba(26,51,204,0.09) 0%, rgba(219,234,254,0.03) 50%, rgba(255,255,255,0) 70%)', zIndex: 1 }} />
+        
         <div className="hero-grid" style={{ position: 'relative', zIndex: 2 }}>
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', background: '#f0f4ff', padding: '0.45rem 1.1rem', borderRadius: '9999px', fontSize: '0.8125rem', fontWeight: 600, color: '#1a33cc', marginBottom: '1.5rem' }}>
@@ -274,6 +309,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
       {/* Stats Bar */}
       <section className="stats-section" style={{ padding: '3.5rem 2.5rem', background: '#f8f9fa', borderTop: '1px solid #eef2f6', borderBottom: '1px solid #eef2f6', position: 'relative', overflow: 'hidden' }}>
         <div className='absolute inset-0 bg-[radial-gradient(#e5e7eb_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-40 pointer-events-none' />
@@ -291,6 +327,7 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
       {/* Features Section */}
       <section id="features" className="features-section" style={{ padding: '6rem 2.5rem', maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '4.5rem' }}>
@@ -323,6 +360,7 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
       {/* How It Works Section */}
       <section id="how-it-works" className="workflow-section" style={{ padding: '6rem 2.5rem', background: '#f8f9fa', borderTop: '1px solid #eef2f6' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
@@ -354,6 +392,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
       {/* Demo Section */}
       <section id="demo" className="demo-section" style={{ padding: '6rem 2.5rem', maxWidth: '1280px', margin: '0 auto', position: 'relative', overflow: 'hidden' }}>
         
@@ -417,6 +456,7 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
       {/* Testimonials Section */}
       <section className="testimonials-section" style={{ padding: '6rem 2.5rem', background: '#f8f9fa', borderTop: '1px solid #eef2f6' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
@@ -445,6 +485,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
       {/* FAQ Section */}
       <section id="faq" className="faq-section" style={{ padding: '6rem 2.5rem', maxWidth: '850px', margin: '0 auto', position: 'relative', overflow: 'hidden' }}>
         
@@ -472,6 +513,7 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
       {/* Rolling Belt Section */}
       <section className="belt-section" style={{ background: '#1535C9', padding: '2.5rem 0 3rem', overflow: 'hidden', position: 'relative' }}>
         <p style={{ textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1.5rem' }}>
@@ -524,6 +566,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
       {/* Footer */}
       <footer className="footer-section" style={{ background: '#f8f9ff', borderTop: '1px solid #e5e7eb', padding: '4rem 2.5rem 2rem' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>

@@ -4,6 +4,10 @@ import { isAuthenticated } from "@/server/user";
 import { AddDoctorDialog } from "./add-doctor-dialog";
 import { toggleDoctorStatus, deleteDoctor } from "./actions";
 import { DeleteDoctorButton } from '@/components/admin/delete-doctor-button'
+import { Separator } from '@/components/ui/separator'
+import { UserDropdown } from '@/components/dashboard/layout/user-dropdown'
+import { userType } from '@/types/user'
+import Link from 'next/link'
 
 export default async function DoctorsPage() {
   const session = await isAuthenticated();
@@ -21,13 +25,21 @@ export default async function DoctorsPage() {
 
       {/* Top App Bar */}
       <header className="flex flex-wrap items-center justify-between gap-3 w-full px-4 sm:px-6 lg:px-10 py-3 sm:h-16 sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200">
-        <nav className="flex items-center gap-2 text-sm shrink-0">
-          <span className="text-gray-500">Administration</span>
-          <span className="text-gray-400 text-xs">›</span>
-          <span className="text-[#1a33cc] font-bold border-b-2 border-[#1a33cc] pb-1">Manage Doctors</span>
-        </nav>
-        <div className="flex items-center gap-4 shrink-0">
+        <div className="flex items-center">
+          <Link href="/admin" className="flex flex-col items-start gap-0.5 hover:opacity-90 transition-opacity">
+            <img 
+              src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" 
+              alt="Enlight Lab" 
+              className="h-6 sm:h-7 w-auto"
+            />
+            <span className="text-[9px] sm:text-[10px] font-bold tracking-widest text-[#0A1F6B] leading-none" style={{ marginLeft: '34px' }}>
+              CARESCRIBE AI
+            </span>
+          </Link>
+        </div>
+        <div className="flex items-center gap-3 shrink-0">
           <AddDoctorDialog />
+          <UserDropdown user={session.user as userType} />
         </div>
       </header>
 
@@ -57,15 +69,15 @@ export default async function DoctorsPage() {
           </div>
 
           {/* Desktop Table */}
-          <div className="hidden md:block overflow-x-auto overflow-y-visible">
-            <table className="w-full text-left border-collapse">
+          <div className="hidden md:block overflow-hidden">
+            <table className="w-full text-left border-collapse table-auto">
               <thead>
                 <tr className="bg-[#f0f4ff] text-gray-600">
-                  <th className="px-6 py-4 text-xs uppercase tracking-wider font-bold">Name</th>
-                  <th className="px-6 py-4 text-xs uppercase tracking-wider font-bold">Email</th>
-                  <th className="px-6 py-4 text-xs uppercase tracking-wider font-bold">Created</th>
-                  <th className="px-6 py-4 text-xs uppercase tracking-wider font-bold text-center">Status</th>
-                  <th className="px-6 py-4 text-xs uppercase tracking-wider font-bold text-right">Actions</th>
+                  <th className="px-2.5 sm:px-3.5 py-3 text-xs uppercase tracking-wider font-bold text-center">Name</th>
+                  <th className="px-2.5 sm:px-3.5 py-3 text-xs uppercase tracking-wider font-bold text-center">Email</th>
+                  <th className="px-2.5 sm:px-3.5 py-3 text-xs uppercase tracking-wider font-bold text-center">Created</th>
+                  <th className="px-2.5 sm:px-3.5 py-3 text-xs uppercase tracking-wider font-bold text-center">Status</th>
+                  <th className="px-2.5 sm:px-3.5 py-3 text-xs uppercase tracking-wider font-bold text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -82,22 +94,22 @@ export default async function DoctorsPage() {
                 ) : (
                   doctors.map((doctor) => (
                     <tr key={doctor.id} className="hover:bg-[#f0f4ff] transition-colors group">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
+                      <td className="px-2.5 sm:px-3.5 py-3 text-center">
+                         <div className="flex items-center justify-center gap-3">
                           <div className="w-8 h-8 rounded-full bg-[#dbeafe] flex items-center justify-center text-[#1e40af] font-bold text-xs flex-shrink-0">
                             {(doctor.name ?? 'U')[0].toUpperCase()}
                           </div>
-                          <span className="text-sm font-bold text-gray-800 whitespace-nowrap">{doctor.name}</span>
+                          <span className="text-xs sm:text-sm font-bold text-gray-800 whitespace-nowrap">{doctor.name}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{doctor.email}</td>
-                      <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                      <td className="px-2.5 sm:px-3.5 py-3 text-xs sm:text-sm text-gray-500 whitespace-nowrap text-center">{doctor.email}</td>
+                      <td className="px-2.5 sm:px-3.5 py-3 text-xs sm:text-sm text-gray-500 whitespace-nowrap text-center">
                         {new Date(doctor.createdAt).toLocaleDateString('en-US', {
                           month: 'short', day: 'numeric', year: 'numeric'
                         })}
                       </td>
-                      <td className="px-6 py-4 text-center">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-wider whitespace-nowrap ${
+                      <td className="px-2.5 sm:px-3.5 py-3 text-center">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wider whitespace-nowrap ${
                           doctor.banned
                             ? 'bg-red-100 text-red-700'
                             : 'bg-green-100 text-green-700'
@@ -105,8 +117,8 @@ export default async function DoctorsPage() {
                           {doctor.banned ? 'INACTIVE' : 'ACTIVE'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                      <td className="px-2.5 sm:px-3.5 py-3 text-center">
+                        <div className="flex items-center justify-center gap-2">
                           <form action={toggleDoctorStatus}>
                             <input type="hidden" name="doctorId" value={doctor.id} />
                             <input type="hidden" name="banned" value={String(doctor.banned)} />

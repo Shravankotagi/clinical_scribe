@@ -5,20 +5,26 @@ interface EncounterRowProps {
   doctorId: string
   isDraft: boolean
   children: React.ReactNode
+  as?: 'tr' | 'div'
+  className?: string
 }
 
-export function EncounterRow({ encounterId, doctorId, isDraft, children }: EncounterRowProps) {
+export function EncounterRow({
+  encounterId,
+  doctorId,
+  children,
+  as = 'tr',
+  className = "hover:bg-[#f0f4ff] transition-colors cursor-pointer"
+}: EncounterRowProps) {
+  const Component = as
   return (
-    <tr
-      className="hover:bg-[#f0f4ff] transition-colors"
-      style={{ cursor: isDraft ? 'pointer' : 'default' }}
+    <Component
+      className={className}
       onClick={() => {
-        if (isDraft) {
-          window.location.href = `/scribe?doctorId=${doctorId}&encounterId=${encounterId}`
-        }
+        window.location.href = `/scribe?doctorId=${doctorId}&encounterId=${encounterId}`
       }}
     >
       {children}
-    </tr>
+    </Component>
   )
 }

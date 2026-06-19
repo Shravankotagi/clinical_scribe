@@ -47,13 +47,14 @@ export function AppSidebar({
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Link href="/dashboard" className="flex flex-col items-center gap-1 px-2 py-3 w-full">
+            {/* Aligned left (items-start) with left margin offset for text alignment */}
+            <Link href="/dashboard" className="flex flex-col items-start gap-1 px-4 py-3 w-full">
               <img 
                 src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" 
                 alt="Enlight Lab" 
                 className="h-8 w-auto"
               />
-              <span className="text-[11px] font-bold tracking-widest text-[#0A1F6B]">
+              <span className="text-[11px] font-bold tracking-widest text-[#0A1F6B]" style={{ marginLeft: '34px' }}>
                 CARESCRIBE AI
               </span>
             </Link>
