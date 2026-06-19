@@ -19,23 +19,38 @@ export function useEncounters() {
 
   const addEncounter = async (data: Partial<Encounter>) => {
     try {
-      const newEncounter = createEncounter(data)
-      const updated = [newEncounter, ...encounters]
+      const existingIdx = encounters.findIndex(e => e.id === data.id)
+      let updated: Encounter[]
+      let targetEncounter: Encounter
+      if (existingIdx > -1) {
+        const copy = [...encounters]
+        copy[existingIdx] = { ...copy[existingIdx], ...data }
+        updated = copy
+        targetEncounter = copy[existingIdx]
+      } else {
+        const newEncounter = createEncounter(data)
+        updated = [newEncounter, ...encounters]
+        targetEncounter = newEncounter
+      }
+
+      // Sort by created_at DESC to preserve sequence at all costs
+      updated.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
       await saveEncounters(updated)
       await mutate(updated, false)
 
       // Audit log: encounter created
       await writeAuditEntry({
-        event_type: "encounter.created",
-        resource_id: newEncounter.id,
+        event_type: existingIdx > -1 ? "encounter.updated" : "encounter.created",
+        resource_id: targetEncounter.id,
         success: true,
         metadata: {
-          status: newEncounter.status,
-          has_patient_name: !!newEncounter.patient_name,
+          status: targetEncounter.status,
+          has_patient_name: !!targetEncounter.patient_name,
         },
       })
 
-      return newEncounter
+      return targetEncounter
     } catch (error) {
       // Audit log: encounter creation failed
       await writeAuditEntry({

@@ -27,5 +27,6 @@ export async function GET() {
     status: 'completed' as const,
     language: 'en',
     recording_duration: e.duration,
+    is_approved: e.clinicalNote?.status === 'APPROVED',
   })))
 }

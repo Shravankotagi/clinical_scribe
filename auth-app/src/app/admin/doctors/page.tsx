@@ -32,7 +32,7 @@ export default async function DoctorsPage() {
               alt="Enlight Lab" 
               className="h-6 sm:h-7 w-auto"
             />
-            <span className="text-[9px] sm:text-[10px] font-bold tracking-widest text-[#0A1F6B] leading-none" style={{ marginLeft: '34px' }}>
+            <span className="text-[9px] sm:text-[10px] font-bold tracking-widest text-[#0A1F6B] leading-none" style={{ marginLeft: '42px' }}>
               CARESCRIBE AI
             </span>
           </Link>
@@ -54,7 +54,7 @@ export default async function DoctorsPage() {
           >
             Manage doctor accounts
           </h1>
-          <p className="text-sm sm:text-base text-gray-500">View, edit, and deactivate clinical practitioner access.</p>
+          <p className="text-sm sm:text-base text-gray-500">View, edit, and deactivate doctors access.</p>
         </section>
 
         {/* Practitioners Table */}
@@ -64,7 +64,7 @@ export default async function DoctorsPage() {
         >
           <div className="px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center border-b border-gray-200 bg-white">
             <h3 className="text-lg sm:text-xl font-semibold text-[#1a33cc]" style={{ fontFamily: 'Manrope, sans-serif' }}>
-              Practitioner Records
+              Doctor Records
             </h3>
           </div>
 

@@ -24,6 +24,7 @@ export interface Encounter {
   status: EncounterStatus
   language: string
   recording_duration?: number
+  is_approved?: boolean
 }
 
 /**

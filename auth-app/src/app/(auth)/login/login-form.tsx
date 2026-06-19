@@ -148,7 +148,7 @@ export function LoginForm({
           height={38}
           style={{ objectFit: 'contain' }}
         />
-        <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#0A1F6B', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '1px', marginLeft: '43px' }}>
+        <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#0A1F6B', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '1px', marginLeft: '42px' }}>
           CARESCRIBE AI
         </span>
       </Link>

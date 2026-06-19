@@ -1,6 +1,7 @@
 import { isAuthenticated } from '@/server/user';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { Fragment } from 'react';
 import prisma from '@/lib/prisma';
 import { AutoRefresh } from '@/components/dashboard/auto-refresh'
 import { CodeChip } from '@/components/CodeChip'
@@ -14,9 +15,12 @@ import { userType } from '@/types/user'
 export default async function DashboardPage({
   searchParams
 }: {
-  searchParams: Promise<{ filter?: string }>
+  searchParams: Promise<{ filter?: string; page?: string }>
 }) {
-  const { filter } = await searchParams
+  const { filter, page: pageParam } = await searchParams
+  const page = Math.max(1, parseInt(pageParam || '1'))
+  const perPage = 25
+
   const session = await isAuthenticated();
 
   if (!session) {
@@ -25,19 +29,43 @@ export default async function DashboardPage({
 
   const user = session.user;
 
-  const encounters = await prisma.encounter.findMany({
-    where: { doctorId: user.id },
-    include: { clinicalNote: true },
-    orderBy: { createdAt: 'desc' },
-    take: 50,
-  });
+  // Run queries in parallel for maximum performance
+  const [
+    totalEncounters,
+    notesGenerated,
+    pendingApproval,
+    encounters
+  ] = await Promise.all([
+    prisma.encounter.count({
+      where: { doctorId: user.id }
+    }),
+    prisma.encounter.count({
+      where: {
+        doctorId: user.id,
+        clinicalNote: { isNot: null }
+      }
+    }),
+    prisma.encounter.count({
+      where: {
+        doctorId: user.id,
+        clinicalNote: { status: 'DRAFT' }
+      }
+    }),
+    prisma.encounter.findMany({
+      where: {
+        doctorId: user.id,
+        ...(filter === 'pending' ? { clinicalNote: { status: 'DRAFT' } } : {})
+      },
+      include: { clinicalNote: true },
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * perPage,
+      take: perPage,
+    })
+  ])
 
-  const totalEncounters = encounters.length;
-  const notesGenerated = encounters.filter(e => e.clinicalNote).length;
-  const pendingApproval = encounters.filter(e => e.clinicalNote?.status === 'DRAFT').length;
-  const displayEncounters = filter === 'pending'
-    ? encounters.filter(e => e.clinicalNote?.status === 'DRAFT')
-    : encounters
+  const currentTotal = filter === 'pending' ? pendingApproval : totalEncounters
+  const totalPages = Math.ceil(currentTotal / perPage)
+  const displayEncounters = encounters
 
   return (
     <div className="flex-1 flex flex-col min-h-screen" style={{ background: '#f5f7ff' }}>
@@ -358,18 +386,50 @@ export default async function DashboardPage({
             </>
           )}
 
-          {/* Table Footer */}
-          <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-200 flex items-center justify-between">
-            <span className="text-xs text-gray-500">
-              Showing {displayEncounters.length} of {totalEncounters} encounters
+          {/* Pagination Footer */}
+          <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-3 bg-white rounded-b-xl">
+            <span className="text-xs text-gray-500 order-2 sm:order-1">
+              Page {page} of {totalPages || 1} · {currentTotal} total encounters
             </span>
-            <div className="flex gap-2">
-              <button className="p-1.5 sm:p-2 border border-gray-200 rounded-lg hover:bg-[#f0f4ff] disabled:opacity-30 transition-colors" disabled>
-                ‹
-              </button>
-              <button className="p-1.5 sm:p-2 border border-gray-200 rounded-lg hover:bg-[#f0f4ff] transition-colors">
-                ›
-              </button>
+            <div className="flex items-center gap-2 order-1 sm:order-2">
+              {page > 1 && (
+                <Link
+                  href={`/dashboard?page=${page - 1}${filter ? `&filter=${filter}` : ''}`}
+                  className="px-3 sm:px-4 py-2 text-sm font-semibold rounded-lg border border-gray-200 hover:bg-[#f0f4ff] transition-colors"
+                  style={{ color: '#1a33cc' }}
+                >
+                  ← Previous
+                </Link>
+              )}
+              <div className="hidden sm:flex items-center gap-2">
+                {Array.from({ length: totalPages || 1 }, (_, i) => i + 1)
+                  .filter(p => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
+                  .map((p, i, arr) => (
+                    <Fragment key={p}>
+                      {i > 0 && arr[i - 1] !== p - 1 && <span className="text-gray-400 text-sm">...</span>}
+                      <Link
+                        href={`/dashboard?page=${p}${filter ? `&filter=${filter}` : ''}`}
+                        className="w-9 h-9 flex items-center justify-center text-sm font-semibold rounded-lg transition-colors"
+                        style={{
+                          background: p === page ? '#1a33cc' : 'transparent',
+                          color: p === page ? 'white' : '#1a33cc',
+                          border: p === page ? 'none' : '1px solid #e5e7eb',
+                        }}
+                      >
+                        {p}
+                      </Link>
+                    </Fragment>
+                  ))}
+              </div>
+              {page < totalPages && (
+                <Link
+                  href={`/dashboard?page=${page + 1}${filter ? `&filter=${filter}` : ''}`}
+                  className="px-3 sm:px-4 py-2 text-sm font-semibold rounded-lg border border-gray-200 hover:bg-[#f0f4ff] transition-colors"
+                  style={{ color: '#1a33cc' }}
+                >
+                  Next →
+                </Link>
+              )}
             </div>
           </div>
         </section>

@@ -5,7 +5,7 @@ import { cn } from "@/lib/scribe-ui/utils"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/lib/scribe-ui/ui/scroll-area"
 import { Search, FileText, Clock, Trash2 } from "lucide-react"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useRef, useEffect } from "react"
 import { formatDistanceToNow } from "date-fns"
 
 const VISIT_TYPE_LABELS: Record<string, string> = {
@@ -32,6 +32,19 @@ export function EncounterList({
   disabled,
 }: EncounterListProps) {
   const [search, setSearch] = useState("")
+  const activeItemRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (selectedId) {
+      const timer = setTimeout(() => {
+        activeItemRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        })
+      }, 100)
+      return () => clearTimeout(timer)
+    }
+  }, [selectedId])
 
   const filtered = useMemo(() => {
     if (!search.trim()) return encounters
@@ -97,6 +110,7 @@ export function EncounterList({
             {filtered.map((encounter) => (
               <div
                 key={encounter.id}
+                ref={selectedId === encounter.id ? activeItemRef : undefined}
                 className={cn(
                   "relative mb-1 w-full rounded-lg p-3 text-left transition-colors cursor-pointer",
                   selectedId === encounter.id

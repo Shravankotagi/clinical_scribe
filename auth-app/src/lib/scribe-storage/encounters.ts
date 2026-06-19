@@ -23,12 +23,22 @@ export async function saveEncounters(encounters: Encounter[]): Promise<void> {
 
 export async function bulkMergeEncounters(newEncounters: Encounter[]): Promise<Encounter[]> {
   const existing = await getEncounters()
-  const existingIds = new Set(existing.map(e => e.id))
-  const toAdd = newEncounters.filter(e => !existingIds.has(e.id))
+  const existingMap = new Map(existing.map(e => [e.id, e]))
   
-  if (toAdd.length === 0) return existing
+  newEncounters.forEach(newEnc => {
+    const ext = existingMap.get(newEnc.id)
+    if (ext) {
+      existingMap.set(newEnc.id, {
+        ...ext,
+        ...newEnc,
+        audio_blob: ext.audio_blob || newEnc.audio_blob,
+      })
+    } else {
+      existingMap.set(newEnc.id, newEnc)
+    }
+  })
   
-  const merged = [...existing, ...toAdd]
+  const merged = Array.from(existingMap.values())
   await saveEncounters(merged)
   return merged
 }

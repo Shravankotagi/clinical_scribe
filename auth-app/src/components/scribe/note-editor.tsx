@@ -21,6 +21,7 @@ const VISIT_TYPE_LABELS: Record<string, string> = {
 interface NoteEditorProps {
   encounter: Encounter
   onSave: (noteText: string) => void
+  onApprove?: () => void
 }
 
 type TabType = "note" | "transcript"
@@ -52,7 +53,7 @@ function messageId() {
     : `${Date.now()}-${Math.random().toString(16).slice(2)}`
 }
 
-export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
+export function NoteEditor({ encounter, onSave, onApprove }: NoteEditorProps) {
   const [activeTab, setActiveTab] = useState<TabType>("note")
   const [noteMarkdown, setNoteMarkdown] = useState<string>(encounter.note_text || "")
   const [hasChanges, setHasChanges] = useState(false)
@@ -60,7 +61,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
   const [saved, setSaved] = useState(false)
   const [approved, setApproved] = useState(() => {
     if (typeof window === 'undefined') return false
-    return sessionStorage.getItem(`approved_${encounter.id}`) === 'true'
+    return encounter.is_approved === true || sessionStorage.getItem(`approved_${encounter.id}`) === 'true'
   })
   const [approving, setApproving] = useState(false)
   const [highlightedNote, setHighlightedNote] = useState<string | null>(null)
@@ -87,7 +88,12 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
     setOpenClawMessages([])
     setOpenClawInput("")
     setOpenClawSending(false)
-  }, [encounter.id, encounter.note_text])
+    const isApproved = encounter.is_approved === true || sessionStorage.getItem(`approved_${encounter.id}`) === 'true'
+    setApproved(isApproved)
+    if (isApproved) {
+      setEditMode(false)
+    }
+  }, [encounter.id, encounter.note_text, encounter.is_approved])
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -137,6 +143,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
       setApproved(true)
       sessionStorage.setItem(`approved_${encounter.id}`, 'true')
       setHasChanges(false)
+      onApprove?.()
       const channel = new BroadcastChannel('dashboard_refresh')
       channel.postMessage('refresh')
       channel.close()
@@ -383,8 +390,9 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
               </button>
               
               <button
-                onClick={() => setEditMode(!editMode)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+                onClick={() => { if (!approved) setEditMode(!editMode) }}
+                disabled={approved}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors disabled:opacity-50"
                 style={{ color: '#1a33cc', border: '1px solid rgba(26,51,204,0.3)' }}
               >
                 {editMode ? 'Preview' : 'Edit'}
@@ -411,7 +419,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
 
                   <button
                     onClick={handleSave}
-                    disabled={!hasChanges}
+                    disabled={!hasChanges || approved}
                     className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors disabled:opacity-40 shrink-0"
                     style={{ background: 'white', color: '#1a33cc', border: '2px solid #1a33cc' }}
                     onMouseEnter={e => (e.currentTarget.style.background = 'rgba(26,51,204,0.05)')}
@@ -494,6 +502,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                       <Textarea
                           value={noteMarkdown}
                           onChange={(e) => handleNoteChange(e.target.value)}
+                          disabled={approved}
                           placeholder="Clinical note markdown..."
                           className="min-h-[500px] resize-none rounded-xl font-mono text-sm leading-relaxed focus-visible:ring-1"
                           style={{
@@ -504,8 +513,8 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                         />
                       ) : (
                         <div
-                          onClick={() => setEditMode(true)}
-                          className="min-h-[500px] rounded-xl p-4 cursor-text"
+                          onClick={() => { if (!approved) setEditMode(true) }}
+                          className={cn("min-h-[500px] rounded-xl p-4", !approved && "cursor-text")}
                           style={{ background: 'white', border: '1px solid #e5e7eb' }}
                         >
                           <NoteMarkdown content={noteMarkdown} />
@@ -570,7 +579,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
               </button>
               <button
                 onClick={handleSave}
-                disabled={!hasChanges}
+                disabled={!hasChanges || approved}
                 className="w-full py-3 sm:py-4 bg-white rounded-xl font-bold flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-40"
                 style={{ border: '2px solid #1a33cc', color: '#1a33cc' }}
                 onMouseEnter={e => (e.currentTarget.style.background = 'rgba(26,51,204,0.05)')}

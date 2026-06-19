@@ -215,7 +215,7 @@ export default function HomePage() {
             {/* Logo Image: Increased dimensions to 160x34 */}
             <img src="https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png" alt="Enlight Lab" width={170} height={36} style={{ objectFit: 'contain' }} />
             {/* Subtext: Scaled font to '0.65rem' and aligned margin-left to '39px' */}
-            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#0A1F6B', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '2px', marginLeft: '39px' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#0A1F6B', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '2px', marginLeft: '42px' }}>
               CARESCRIBE AI
             </span>
           </Link>
@@ -280,7 +280,7 @@ export default function HomePage() {
               </span>
             </h1>
             <p style={{ fontSize: '1.05rem', color: '#6b7280', lineHeight: 1.7, marginBottom: '2rem', fontWeight: 400 }}>
-              CareScribe AI ambiently records clinical consultations and instantly generates structured SOAP notes, ICD-10 codes, and CPT codes — letting physicians focus entirely on the patient.
+              CareScribe AI ambiently records clinical consultations and instantly generates structured SOAP notes, ICD-10 codes, and CPT codes letting physicians focus entirely on the patient.
             </p>
             <div className="hero-buttons" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.75rem' }}>
               <Link href="/login" style={{ background: '#1a33cc', color: '#fff', padding: '0.9rem 1.9rem', borderRadius: '12px', textDecoration: 'none', fontWeight: 700, fontSize: '0.9375rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', boxShadow: '0 8px 24px rgba(26,51,204,0.25)', transition: 'all 0.2s' }}>
@@ -337,7 +337,7 @@ export default function HomePage() {
             <span style={{ background: '#1a33cc', color: '#fff', padding: '0.1em 0.5em', borderRadius: '8px', display: 'inline-block' }}>Nothing extra.</span>
           </h2>
           <p style={{ color: '#6b7280', fontSize: '1.05rem', maxWidth: '600px', margin: '0 auto', lineHeight: 1.6 }}>
-            From the moment the consultation starts to FHIR export — CareScribe handles the full documentation workflow.
+            From the moment the consultation starts to FHIR export, CareScribe handles the full documentation workflow.
           </p>
         </div>
         
@@ -423,7 +423,7 @@ export default function HomePage() {
             {
               role: 'Doctor Demo' as const,
               icon: Stethoscope,
-              desc: 'Experience the doctor workflow — record a consultation, generate notes, and approve.',
+              desc: 'Experience the doctor workflow - record a consultation, generate notes, and approve.',
               email: 'doctor@clinic.com',
               password: 'Doctor@123',
               color: '#059669',

@@ -19,6 +19,7 @@ import {
 } from "@/lib/pipeline-shared/final-upload-error"
 
 import type { Encounter } from "@/lib/scribe-storage/types"
+import { bulkMergeEncounters, saveEncounters } from "@/lib/scribe-storage/encounters"
 import { useEncounters, EncounterList, IdleView, NewEncounterForm, RecordingView, ProcessingView, ErrorBoundary, PermissionsDialog, SettingsDialog, SettingsBar, ModelIndicator, LocalSetupWizard, useHttpsWarning } from "@/components/scribe"
 import { NoteEditor } from "@/components/scribe/note-editor"
 import { useAudioRecorder, type RecordedSegment, warmupMicrophonePermission, warmupSystemAudioPermission } from "@/lib/audio"
@@ -150,6 +151,7 @@ function HomePageContent() {
   const router = useRouter()
   const [user, setUser] = useState<userType | null>(null)
   const [loading, setLoading] = useState(true)
+  const [syncComplete, setSyncComplete] = useState(false)
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -171,6 +173,9 @@ function HomePageContent() {
   }, [router])
 
   const { encounters, addEncounter, updateEncounter, deleteEncounter: removeEncounter, refresh } = useEncounters()
+
+  // Removed duplicate syncEncounters from here; consolidated and sorted version resides below doctorId definition.
+
   const searchParams = useSearchParams()
   const doctorId = searchParams.get("doctorId") || user?.id || ""
   const preloadEncounterId = searchParams.get("encounterId") || ""
@@ -241,24 +246,26 @@ function HomePageContent() {
   }, [])
 
   useEffect(() => {
-    if (!doctorId) return
-
-    const loadFromDb = async () => {
+    if (!user || !doctorId) return
+    const syncEncounters = async () => {
       try {
         const response = await fetch('/api/encounters/mine')
-        if (!response.ok) return
-        const dbEncounters = await response.json() as Encounter[]
-        
-        const { bulkMergeEncounters } = await import('@/lib/scribe-storage/encounters')
-        await bulkMergeEncounters(dbEncounters)
-        await refreshRef.current()
-      } catch (err) {
-        console.error('Failed to load encounters from DB:', err)
+        if (response.ok) {
+          const dbEncounters = await response.json() as Encounter[]
+          const merged = await bulkMergeEncounters(dbEncounters)
+          // Sort chronologically DESC to maintain absolute consistent order
+          merged.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+          await saveEncounters(merged)
+          await refresh()
+        }
+      } catch (error) {
+        console.error("Failed to sync encounters from database:", error)
+      } finally {
+        setSyncComplete(true)
       }
     }
-
-    void loadFromDb()
-  }, [doctorId])
+    void syncEncounters()
+  }, [user, doctorId, refresh])
 
   useEffect(() => {
     const loadApiKeys = async () => {
@@ -1103,20 +1110,32 @@ function HomePageContent() {
   }, [useLocalBackend, localPaused, view.type])
 
   useEffect(() => {
-    if (!preloadEncounterId) return
+    if (!preloadEncounterId || !syncComplete) return
     const loadEncounterFromDb = async () => {
       try {
         const response = await fetch(`/api/encounters/${preloadEncounterId}`)
         if (!response.ok) return
-        const data = await response.json() as { id: string; patientName: string; noteType: string; createdAt: string; clinicalNote?: { aiGeneratedContent?: string; finalContent?: string }; transcript?: { content: string } }
-        await addEncounter({ id: preloadEncounterId, patient_name: data.patientName, patient_id: '', visit_reason: data.noteType, created_at: data.createdAt, updated_at: data.createdAt, transcript_text: data.transcript?.content || '', note_text: data.clinicalNote?.finalContent || data.clinicalNote?.aiGeneratedContent || '', status: 'completed', language: 'en' })
+        const data = await response.json() as { id: string; patientName: string; noteType: string; createdAt: string; clinicalNote?: { aiGeneratedContent?: string; finalContent?: string; status?: string }; transcript?: { content: string } }
+        await addEncounter({
+          id: preloadEncounterId,
+          patient_name: data.patientName,
+          patient_id: '',
+          visit_reason: data.noteType,
+          created_at: data.createdAt,
+          updated_at: data.createdAt,
+          transcript_text: data.transcript?.content || '',
+          note_text: data.clinicalNote?.finalContent || data.clinicalNote?.aiGeneratedContent || '',
+          status: 'completed',
+          language: 'en',
+          is_approved: data.clinicalNote?.status === 'APPROVED'
+        })
         setView({ type: "viewing", encounterId: preloadEncounterId })
       } catch (err) {
         console.error('Failed to load encounter from DB:', err)
       }
     }
     void loadEncounterFromDb()
-  }, [preloadEncounterId])
+  }, [preloadEncounterId, syncComplete])
 
   const currentEncounter = encounters.find((e: Encounter) => "encounterId" in view && e.id === view.encounterId)
   const selectedEncounter = view.type === "viewing" ? encounters.find((e: Encounter) => e.id === view.encounterId) : null
@@ -1191,7 +1210,13 @@ function HomePageContent() {
       }
       case "viewing":
         return selectedEncounter ? (
-          <NoteEditor encounter={selectedEncounter} onSave={handleSaveNote} />
+          <NoteEditor
+            encounter={selectedEncounter}
+            onSave={handleSaveNote}
+            onApprove={() => {
+              void updateEncounter(selectedEncounter.id, { is_approved: true })
+            }}
+          />
         ) : (
           <IdleView onStartNew={handleStartNew} />
         )
@@ -1305,7 +1330,7 @@ function HomePageContent() {
               >
                 <Menu className="w-5 h-5" />
               </button>
-              <span className="font-bold text-gray-800 text-lg select-none">CARESCRIBE AI</span>
+              <span className="font-bold text-gray-800 text-lg select-none">ENCOUNTERS</span>
             </div>
 
             <div className="flex items-center gap-3">
