@@ -214,26 +214,6 @@ function HomePageContent() {
   }, [])
 
   useEffect(() => {
-    const loadFromDb = async () => {
-      try {
-        const response = await fetch('/api/encounters/mine')
-        if (!response.ok) return
-        const dbEncounters = await response.json() as Encounter[]
-        for (const enc of dbEncounters) {
-          const existing = encountersRef.current.find((e: Encounter) => e.id === enc.id)
-          if (!existing) {
-            await addEncounter(enc)
-          }
-        }
-        await refreshRef.current()
-      } catch (err) {
-        console.error('Failed to load encounters from DB:', err)
-      }
-    }
-    void loadFromDb()
-  }, [])
-
-  useEffect(() => {
     const loadApiKeys = async () => {
       try {
         const [keys, mixedAuthStatus] = await Promise.all([getApiKeys(), getMixedModeAuthStatus()])

@@ -8,6 +8,7 @@ import { ScrollArea } from "@/lib/scribe-ui/ui/scroll-area"
 import { Save, Copy, Download, Check, AlertTriangle, Send, X, Loader2, CheckCircle } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/scribe-ui/utils"
+import { NoteMarkdown } from "./note-markdown"
 
 const AUTH_APP_URL = process.env.NEXT_PUBLIC_AUTH_APP_URL || "http://localhost:3000"
 
@@ -74,6 +75,7 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
   const [openClawInput, setOpenClawInput] = useState("")
   const [openClawSending, setOpenClawSending] = useState(false)
   const chatBottomRef = useRef<HTMLDivElement | null>(null)
+  const [editMode, setEditMode] = useState(false)
 
   useEffect(() => {
     setNoteMarkdown(encounter.note_text || "")
@@ -379,6 +381,14 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
               >
                 <Download className="h-4 w-4" />
               </button>
+              
+              <button
+                onClick={() => setEditMode(!editMode)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+                style={{ color: '#1a33cc', border: '1px solid rgba(26,51,204,0.3)' }}
+              >
+                {editMode ? 'Preview' : 'Edit'}
+              </button>
 
               {activeTab === "note" && (
                 <>
@@ -457,21 +467,21 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                 {activeTab === "note" ? (
                   <>
                     {highlightedNote ? (
-                      <div
-                        className="min-h-[300px] sm:min-h-[500px] rounded-xl font-mono text-sm leading-relaxed p-4 whitespace-pre-wrap"
-                        style={{ background: 'white', border: '1px solid #e5e7eb' }}
-                      >
-                        {highlightedNote.split(/(\{\{uncertain\}\}[\s\S]*?\{\{\/uncertain\}\})/g).map((part, i) => {
-                          if (part.startsWith('{{uncertain}}')) {
-                            const text = part.replace('{{uncertain}}', '').replace('{{/uncertain}}', '')
-                            return (
-                              <mark key={i} style={{ background: '#fef08a', borderRadius: '3px', padding: '1px 3px' }}>
-                                {text}
-                              </mark>
-                            )
-                          }
-                          return <span key={i}>{part}</span>
-                        })}
+                    <div
+                      className="min-h-[500px] rounded-xl font-mono text-sm leading-relaxed p-4 whitespace-pre-wrap"
+                      style={{ background: 'white', border: '1px solid #e5e7eb' }}
+                    >
+                      {highlightedNote.split(/(\{\{uncertain\}\}[\s\S]*?\{\{\/uncertain\}\})/g).map((part, i) => {
+                        if (part.startsWith('{{uncertain}}')) {
+                          const text = part.replace('{{uncertain}}', '').replace('{{/uncertain}}', '')
+                          return (
+                            <mark key={i} style={{ background: '#fef08a', borderRadius: '3px', padding: '1px 3px' }}>
+                              {text}
+                            </mark>
+                          )
+                        }
+                        return <span key={i}>{part}</span>
+                      })}
                         <button
                           onClick={() => setHighlightedNote(null)}
                           className="mt-3 text-xs underline block"
@@ -480,19 +490,27 @@ export function NoteEditor({ encounter, onSave }: NoteEditorProps) {
                           Back to edit mode
                         </button>
                       </div>
-                    ) : (
+                    ) : editMode ? (
                       <Textarea
-                        value={noteMarkdown}
-                        onChange={(e) => handleNoteChange(e.target.value)}
-                        placeholder="Clinical note markdown..."
-                        className="min-h-[300px] sm:min-h-[500px] resize-none rounded-xl font-mono text-sm leading-relaxed focus-visible:ring-1"
-                        style={{
-                          background: 'white',
-                          border: '1px solid #e5e7eb',
-                          color: '#0A0F2C',
-                        } as React.CSSProperties}
-                      />
-                    )}
+                          value={noteMarkdown}
+                          onChange={(e) => handleNoteChange(e.target.value)}
+                          placeholder="Clinical note markdown..."
+                          className="min-h-[500px] resize-none rounded-xl font-mono text-sm leading-relaxed focus-visible:ring-1"
+                          style={{
+                            background: 'white',
+                            border: '1px solid #e5e7eb',
+                            color: '#0A0F2C',
+                          } as React.CSSProperties}
+                        />
+                      ) : (
+                        <div
+                          onClick={() => setEditMode(true)}
+                          className="min-h-[500px] rounded-xl p-4 cursor-text"
+                          style={{ background: 'white', border: '1px solid #e5e7eb' }}
+                        >
+                          <NoteMarkdown content={noteMarkdown} />
+                        </div>
+                      )}
                     {openClawError && openClawInitState === "failed" && (
                       <div className="mt-3 flex items-start gap-2 rounded-lg px-3 py-2 text-xs" style={{ background: '#fee2e2', border: '1px solid rgba(186,26,26,0.3)', color: '#991b1b' }}>
                         <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />

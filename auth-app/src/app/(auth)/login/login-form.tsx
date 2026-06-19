@@ -82,37 +82,86 @@ export function LoginForm({
   }
 
   return (
-    <main className='relative flex min-h-screen items-center justify-center bg-white p-8 md:p-12 overflow-hidden'>
-      <div className='absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full blur-3xl pointer-events-none' style={{ background: 'rgba(26,51,204,0.05)' }} />
-      <div className='absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full blur-3xl pointer-events-none' style={{ background: 'rgba(219,234,254,0.4)' }} />
+    <main className='relative flex min-h-screen items-center justify-center bg-gradient-to-tr from-[#f8f9ff] via-white to-[#f5f7ff] p-6 md:p-12 overflow-hidden'>
+      
+      {/* Modern Background Dot Grid & Soft Color Orbs */}
+      <div className='absolute inset-0 bg-[radial-gradient(#e5e7eb_1.5px,transparent_1.5px)] [background-size:32px_32px] opacity-70 pointer-events-none' />
+      <div className='absolute top-0 right-0 -mr-24 -mt-24 w-96 h-96 rounded-full blur-3xl pointer-events-none' style={{ background: 'rgba(26,51,204,0.06)' }} />
+      <div className='absolute bottom-0 left-0 -ml-24 -mb-24 w-96 h-96 rounded-full blur-3xl pointer-events-none' style={{ background: 'rgba(219,234,254,0.45)' }} />
 
-      {/* Brand logo — now a direct sibling of the centered card, positioned relative to the full page */}
+      {/* FLOATING CARD 1: Ambient SOAP Notes (Left Side) */}
+      <div className='absolute left-8 lg:left-12 xl:left-20 top-1/4 max-w-[260px] p-5 bg-white/90 backdrop-blur-md border border-blue-100/50 rounded-2xl shadow-xl shadow-indigo-900/5 rotate-[-3deg] hidden lg:block pointer-events-none select-none transition-all duration-300 hover:rotate-0 hover:scale-102'>
+        <div className='flex items-center gap-2 mb-3'>
+          <svg className='w-4 h-4 text-[#1a33cc]' fill='none' stroke='currentColor' strokeWidth={2.5} viewBox='0 0 24 24'>
+            <path strokeLinecap='round' strokeLinejoin='round' d='M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z' />
+          </svg>
+          <span className='text-[10px] font-bold uppercase tracking-wider text-[#1a33cc]'>Ambient Recording</span>
+        </div>
+        <h4 className='text-xs font-bold text-gray-800 mb-2'>SOAP Note</h4>
+        <div className='space-y-2 text-[10px] text-gray-500 leading-relaxed'>
+          <p><span className='font-bold text-gray-700'>S:</span> Patient reports mild chest tightness during exertion...</p>
+          <p><span className='font-bold text-gray-700'>O:</span> BP 128/82, HR 74 bpm, lungs clear to auscultation...</p>
+        </div>
+        <div className='mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-[9px] text-gray-400'>
+          <span>Processing audio...</span>
+          <span className='text-[#1a33cc] bg-blue-50 px-1.5 py-0.5 rounded font-semibold'>~3 min</span>
+        </div>
+      </div>
+
+      {/* FLOATING CARD 2: AI Medical Coding (Right Side) */}
+      <div className='absolute right-8 lg:right-12 xl:right-20 bottom-1/4 max-w-[260px] p-5 bg-white/90 backdrop-blur-md border border-emerald-100/50 rounded-2xl shadow-xl shadow-emerald-900/5 rotate-[3deg] hidden lg:block pointer-events-none select-none transition-all duration-300 hover:rotate-0 hover:scale-102'>
+        <div className='flex items-center gap-2 mb-3'>
+          <svg className='w-4 h-4 text-emerald-600' fill='none' stroke='currentColor' strokeWidth={2.5} viewBox='0 0 24 24'>
+            <path strokeLinecap='round' strokeLinejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581a1.42 1.42 0 002.008 0l4.318-4.318a1.42 1.42 0 000-2.008L10.985 4.66A2.25 2.25 0 009.568 3z' />
+            <path strokeLinecap='round' strokeLinejoin='round' d='M6 6h.008v.008H6V6z' />
+          </svg>
+          <span className='text-[10px] font-bold uppercase tracking-wider text-emerald-600'>AI Auto-Coding</span>
+        </div>
+        <h4 className='text-xs font-bold text-gray-800 mb-2'>ICD-10 & CPT Codes</h4>
+        <div className='space-y-1.5 text-[10px] text-gray-600 font-mono'>
+          <div className='flex justify-between items-center bg-gray-50 p-1.5 rounded'>
+            <span>I10 (Hypertension)</span>
+            <span className='text-emerald-600 font-semibold bg-emerald-50 px-1 rounded'>99%</span>
+          </div>
+          <div className='flex justify-between items-center bg-gray-50 p-1.5 rounded'>
+            <span>99213 (Outpatient visit)</span>
+            <span className='text-emerald-600 font-semibold bg-emerald-50 px-1 rounded'>98%</span>
+          </div>
+        </div>
+        <div className='mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-[9px] text-gray-400'>
+          <span>FHIR Export Ready</span>
+          <span className='text-emerald-600 font-semibold'>98.4% Acc.</span>
+        </div>
+      </div>
+
+      {/* Brand logo — aligned perfectly */}
       <Link
         href='/'
-        className='fixed top-6 left-6 z-20'
-        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none' }}
+        className='fixed top-6 left-6 z-20 transition-opacity hover:opacity-90'
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textDecoration: 'none' }}
       >
         <img
           src='https://enlightlab.com/wp-content/uploads/2023/03/Layer_1.png'
           alt='Enlight Lab'
-          width={200}
-          height={42}
+          width={180}
+          height={38}
           style={{ objectFit: 'contain' }}
         />
-        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#0A1F6B', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '-2px' }}>
+        <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#0A1F6B', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '1px', marginLeft: '43px' }}>
           CARESCRIBE AI
         </span>
       </Link>
 
-      <div className={cn('w-full max-w-md relative z-10 mx-auto', className)} {...props}>
+      {/* Central Login Card */}
+      <div className={cn('w-full max-w-md relative z-10 mx-auto bg-white border border-gray-100 rounded-3xl p-8 md:p-10 shadow-2xl shadow-indigo-900/5', className)} {...props}>
 
-        <div className='mb-10 text-center'>
-          <h2 className='text-3xl font-bold text-[#0A0F2C] mb-2'>Sign in to Practitioner Portal</h2>
-          <p className='text-base text-gray-500'>Welcome back. Enter your credentials to continue.</p>
+        <div className='mb-8 text-center'>
+          <h2 className='text-2xl font-bold text-[#0A0F2C] mb-2 tracking-tight'>Sign in to Practitioner Portal</h2>
+          <p className='text-sm text-gray-500'>Welcome back. Enter your credentials to continue.</p>
         </div>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-          <FieldGroup>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-5'>
+          <FieldGroup className='space-y-5'>
             {/* Email */}
             <Controller
               name='email'
@@ -135,7 +184,7 @@ export function LoginForm({
                       autoCapitalize='none'
                       autoCorrect='off'
                       aria-invalid={fieldState.invalid}
-                      className='w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a33cc] focus:border-[#1a33cc] outline-none transition-all shadow-sm h-auto'
+                      className='w-full pl-12 pr-4 py-3 bg-gray-50/50 focus:bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a33cc] focus:border-[#1a33cc] outline-none transition-all shadow-sm h-auto text-sm'
                     />
                   </div>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -167,7 +216,7 @@ export function LoginForm({
                       placeholder='••••••••'
                       autoComplete='current-password'
                       aria-invalid={fieldState.invalid}
-                      className='w-full pl-12 pr-12 py-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a33cc] focus:border-[#1a33cc] outline-none transition-all shadow-sm h-auto'
+                      className='w-full pl-12 pr-12 py-3 bg-gray-50/50 focus:bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a33cc] focus:border-[#1a33cc] outline-none transition-all shadow-sm h-auto text-sm'
                     />
                   </div>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -179,22 +228,74 @@ export function LoginForm({
             <Button
               type='submit'
               disabled={isSubmitting}
-              className='w-full py-4 h-auto font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.98]'
+              className='w-full py-3.5 h-auto font-semibold rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all active:scale-[0.98]'
               style={{ background: '#1a33cc', color: 'white' }}
             >
               {isSubmitting ? (
-                <Spinner />
+                <Spinner className='text-white' />
               ) : (
                 <>
                   Sign In to Dashboard
                   <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1' />
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M14 5l7 7m0 0l-7 7m7-7H3' />
                   </svg>
                 </>
               )}
             </Button>
           </FieldGroup>
         </form>
+
+        {/* Separator / Divider */}
+        <div className='relative my-6'>
+          <div className='absolute inset-0 flex items-center' aria-hidden='true'>
+            <div className='w-full border-t border-gray-100' />
+          </div>
+          <div className='relative flex justify-center text-xs uppercase'>
+            <span className='bg-white px-3 text-gray-400 font-semibold tracking-wider'>Demo Accounts</span>
+          </div>
+        </div>
+
+        {/* Demo Quick Login Buttons */}
+        <div className='grid grid-cols-2 gap-3'>
+          {/* Admin Demo Button */}
+          <button
+            type='button'
+            onClick={() => {
+              form.setValue('email', 'admin@clinic.com');
+              form.setValue('password', 'Admin@123');
+              setTimeout(() => {
+                form.handleSubmit(onSubmit)();
+              }, 50);
+            }}
+            className='flex flex-col items-center justify-center p-3.5 rounded-2xl border border-blue-100 bg-[#f5f7ff] hover:bg-[#eef2ff] transition-all text-center group cursor-pointer'
+          >
+            <svg className='w-5 h-5 text-[#1a33cc] mb-1.5' fill='none' stroke='currentColor' strokeWidth={2} viewBox='0 0 24 24'>
+              <path strokeLinecap='round' strokeLinejoin='round' d='M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' />
+            </svg>
+            <span className='text-xs font-bold text-[#0A1F6B]'>Admin Demo</span>
+            <span className='text-[10px] text-[#1a33cc]/70 mt-0.5 font-semibold group-hover:underline'>Auto Login →</span>
+          </button>
+
+          {/* Doctor Demo Button */}
+          <button
+            type='button'
+            onClick={() => {
+              form.setValue('email', 'doctor@clinic.com');
+              form.setValue('password', 'Doctor@123');
+              setTimeout(() => {
+                form.handleSubmit(onSubmit)();
+              }, 50);
+            }}
+            className='flex flex-col items-center justify-center p-3.5 rounded-2xl border border-emerald-100 bg-[#f0fdf4] hover:bg-[#dcfce7] transition-all text-center group cursor-pointer'
+          >
+            <svg className='w-5 h-5 text-emerald-600 mb-1.5' fill='none' stroke='currentColor' strokeWidth={2} viewBox='0 0 24 24'>
+              <path strokeLinecap='round' strokeLinejoin='round' d='M12 14c2.76 0 5-2.24 5-5V4.5M12 14c-2.76 0-5-2.24-5-5V4.5M12 14v4m0 0a3 3 0 100 6 3 3 0 000-6z' />
+              <path strokeLinecap='round' strokeLinejoin='round' d='M7 4.5h10M5 4.5h2M17 4.5h2' />
+            </svg>
+            <span className='text-xs font-bold text-emerald-800'>Doctor Demo</span>
+            <span className='text-[10px] text-emerald-600/70 mt-0.5 font-semibold group-hover:underline'>Auto Login →</span>
+          </button>
+        </div>
       </div>
     </main>
   );
