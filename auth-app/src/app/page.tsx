@@ -606,7 +606,7 @@ export default function HomePage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {[
                   { label: 'About Enlight Lab', href: 'https://enlightlab.com/about' },
-                  { label: 'Case Studies', href: 'https://enlightlab.com/case-study/' },
+                  { label: 'Case Studies', href: 'https://enlightlab.com/case-studies/' },
                   { label: 'Blog', href: 'https://enlightlab.com/blog' },
                   { label: 'Contact', href: 'https://enlightlab.com/contact' },
                 ].map(link => (
@@ -617,8 +617,8 @@ export default function HomePage() {
             <div>
               <h4 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1a33cc', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1.25rem' }}>Legal</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <a href="#" style={{ fontSize: '0.875rem', color: '#6b7280', textDecoration: 'none' }}>Privacy Policy</a>
-                <a href="#" style={{ fontSize: '0.875rem', color: '#6b7280', textDecoration: 'none' }}>Terms of Use</a>
+                <a href="https://enlightlab.com/privacy-policy/" style={{ fontSize: '0.875rem', color: '#6b7280', textDecoration: 'none' }}>Privacy Policy</a>
+                <a href="https://enlightlab.com/website-service-usage-terms-conditions/" style={{ fontSize: '0.875rem', color: '#6b7280', textDecoration: 'none' }}>Terms of Use</a>
               </div>
             </div>
           </div>
