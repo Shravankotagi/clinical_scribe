@@ -59,7 +59,7 @@ export function AppSidebar({
                 alt="Enlight Lab" 
                 className="h-8 w-auto"
               />
-              <span className="text-[11px] font-bold tracking-widest text-[#0A1F6B]" style={{ marginLeft: '34px' }}>
+              <span className="text-[11px] font-bold tracking-widest text-[#0A1F6B]" style={{ marginLeft: '42px' }}>
                 CARESCRIBE AI
               </span>
             </Link>

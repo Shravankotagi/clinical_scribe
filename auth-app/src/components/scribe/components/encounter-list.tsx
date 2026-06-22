@@ -70,7 +70,7 @@ export function EncounterList({
             className="h-8 w-auto brightness-100"
           />
           {/* Added marginLeft: '34px' to match navigation headers and sidebars */}
-          <span className="text-[11px] font-bold tracking-widest text-[#0A1F6B]" style={{ marginLeft: '34px' }}>
+          <span className="text-[11px] font-bold tracking-widest text-[#0A1F6B]" style={{ marginLeft: '42px' }}>
             CARESCRIBE AI
           </span>
         </a>
