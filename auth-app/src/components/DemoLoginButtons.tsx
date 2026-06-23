@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 // Most Better Auth + Next.js setups put it at src/lib/auth-client.ts, e.g.:
 //   import { createAuthClient } from "better-auth/react"
 //   export const authClient = createAuthClient()
-import { authClient } from '@/lib/auth-client'
+import { login } from '@/server/user'
 
 type DemoRole = 'admin' | 'doctor'
 
@@ -26,9 +26,9 @@ export function DemoLoginButton({ role, color }: { role: DemoRole; color: string
     const { email, password, redirectTo } = DEMO_ACCOUNTS[role]
 
     try {
-      const { error: signInError } = await authClient.signIn.email({ email, password })
+      const result = await login({ email, password })
 
-      if (signInError) {
+      if (!result.success) {
         setError('Demo login failed. Please try again.')
         setLoading(false)
         return
