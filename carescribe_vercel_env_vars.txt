@@ -1,0 +1,46 @@
+# =========================================================================
+# CareScribe Vercel Production Environment Variables
+# =========================================================================
+
+# --- SECTION 1: DOMAINS & AUTHENTICATION ---
+# Replace 'https://carescribe-auth.vercel.app' with your actual Vercel Auth App deployment URL
+NEXT_PUBLIC_APP_URL="https://carescribe-auth.vercel.app"
+BETTER_AUTH_URL="https://carescribe-auth.vercel.app"
+
+# Replace 'https://openscribe.vercel.app' with your actual OpenScribe client deployment URL
+OPENSCRIBE_URL="https://openscribe.vercel.app"
+NEXT_PUBLIC_OPENSCRIBE_URL="https://openscribe.vercel.app"
+
+# BETTER_AUTH_SECRET: Generate a secure 32-character key for production
+# Example generation: run `openssl rand -base64 32` in your terminal
+BETTER_AUTH_SECRET="run-openssl-rand-base64-32-to-generate"
+
+
+# --- SECTION 2: PRODUCTION DATABASE (Neon cloud is safe to use directly) ---
+DATABASE_URL="postgresql://neondb_owner:npg_zcr09XsplknW@ep-wild-cherry-aqfpp343.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&connect_timeout=30&family=4"
+
+
+# --- SECTION 3: EXTERNAL API KEYS ---
+GEMINI_API_KEY="AIzaSyBwBCkUbN95__uzIXkLbhpNzc9Dk-dUJek"
+ANTHROPIC_API_KEY="AIzaSyBwBCkUbN95__uzIXkLbhpNzc9Dk-dUJek"
+RESEND_API_KEY="re_ddoduEs3_MEBhFVd5dma1yiyFJ3Hw6eP3"
+EMAIL_SENDER_NAME="CareScribe AI"
+
+
+# --- SECTION 4: TRANSCRIPTION CONFIGURATION (Whisper) ---
+TRANSCRIBION_PROVIDER="whisper_local"
+
+# In production (Vercel serverless), you cannot run a local dockerized Whisper container.
+# You must deploy 'whisper-server' to a cloud service (e.g. Railway, GCP, AWS, or DigitalOcean VM).
+# Replace 'your-whisper-server-domain.com' with the public address of your deployed Whisper server.
+WHISPER_LOCAL_URL="https://your-whisper-server-domain.com/v1/audio/transcriptions"
+
+# Add your deployed Whisper server domain to the trusted hosts list if it uses HTTP instead of HTTPS.
+# If you configure HTTPS/SSL for your deployed Whisper server, this can be left empty.
+WHISPER_LOCAL_TRUSTED_HOSTS="your-whisper-server-domain.com"
+
+WHISPER_LOCAL_BACKEND="openai"
+WHISPER_LOCAL_MODEL="assemblyai/base"
+WHISPER_LOCAL_TIMEOUT_MS="120000"
+WHISPER_LOCAL_MAX_RETRIES="1"
+WHISPER_SERVER_URL=""

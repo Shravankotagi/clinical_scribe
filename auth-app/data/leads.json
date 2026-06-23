@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Shravan",
+    "email": "ahdliuaed@gmail.com",
+    "company": "Not provided",
+    "role": "CTO",
+    "problemStatement": "Scaling AI capabilities across business workflows securely and cost-effectively",
+    "fitScore": 3,
+    "isHighFit": false,
+    "transcript": "Assistant: Hi! I'm Enlight Lab's technical assistant. Ask me about our engineering work, fractional CTO services, or book a diagnostic.\n\rVisitor: Who founded Enlight Lab?\n\rAssistant: Enlight Lab was founded by Dhananjay Goel, who serves as the CEO and Founder. With over 18 years of industry expertise, he leads our mission to empower businesses through our \"Ideate, Innovate, Create\" framework. \n\nTo help me get to know you better, may I have your name?\n\rVisitor: shravan\n\rAssistant: Nice to meet you, Shravan. To help me understand how we might best assist you, could you please share your work email address?\n\rVisitor: ahdliuaed@gmail.com\n\rAssistant: Thanks, Shravan. To help me understand your current focus, could you tell me which company you are with and what your role is there? Also, what is the primary technical or product challenge you are looking to solve right now?\n\rVisitor: As the CTO, I lead our technology and product initiatives. Our current priority is scaling our AI capabilities across the business. The main challenge we're solving is how to integrate AI into our core workflows in a secure, scalable, and cost-effective manner while maintaining high performance and user experience.\n\rAssistant: That sounds like a critical initiative, Shravan. At Enlight Lab, we specialize in helping companies scale their engineering and infrastructure efficiently. While we don't have a specific case study on AI integration in our current documentation, we do have extensive experience in helping Series A-C startups optimize their cloud infrastructure—often achieving up to a 38% reduction in DevOps costs—and we enforce controls that map to SOC 2 / HIPAA frameworks to ensure your integrations remain secure and compliant.\n\nGiven your focus on scaling and security, we could certainly discuss how our fractional CTO approach might support your AI roadmap. \n\nTo ensure I have everything captured correctly:\n\n\n\n*(Note: To finalize your high-fit status, could you let me know the name of your company and its approximate size or funding stage?)*"
+  },
+  {
+    "name": "John Doe",
+    "email": "john@alida.com",
+    "company": "Alida Inc",
+    "role": "VP of Engineering",
+    "problemStatement": "Building a custom AI outbound calling agent",
+    "fitScore": 5,
+    "isHighFit": true,
+    "transcript": "Assistant: Hi! I'm Enlight Lab's technical assistant. Ask me about our engineering work, fractional CTO services, or book a diagnostic.\n\rVisitor: \"Hi, my name is John Doe. I'm the VP of Engineering at Alida Inc. We are a HealthTech company and want to build a custom AI outbound calling agent. My email is  john@alida.com .\"\n\rAssistant: Hi John! It's a pleasure to meet you. That sounds like a fantastic project—we specialize in deploying task-specific AI agents for outbound calling that integrate seamlessly with your existing systems, and we can typically get those up and running in 2 to 4 weeks.\n\nSince you're in the HealthTech space, I want to assure you that we enforce controls that map to SOC 2 / HIPAA frameworks to ensure your operations remain secure and compliant.\n\nTo make sure I have everything for our business development team, could you tell me a bit more about the specific problem you're looking to solve with this AI agent? Once I have that, I can get this over to our team, and they will reach out to you within two business days."
+  },
+  {
+    "name": "John Doe",
+    "email": "john@alida.com",
+    "company": "Alida Inc",
+    "role": "VP of Engineering",
+    "problemStatement": "Building a custom AI outbound calling agent",
+    "fitScore": 5,
+    "isHighFit": true,
+    "transcript": "Assistant: Hi! I'm Enlight Lab's technical assistant. Ask me about our engineering work, fractional CTO services, or book a diagnostic.\n\rVisitor: \"Hi, my name is John Doe. I'm the VP of Engineering at Alida Inc. We are a HealthTech company and want to build a custom AI outbound calling agent. My email is  john@alida.com .\"\n\rAssistant: Hi John, it's a pleasure to meet you! That sounds like an exciting project. At Enlight Lab, we specialize in deploying task-specific AI agents for industries like HealthTech, and we can certainly help you build a custom outbound calling agent that integrates seamlessly with your existing systems.\n\nOur AI agents are designed to work 24/7 to boost productivity and handle tasks like lead qualification and appointment booking. We typically deliver these solutions within 2 to 4 weeks, depending on the complexity. Furthermore, we enforce controls that map to SOC 2 / HIPAA frameworks to ensure your operations remain secure and compliant.\n\nTo make sure I have everything documented for our business development team, could you please share a bit more about the specific problem or workflow you're looking to solve with this agent?"
+  },
+  {
+    "name": "John Doe",
+    "email": "john@enlightlab.com",
+    "company": "XYZ technologies Inc",
+    "role": "VP of Engineering",
+    "problemStatement": "Building a custom AI outbound calling agent",
+    "fitScore": 5,
+    "isHighFit": true,
+    "transcript": "Assistant: Hi! I'm Enlight Lab's technical assistant. Ask me about our engineering work, fractional CTO services, or book a diagnostic.\n\rVisitor: \"Hi, my name is John Doe. I'm the VP of Engineering at XYZ technologies Inc. We are a HealthTech company and want to build a custom AI outbound calling agent. My email is  john@enlightlab.com & phone no. is \"\n\rAssistant: Hi John, it's great to meet you. Thank you for reaching out to Enlight Lab.\n\nBuilding custom AI outbound calling agents is exactly the kind of work we specialize in. Given your focus on HealthTech, I should mention that we enforce controls that map to SOC 2 / HIPAA frameworks to ensure your data and processes remain secure.\n\nTo make sure I get you to the right person on our team, could you tell me a bit more about the specific problem statement or the primary goal you're looking to achieve with this AI agent? Also, could you confirm the approximate size of your company?"
+  }
+]

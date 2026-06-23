@@ -1,0 +1,25 @@
+# =========================================================================
+# CareScribe Environment Variables (Mapped from Screenshots & Env File)
+# =========================================================================
+
+# --- SCREENSHOT 1 ---
+WHISPER_LOCAL_TRUSTED_HOSTS="transcription"
+WHISPER_LOCAL_URL="http://transcription:8000/v1/audio/transcriptions"
+ANTHROPIC_API_KEY="AIzaSyBwBCkUbN95__uzIXkLbhpNzc9Dk-dUJek"
+GEMINI_API_KEY="AIzaSyBwBCkUbN95__uzIXkLbhpNzc9Dk-dUJek"
+WHISPER_LOCAL_TIMEOUT_MS="120000"
+WHISPER_LOCAL_BACKEND="openai"
+WHISPER_LOCAL_MODEL="assemblyai/base"
+TRANSCRIBION_PROVIDER="whisper_local" # Note: preserving the exact spelling from Screenshot 1
+WHISPER_SERVER_URL="" # Not defined in your local env (optional, defaults to empty)
+
+# --- SCREENSHOT 2 ---
+WHISPER_LOCAL_MAX_RETRIES="1"
+NEXT_PUBLIC_APP_URL="http://localhost:3000" # Matches BETTER_AUTH_URL for local dev
+OPENSCRIBE_URL="http://localhost:3001" # Matches NEXT_PUBLIC_OPENSCRIBE_URL
+NEXT_PUBLIC_OPENSCRIBE_URL="http://localhost:3001"
+BETTER_AUTH_URL="http://localhost:3000"
+DATABASE_URL="postgresql://neondb_owner:npg_zcr09XsplknW@ep-wild-cherry-aqfpp343.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&connect_timeout=30&family=4"
+BETTER_AUTH_SECRET="run-openssl-rand-base64-32-to-generate"
+RESEND_API_KEY="re_ddoduEs3_MEBhFVd5dma1yiyFJ3Hw6eP3"
+EMAIL_SENDER_NAME="CareScribe AI"

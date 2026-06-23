@@ -3,6 +3,7 @@ import './globals.css';
 import { Inter as FontSans } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
+import Script from 'next/script';
 
 const fontSans = FontSans({
   subsets: ['latin']
@@ -31,6 +32,12 @@ export default function RootLayout({
           defaultTheme='light'
           enableSystem={false}
         >
+
+        <Script
+          src="https://enlightlab-widget.vercel.app/widget.js"
+          data-client="enlightlab"
+          strategy="afterInteractive"
+        />
           <main>{children}</main>
           <Toaster />
         </ThemeProvider>
