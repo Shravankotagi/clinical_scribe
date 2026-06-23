@@ -1,34 +1,29 @@
-# 🏥 AI Clinical Documentation Assistant
+# 🏥 AI Clinical Documentation Assistant (CareScribe)
 
 > **Ambient AI clinical scribe** — records consultations, transcribes with speaker labels, generates SOAP notes, suggests billing codes, and exports to EHR in one click.
-
 
 [![Node.js](https://img.shields.io/badge/Node.js-v20+-green.svg)](https://nodejs.org)
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 [![Docker](https://img.shields.io/badge/Docker-Supported-blue.svg)](https://docker.com)
+[![Vercel](https://img.shields.io/badge/Vercel-Deploys-blue.svg)](https://vercel.com)
 
 ---
 
 ## 📋 Table of Contents
 
-- [Introduction](#-introduction)
-- [Why This Exists](#-why-this-exists)
-- [How It Works](#-how-it-works)
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Getting Started](#-getting-started)
-  - [Prerequisites](#prerequisites)
-  - [API Keys Required](#api-keys-required)
-  - [Method 1 — Docker (Recommended)](#method-1--docker-recommended)
-  - [Method 2 — Local Development](#method-2--local-development)
-- [Environment Variables](#-environment-variables)
-- [First Time Setup](#-first-time-setup)
-- [Build and Test](#-build-and-test)
-- [Project Structure](#-project-structure)
-- [Database Schema](#-database-schema)
-- [Cost Estimate](#-cost-estimate)
-- [Roadmap](#-roadmap)
-- [Contributing](#-contributing)
+- [📖 Introduction](#-introduction)
+- [💡 Why This Exists](#-why-this-exists)
+- [🔄 How It Works](#-how-it-works)
+- [✅ Features](#-features)
+- [🛠️ Tech Stack](#-tech-stack)
+- [🚀 Quick Start (Docker - Easiest & Recommended)](#-quick-start-docker---easiest--recommended)
+- [💻 Manual Local Setup (Without Docker)](#-manual-local-setup-without-docker)
+- [🔧 Environment Variables Configuration](#-environment-variables-configuration)
+- [☁️ Vercel & Cloud Deployment Guide (Non-IT Friendly)](#%EF%B8%8F-vercel--cloud-deployment-guide-non-it-friendly)
+- [🏁 First-Time App Setup & Doctor Workflow](#-first-time-app-setup--doctor-workflow)
+- [📁 Project Structure](#-project-structure)
+- [🗄️ Database Schema](#-database-schema)
+- [💰 Cost Estimate](#-cost-estimate)
 
 ---
 
@@ -38,24 +33,17 @@ The **AI Clinical Documentation Assistant** is an ambient AI scribe system desig
 
 The system listens to doctor-patient conversations, transcribes them with labeled speakers, automatically generates structured **SOAP clinical notes**, suggests **ICD-10 and CPT billing codes** with confidence scores, and exports finalized notes in **FHIR R4 format** for direct EHR integration.
 
-> **The physician always remains in full control.** The AI assists documentation — it never diagnoses, prescribes, or makes autonomous clinical decisions.
+> ⚕️ **Important Disclaimer:** This system is a documentation assistance tool only. It is not a diagnostic system. All AI-generated content requires physician review and approval before clinical use. The physician remains the sole decision-maker for all clinical judgments.
 
 ---
 
 ## 💡 Why This Exists
 
-Physicians currently spend **2–3 hours per day** on documentation, contributing to:
-
-| Problem | Impact |
-|---|---|
-| Manual note-taking during consultations | Reduced eye contact and patient rapport |
-| Post-visit documentation burden | Delayed chart completion |
-| Excessive EHR navigation | Physician burnout |
-| Administrative overhead | **$125 billion** lost annually across the US |
+Physicians currently spend **2–3 hours per day** on documentation, contributing to eye-contact loss during consultation, delayed chart completion, and severe administrative burnout.
 
 **The solution:** AI listens and drafts. The physician reviews and approves in one click.
 
-Compared to a human medical scribe (~$3,000/month), this system costs approximately **$90-100/month** — a saving of **~$2,900/month per physician**.
+Compared to a human medical scribe (~$3,000/month), this system costs approximately **$90-100/month** in server/API usage — a saving of **~$2,900/month per physician**.
 
 ---
 
@@ -99,7 +87,7 @@ FHIR R4 file generated → inserted into EHR system
 | 🔐 Role-based authentication (Admin / Doctor) | ✅ Complete |
 | 🔄 Auto-refresh dashboards | ✅ Complete |
 | 💬 Tooltip descriptions on billing code chips | ✅ Complete |
-| 🐳 Docker containerization | ✅ Complete |
+| 🐳 Docker containerization (Scribe + Transcriber) | ✅ Complete |
 
 ---
 
@@ -107,103 +95,77 @@ FHIR R4 file generated → inserted into EHR system
 
 | Component | Technology |
 |---|---|
-| Audio Transcription | AssemblyAI REST API |
+| Audio Transcription | AssemblyAI REST API / Whisper API |
 | Note Generation | Gemini 2.5 Flash |
 | ICD-10 + CPT Extraction | Gemini 2.5 Flash |
-| Uncertainty Highlighting | Gemini 2.5 Flash |
-| Transcription Server | Python FastAPI |
-| Scribe Frontend (OpenScribe) | Next.js 16, port 3001 |
-| Auth + Admin App | Next.js 16 + Better Auth + Prisma |
-| Database | Neon.tech PostgreSQL |
+| Scribe Interface (All-in-One) | Next.js 16 (React 19) + Prisma |
+| Authentication | Better Auth |
+| Database | PostgreSQL (e.g. Neon.tech PostgreSQL cloud) |
 | UI Components | Shadcn UI + Tailwind CSS |
 | EHR Export Format | FHIR R4 DocumentReference |
 | Containerization | Docker + Docker Compose |
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Start (Docker - Easiest & Recommended)
 
-### Prerequisites
+This is the easiest setup method. It installs and runs the entire system in containers with a single command. **No programming knowledge required.**
 
-Install the following software before you begin.
+### Step 1: Install Prerequisites
+Before you start, download and install:
+1. **Docker Desktop** (Click "Next" through the installer): [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-| Software | Version | Download |
-|---|---|---|
-| Node.js | v20 or higher | https://nodejs.org |
-| Python | 3.11 or higher | https://python.org |
-| pnpm | v10.23.0 | Run: `npm install -g pnpm@10.23.0` |
-| Docker Desktop | Latest | https://docker.com/products/docker-desktop |
-| Git | Latest | https://git-scm.com |
+### Step 2: Download the Project
+1. Download this project folder as a ZIP file and extract it.
+2. Open your terminal (PowerShell on Windows, or Terminal on Mac).
+3. Navigate into the folder:
+   ```bash
+   cd CareScribe
+   ```
 
----
+### Step 3: Configure Environment Keys
+1. Create a file named `.env` in the root folder.
+2. Paste the following line, replacing with your AssemblyAI Key:
+   ```env
+   ASSEMBLYAI_API_KEY="your-assemblyai-key-here"
+   ```
+3. Open the `auth-app` folder, find `.env` (create it if missing), and fill out:
+   ```env
+   DATABASE_URL="postgresql://neondb_owner:password@ep-xxxxx.neon.tech/neondb?sslmode=require"
+   BETTER_AUTH_SECRET="some-random-long-key-here"
+   BETTER_AUTH_URL="http://localhost:3000"
+   GEMINI_API_KEY="your-google-gemini-key-here"
+   ```
+   *(See [Environment Variables Configuration](#-environment-variables-configuration) below for details on how to get these keys).*
 
-### API Keys Required
-
-You need accounts and API keys from the following services before running the application.
-
-| Service | What It Does | Where to Get Your Key |
-|---|---|---|
-| **AssemblyAI** | Transcribes audio with speaker labels | https://assemblyai.com |
-| **Gemini API** | Generates SOAP notes + billing codes | https://ai.google.dev |
-| **Neon PostgreSQL** | Hosts the application database | https://neon.tech |
-| **Resend** *(optional)* | Sends email notifications | https://resend.com |
-
-> 💡 **Tip:** Neon PostgreSQL has a free tier that is sufficient for development and small clinics.
-
----
-
-### Method 1 — Docker (Recommended)
-
-Use this method to run everything in containers with a single command. Best for consistent environments and team deployments.
-
-**Step 1 — Clone the repository**
-
+### Step 4: Build and Start
+Run the following command in your terminal:
 ```bash
-git clone <repo-url>
-cd clinical-scribe
+docker compose up --build
 ```
+> ⏱️ The first build will take 5-8 minutes as it downloads dependencies. Future starts will take less than 15 seconds.
 
-**Step 2 — Configure environment files**
+### Step 5: Open the Application
+Open your browser and navigate to:
+* **http://localhost:3000** (Auth + Admin + Scribe Workspace)
 
-See the [Environment Variables](#-environment-variables) section below and create all required `.env` files before building.
-
-**Step 3 — Build and start all services**
-
+To stop the application at any time, press `Ctrl + C` in the terminal, or run:
 ```bash
-docker-compose build
-docker-compose up
-```
-
-> ⏱️ The first build may take 5–10 minutes as Docker downloads dependencies. Subsequent starts are much faster.
-
-**Step 4 — Open the application**
-
-| App | URL |
-|---|---|
-| Auth + Admin App | http://localhost:3000 |
-| OpenScribe Scribe UI | http://localhost:3001 |
-
-To stop all services:
-
-```bash
-docker-compose down
+docker compose down
 ```
 
 ---
 
-### Method 2 — Local Development
+## 💻 Manual Local Setup (Without Docker)
 
-Use this method if you want to run the application directly on your machine without Docker.
+Use this method if you want to run the project files directly on your local computer's native processor.
 
-**Step 1 — Clone the repository**
+### Step 1: Install Prerequisites
+* **Node.js** (v20 or higher): [Download Node.js](https://nodejs.org)
+* **Python** (v3.11 or higher): [Download Python](https://python.org)
 
-```bash
-git clone <your-repo-url>
-cd clinical-scribe
-```
-
-**Step 2 — Set up the Auth App**
-
+### Step 2: Set up the Database & UI
+Navigate to the `auth-app` directory in your terminal and install packages:
 ```bash
 cd auth-app
 npm install
@@ -211,26 +173,17 @@ npx prisma generate
 npx prisma db push
 cd ..
 ```
+*Note: `npx prisma db push` automatically connects to your Neon database and creates all tables.*
 
-> ℹ️ `prisma db push` creates all the database tables in your Neon PostgreSQL database. Make sure your `DATABASE_URL` is set in `auth-app/.env` before running this step (see [Environment Variables](#-environment-variables)).
-
-**Step 3 — Set up the OpenScribe Frontend**
-
-```bash
-cd frontend
-pnpm install
-cd ..
-```
-
-**Step 4 — Set up the Transcription Server**
-
+### Step 3: Set up the Transcription server
+Navigate to the `whisper-server` directory, create a Python environment, and install dependencies:
 ```bash
 cd whisper-server
 python -m venv venv
 
+# Activate Virtual Environment:
 # On Windows:
 venv\Scripts\activate
-
 # On macOS / Linux:
 source venv/bin/activate
 
@@ -238,312 +191,147 @@ pip install -r requirements.txt
 cd ..
 ```
 
-**Step 5 — Configure your environment files**
+### Step 4: Start both services
+You will need **two separate terminal windows** open:
 
-See the [Environment Variables](#-environment-variables) section below and create the required `.env` files.
+* **Terminal 1 (Transcription Server)**:
+  ```bash
+  cd whisper-server
+  # Activate venv first: venv\Scripts\activate (Windows) or source venv/bin/activate (Mac)
+  python transcribe_server.py
+  ```
+* **Terminal 2 (Next.js Scribe Application)**:
+  ```bash
+  cd auth-app
+  npm run dev
+  ```
 
-**Step 6 — Start all three services** (open 3 separate terminal windows)
-
-```bash
-# Terminal 1 — Transcription Server
-cd whisper-server
-venv\Scripts\activate        # Windows
-# source venv/bin/activate   # macOS/Linux
-python transcribe_server.py
-
-# Terminal 2 — OpenScribe UI (Scribe Frontend)
-cd frontend
-pnpm dev
-
-# Terminal 3 — Auth App (Login + Admin)
-cd auth-app
-npm run dev
-```
-
-**Step 7 — Open the application**
-
-| App | URL |
-|---|---|
-| Auth + Admin App | http://localhost:3000 |
-| OpenScribe Scribe UI | http://localhost:3001 |
+Open your browser to **http://localhost:3000** to log in.
 
 ---
 
-## 🔧 Environment Variables
+## 🔧 Environment Variables Configuration
 
-Create the following `.env` files exactly as shown. Replace placeholder values with your actual API keys.
+Create the following files in their respective folders to provide keys to the application.
 
-### `auth-app/.env`
-
-Get `BETTER_AUTH_SECRET` and `NEXT_PUBLIC_SECURE_STORAGE_KEY` by running the following command in your terminal:
-
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
-```
-
+### `auth-app/.env` (Next.js Application Keys)
 ```env
-DATABASE_URL="postgresql://your-neon-connection-string"
-BETTER_AUTH_SECRET="your-32-character-secret-key-here"
+# 1. Neon PostgreSQL Database Connection (obtained from neon.tech dashboard)
+DATABASE_URL="postgresql://neondb_owner:npg_zcr09XsplknW@ep-wild-cherry-aqfpp343.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require"
+
+# 2. Authentication Secret (Generate by running `openssl rand -base64 32` in terminal)
+BETTER_AUTH_SECRET="secure-random-base64-key"
 BETTER_AUTH_URL="http://localhost:3000"
-RESEND_API_KEY="re_your_resend_key"
-EMAIL_SENDER_NAME="ClinicalScribe"
+
+# 3. Google Gemini API Key (obtained from Google AI Studio)
+GEMINI_API_KEY="AIzaSy..."
+
+# 4. Resend Email Configurations (optional, for notifications)
+RESEND_API_KEY="re_..."
+EMAIL_SENDER_NAME="CareScribe AI"
 EMAIL_SENDER_ADDRESS="onboarding@resend.dev"
-GEMINI_API_KEY="AIza_your_gemini_key"
 ```
 
-### `frontend/apps/web/.env.local`
-
+### `.env` (Root directory - used by Docker)
 ```env
-GEMINI_API_KEY="AIza_your_gemini_key"
-TRANSCRIPTION_PROVIDER="whisper_local"
-WHISPER_LOCAL_URL="http://127.0.0.1:8000/v1/audio/transcriptions"
-WHISPER_LOCAL_MODEL="assemblyai/base"
-WHISPER_LOCAL_BACKEND="openai"
-WHISPER_LOCAL_TIMEOUT_MS="120000"
-WHISPER_LOCAL_MAX_RETRIES="1"
-NEXT_PUBLIC_SECURE_STORAGE_KEY="your-base64-encoded-32-byte-key"
+ASSEMBLYAI_API_KEY="your-assembly-ai-api-key"
 ```
-
-### `.env` (root — used by Docker)
-
-```env
-ASSEMBLYAI_API_KEY=your-assemblyai-api-key
-```
-
-> ⚠️ **Security reminder:** Never commit `.env` files to version control. Add them to `.gitignore`.
 
 ---
 
-## 🏁 First Time Setup
+## ☁️ Vercel & Cloud Deployment Guide (Non-IT Friendly)
 
-After the application is running for the first time, follow these steps to create your first users.
+Since the scribe interface and authentication are fully unified inside `auth-app`, deploying to the cloud is simple.
 
-1. Go to http://localhost:3000/login
-2. Log in with the default admin account: `admin@clinic.com`
-3. Navigate to **Admin Panel → Doctors → Add Doctor**
-4. Create doctor accounts by entering: name, email, and password
-5. The doctor can now log in at http://localhost:3000/login
-6. Doctor navigates to the **Dashboard** and clicks **New Encounter** to begin recording
+### Part A: Deploying the Database (Neon)
+1. Go to [neon.tech](https://neon.tech) and sign up for a free account.
+2. Click **Create Project**.
+3. Copy the **Connection String** shown in the dashboard. This is your `DATABASE_URL`.
 
-### Complete Doctor Workflow
+### Part B: Uploading to GitHub
+Vercel integrates seamlessly with GitHub. To upload your code:
+1. Create a free account on [GitHub.com](https://github.com).
+2. Download [GitHub Desktop](https://desktop.github.com/) (easiest for non-technical users).
+3. Log in, select **Add Local Repository**, choose your `CareScribe` folder, and click **Publish Repository** (make sure to check "Keep this code private").
 
-Once set up, a typical encounter follows these steps:
-
-1. Doctor logs in → sees **Dashboard** with full encounter history
-2. Doctor clicks **New Encounter** → OpenScribe opens at port 3001
-3. Doctor clicks **Start Recording** at the start of the patient consultation
-4. System captures audio → AssemblyAI transcribes with **Doctor / Patient** speaker labels
-5. Recording stops → Gemini generates a complete **SOAP clinical note** automatically
-6. **ICD-10** diagnosis codes appear as blue chips with confidence scores
-7. **CPT** billing codes appear as purple chips with confidence scores
-8. Doctor clicks **Check Uncertain** to highlight any AI assumptions that need review
-9. Doctor edits the note if needed → clicks **Approve**
-10. Dashboard updates automatically → encounter status changes to **APPROVED**
-11. Doctor clicks **⬇ FHIR** to download the FHIR R4 file for EHR insertion
-12. Admin can view all encounters across all doctors in the **Admin Panel**
+### Part C: Deploying to Vercel
+1. Sign up/Log in to [Vercel.com](https://vercel.com).
+2. Click **Add New** > **Project**.
+3. Import your GitHub repository.
+4. **Configure Project Settings**:
+   * **Framework Preset**: `Next.js`
+   * **Root Directory**: Click Edit, select the **`auth-app`** folder, and save.
+5. **Add Environment Variables**:
+   Under **Environment Variables**, add the following keys from your `auth-app/.env` file:
+   * `DATABASE_URL` (your Neon connection string)
+   * `BETTER_AUTH_SECRET` (generate a fresh key)
+   * `BETTER_AUTH_URL` (e.g. `https://your-project.vercel.app`)
+   * `NEXT_PUBLIC_APP_URL` (same as above)
+   * `GEMINI_API_KEY` (your Google Gemini key)
+   * `TRANSCRIBION_PROVIDER` -> `whisper_local`
+   * `WHISPER_LOCAL_URL` -> Set to the address of your hosted whisper-server (e.g., on Fly.io, Railway, or VPS).
+6. Click **Deploy**. Vercel will build and launch your application in under 3 minutes!
 
 ---
 
-## 🧪 Build and Test
+## 🏁 First-Time App Setup & Doctor Workflow
 
-### Running in Development Mode
-
-```bash
-# Auth App
-cd auth-app && npm run dev
-
-# OpenScribe Frontend
-cd frontend && pnpm dev
-
-# Transcription Server
-cd whisper-server && python transcribe_server.py
-```
-
-### Building for Production
-
-```bash
-# Auth App
-cd auth-app && npm run build
-
-# OpenScribe Frontend
-cd frontend && pnpm build
-```
-
-### Database Management
-
-```bash
-# Generate Prisma client after schema changes
-cd auth-app && npx prisma generate
-
-# Push schema changes to database
-cd auth-app && npx prisma db push
-
-# Open Prisma Studio (visual database browser)
-cd auth-app && npx prisma studio
-```
-
-### Docker Commands
-
-```bash
-# Build all containers
-docker-compose build
-
-# Start all services (foreground)
-docker-compose up
-
-# Start all services (background)
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop all services
-docker-compose down
-
-# Rebuild a single service
-docker-compose build whisper-server
-```
+1. Go to **http://localhost:3000/login** (or your Vercel URL).
+2. Log in with the default admin account:
+   * **Email**: `admin@clinic.com`
+   * **Password**: `Admin123!` *(or default password configured in seed data)*
+3. Navigate to **Admin Panel** → **Doctors** → **Add Doctor** to create doctor credentials.
+4. Log out, then log back in using the created doctor's email.
+5. Go to the **Dashboard** and click **New Encounter** to start recording!
 
 ---
 
 ## 📁 Project Structure
 
+Following our frontend consolidation, the repository is structured into two clean sub-projects:
+
 ```
-clinical-scribe/
-├── .env                              ← Root Docker env (ASSEMBLYAI_API_KEY)
-├── docker-compose.yml                ← Orchestrates all 3 services
+CareScribe/
+├── docker-compose.yml           ← Orchestrates both containers
+├── README.md
 │
-├── whisper-server/
-│   ├── transcribe_server.py          ← AssemblyAI FastAPI transcription server
-│   ├── requirements.txt              ← Python dependencies
-│   ├── Dockerfile                    ← Original GPU Dockerfile (DO NOT USE)
-│   └── Dockerfile.assemblyai         ← Dockerfile for AssemblyAI (use this one)
+├── whisper-server/              ← Python audio transcription backend
+│   ├── transcribe_server.py     ← FastAPI endpoints using AssemblyAI API
+│   ├── Dockerfile.assemblyai    ← Docker recipe for transcription server
+│   └── requirements.txt
 │
-├── frontend/                         ← OpenScribe monorepo (pnpm)
-│   ├── package.json                  ← Root monorepo package.json
-│   ├── pnpm-lock.yaml
-│   ├── apps/web/
-│   │   ├── src/app/
-│   │   │   ├── actions.ts            ← Note generation + DB save + ICD/CPT logic
-│   │   │   └── page.tsx              ← Main recording UI
-│   │   ├── Dockerfile                ← OpenScribe Docker build
-│   │   └── next.config.mjs           ← Imports from config/
-│   ├── packages/pipeline/render/src/components/
-│   │   └── note-editor.tsx           ← Approve + Check Uncertain buttons
-│   └── config/
-│       └── next.config.mjs           ← output: standalone, CSP config
-│
-└── auth-app/                         ← Authentication + Admin app
-    ├── Dockerfile                    ← Auth-app Docker build
-    ├── next.config.ts                ← output: standalone
+└── auth-app/                    ← Next.js 16 Web UI Workspace
+    ├── Dockerfile               ← Docker recipe for the main Next.js app
+    ├── package.json
     ├── prisma/
-    │   └── schema.prisma             ← Database schema definition
-    ├── prisma.config.ts              ← Prisma configuration
+    │   └── schema.prisma        ← Database schema definitions
     └── src/app/
-        ├── admin/
-        │   ├── page.tsx              ← Admin dashboard with real DB data
-        │   └── doctors/page.tsx      ← Doctor management (create/activate)
-        ├── dashboard/
-        │   └── (overview)/page.tsx   ← Doctor dashboard
-        ├── (auth)/
-        │   └── login/                ← Login page
-        └── api/encounters/
-            ├── save/route.ts         ← Save encounter + ICD + CPT codes
-            ├── approve/route.ts      ← Approve note + write audit log
-            ├── fhir-export/route.ts  ← Generate FHIR R4 export
-            └── highlight-uncertain/route.ts  ← AI uncertainty detection
+        ├── scribe/              ← Ambient audio capturing & SOAP note editor
+        ├── dashboard/           ← Doctor patient-record logs
+        ├── admin/               ← Admin doctor credentials management
+        └── api/encounters/      ← SOAP note saves, FHIR exports, & audit log handlers
 ```
 
 ---
 
 ## 🗄️ Database Schema
 
-The application uses five core models in PostgreSQL via Prisma.
+CareScribe maps data models using Prisma ORM:
 
-| Model | Key Fields | Description |
-|---|---|---|
-| `User` | `role: "admin" \| "doctor"` | All system users with role-based access |
-| `Encounter` | `patientName`, `status`, `duration` | Individual patient consultation sessions |
-| `Transcript` | `content` | Full Doctor/Patient labeled transcription text |
-| `ClinicalNote` | `aiGeneratedContent`, `finalContent`, `icdCodes`, `cptCodes`, `status` | SOAP note with DRAFT/APPROVED status |
-| `AuditLog` | `userId`, `encounterId`, `action` | Immutable record of all NOTE_APPROVED actions |
+* **User**: Doctors or administrators, specifying credential security and clinic roles.
+* **Encounter**: Records active patient sessions, capture duration, and completion statuses.
+* **Transcript**: Stores full consultations with labeled speaker turn-taking transcripts.
+* **ClinicalNote**: Holds draft and approved SOAP notes, ICD-10/CPT codes, and certainty highlights.
+* **AuditLog**: Keeps chronological records of doctor approvals for regulatory tracking.
 
 ---
 
 ## 💰 Cost Estimate
 
-Estimated monthly cost for a clinic seeing approximately **20 patients per day**.
+Estimated monthly costs for a clinic seeing **20 patients per day**:
 
-| Service | Monthly Cost |
-|---|---|
-| AssemblyAI (transcription) | ~$70 |
-| Gemini API (note generation + coding) | ~$0.09 |
-| Neon PostgreSQL | Free tier / $19 |
-| Hosting (Railway or VPS) | ~$15 |
-| **Total** | **~$90-100/month** |
-
-**Compared to a human clinical scribe:** ~$3,000/month
-**Monthly savings per physician: ~$2,900**
-
----
-
-## 🗺️ Roadmap
-
-### ✅ Current (MVP — All Complete)
-Ambient audio, real-time transcription, SOAP note generation, ICD-10/CPT coding, physician review workflow, FHIR R4 export, session management, audit logging, admin panel, role-based auth, Docker support.
-
-### 🔜 Phase 2
-- Epic FHIR R4 live integration (registration at [open.epic.com](https://open.epic.com))
-- Editable CPT code suggestions
-- Specialty-specific note templates (cardiology, orthopedics, pediatrics, etc.)
-- Medication reconciliation
-
-### 🔮 Phase 3
-- Multi-hospital deployment and tenant management
-- Advanced analytics dashboard for administrators
-- Multi-agent clinical workflows
-- Longitudinal patient memory across visits
-- Care coordination automation
-
----
-
-## 🤝 Contributing
-
-We welcome contributions from clinicians, developers, and healthcare administrators.
-
-### How to Contribute
-
-1. **Fork** the repository
-2. Create a **feature branch**: `git checkout -b feature/your-feature-name`
-3. **Commit** your changes with clear messages: `git commit -m "Add specialty template for cardiology"`
-4. **Push** to your branch: `git push origin feature/your-feature-name`
-5. Open a **Pull Request** with a description of what you changed and why
-
-### Reporting Issues
-
-Open an issue in Azure DevOps with:
-- What you expected to happen
-- What actually happened
-- Steps to reproduce
-- Screenshots if applicable
-
-### Clinical Accuracy
-
-If you are a clinician and notice any issues with note generation quality, ICD-10/CPT code accuracy, or FHIR R4 compliance — please open an issue with details. Clinical accuracy is the highest priority.
-
----
-
-### API References
-
-| Service | Documentation |
-|---|---|
-| AssemblyAI | https://www.assemblyai.com/docs |
-| Gemini API | https://ai.google.dev/docs |
-| FHIR R4 | https://hl7.org/fhir/R4 |
-| Neon PostgreSQL | https://neon.tech/docs |
-| Better Auth | https://better-auth.com/docs |
-| Prisma | https://www.prisma.io/docs |
-
----
-
-> **⚕️ Important Disclaimer:** This system is a documentation assistance tool only. It is not a diagnostic system. All AI-generated content requires physician review and approval before clinical use. The physician remains the sole decision-maker for all clinical judgments.
+* **AssemblyAI (Transcription)**: ~$70.00
+* **Gemini API (SOAP + Coding)**: ~$0.09
+* **Neon Cloud Database**: Free Tier / $19.00
+* **Hosting (Vercel / VPS)**: Free Tier / $15.00
+* **Total Estimated Cost**: **~$90.00 - $100.00 / month** (Saves ~$2,900 compared to human scribes).
