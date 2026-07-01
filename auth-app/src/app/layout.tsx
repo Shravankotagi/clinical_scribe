@@ -33,11 +33,7 @@ export default function RootLayout({
           enableSystem={false}
         >
 
-        <Script
-          src="https://enlightlab-widget.vercel.app/widget.js"
-          data-client="enlightlab"
-          strategy="afterInteractive"
-        />
+        
           <main>{children}</main>
           <Toaster />
         </ThemeProvider>
